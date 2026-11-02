@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16201C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Adnan Traders</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<style>
+/* Layout: one column, sticky header, four-tab bar fixed at the bottom. Built for one hand on a phone. */
+:root {
+  --bg: #EDF0EE;
+  --surface: #FFFFFF;
+  --surface2: #E3E8E5;
+  --ink: #16201C;
+  --muted: #56655E;
+  --line: #CAD2CE;
+  --accent: #9A6406;
+  --accent-ink: #FFFFFF;
+  --good: #1F7A4D;
+  --good-bg: #D8EEE2;
+  --warn: #8F5200;
+  --warn-bg: #F6E7CB;
+  --bad: #B3261E;
+  --bad-bg: #F8E1DF;
+  --font-display: 'Archivo', 'Public Sans', system-ui, sans-serif;
+  --font-body: 'Public Sans', 'Segoe UI', Roboto, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101412;
+    --surface: #19201D;
+    --surface2: #232C28;
+    --ink: #E8EDEA;
+    --muted: #94A19B;
+    --line: #2F3a35;
+    --accent: #E6A532;
+    --accent-ink: #1A1200;
+    --good: #6FD39D;
+    --good-bg: #16301F;
+    --warn: #E6A532;
+    --warn-bg: #3B2D10;
+    --bad: #FF8A80;
+    --bad-bg: #3A1C1A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101412;
+  --surface: #19201D;
+  --surface2: #232C28;
+  --ink: #E8EDEA;
+  --muted: #94A19B;
+  --line: #2F3a35;
+  --accent: #E6A532;
+  --accent-ink: #1A1200;
+  --good: #6FD39D;
+  --good-bg: #16301F;
+  --warn: #E6A532;
+  --warn-bg: #3B2D10;
+  --bad: #FF8A80;
+  --bad-bg: #3A1C1A;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 112px;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  z-index: 10;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+.wrap { max-width: 640px; margin: 0 auto; }
+
+/* header */
+.top {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 9;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 10px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+.brand small { display: block; font-family: var(--font-body); font-weight: 400; font-size: 13px; color: var(--muted); line-height: 1.4; letter-spacing: 0; }
+.sync { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; text-align: right; }
+.sync i { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; flex: none; }
+.sync[data-state="ok"] i { background: var(--good); }
+.sync[data-state="slow"] i { background: var(--warn); }
+.sync[data-state="off"] i { background: var(--bad); }
+.hright { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+#themeBtn { min-height: 34px; font-size: 13px; padding: 0 10px; }
+
+/* type */
+h2 { font-family: var(--font-display); font-size: 20px; line-height: 1.3; margin: 20px 0 6px; font-weight: 700; }
+h3 { font-size: 13px; margin: 18px 0 6px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+p { margin: 6px 0; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; min-width: 0; }
+.stat b { display: block; font-family: var(--font-display); font-size: 28px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.stat.bad b { color: var(--bad); }
+.stat.warn b { color: var(--warn); }
+.week-total { margin-top: 10px; background: var(--surface2); border-radius: 12px; padding: 10px 14px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.week-total b { font-variant-numeric: tabular-nums; }
+
+/* lists */
+.list { display: flex; flex-direction: column; gap: 10px; margin: 8px 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.card.is-bad { border-color: var(--bad); }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row.between { justify-content: space-between; }
+.title { font-weight: 700; font-size: 17px; margin: 0; overflow-wrap: anywhere; }
+.items { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.pill { display: inline-block; font-size: 13px; padding: 0 10px; border-radius: 99px; background: var(--surface2); color: var(--muted); line-height: 1.7; white-space: nowrap; }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.good { background: var(--good-bg); color: var(--good); }
+.empty { border: 1px dashed var(--line); border-radius: 12px; padding: 18px 14px; color: var(--muted); text-align: center; }
+.empty b { display: block; color: var(--ink); margin-bottom: 2px; }
+
+/* buttons + fields */
+.btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 4px 14px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn.danger { color: var(--bad); }
+.btn.sm { min-height: 38px; padding: 0 12px; font-size: 14px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+form { display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin: 10px 0; }
+label { display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
+input, select, textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 6px 12px;
+  color: var(--ink);
+  font-size: 16px;
+}
+textarea { min-height: 84px; resize: vertical; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 380px) { .two { grid-template-columns: 1fr; } }
+.search { margin-top: 10px; }
+#saleRows { display: grid; gap: 10px; }
+.item-row { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.lines { display: grid; gap: 4px; margin: 8px 0 4px; }
+.line { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.line span { min-width: 0; overflow-wrap: anywhere; }
+.sum { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; display: grid; gap: 2px; }
+.stats.compact .stat b { font-size: 19px; overflow-wrap: anywhere; }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; color: var(--ink); }
+#receiptImg { display: block; width: 100%; max-width: 360px; margin: 8px auto; border-radius: 10px; border: 1px solid var(--line); }
+
+/* bottom tabs */
+.tabs {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 9;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
+}
+.tabs div { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.tab { appearance: none; border: 0; background: transparent; border-radius: 10px; min-height: 48px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; line-height: 1.3; padding: 4px; }
+.tab[aria-current="page"] { background: var(--surface2); color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
+.tab:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.tab em { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 99px; background: var(--bad); color: #fff; font-style: normal; font-size: 12px; line-height: 20px; }
+
+#toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 10px;
+  padding: 8px 16px;
+  max-width: calc(100% - 32px);
+  font-size: 14px;
+}
+.banner { background: var(--warn-bg); color: var(--warn); border-radius: 12px; padding: 10px 14px; margin-top: 12px; }
+details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .tab, .btn { transition: background-color .15s; } }
+[hidden] { display: none !important; }
+body { margin: 0; }
+img { max-width: 100%; }
+#loginErr { margin: 12px 0; }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand" id="brand">Adnan Traders<small>Shops, collections and orders</small></h1>
+    <div class="hright"><div class="sync" id="sync" data-state="load" role="status"><i></i><span id="syncText">Connecting</span></div><button class="btn sm" id="themeBtn" type="button" aria-label="Change display mode">Mode: Auto</button></div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+  <div id="updateBar" class="banner" hidden><span>A new version of the app is ready.</span> <button class="btn sm primary" id="updateBtn" type="button">Reload now</button></div>
+
+  <p id="view-load" class="muted" style="margin-top:24px">Opening...</p>
+
+  <!-- Today -->
+  <section id="view-today" aria-label="Today" hidden>
+    <div class="stats" id="stats"></div>
+    <div class="week-total" id="weekTotal"></div>
+    <div id="todayLists"></div>
+    <details id="doneBox" style="margin-top:14px"><summary id="doneSummary">Delivered orders</summary><div class="list" id="doneList"></div></details>
+  </section>
+
+  <!-- Shops -->
+  <section id="view-shops" aria-label="Shops" hidden>
+    <div class="row between" style="margin-top:8px">
+      <h2 style="margin:0">Shops</h2>
+      <button class="btn primary" id="newShopBtn" type="button">Add shop</button>
+    </div>
+    <form id="shopForm" hidden>
+      <input type="hidden" id="shopId">
+      <label for="fShop">Shop name
+        <input id="fShop" autocomplete="off" required>
+      </label>
+      <label for="fOwner">Shopkeeper name
+        <input id="fOwner" autocomplete="off">
+      </label>
+      <label for="fPhone">Contact number
+        <input id="fPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="03xx xxxxxxx">
+      </label>
+      <label for="fLocation">Location (area or address)
+        <input id="fLocation" autocomplete="off" placeholder="e.g. Chamkani, Peshawar">
+      </label>
+      <label for="fMap">Map link (optional)
+        <input id="fMap" type="url" inputmode="url" autocomplete="off" placeholder="https://maps.google.com/...">
+      </label>
+      <label for="fOpening">Old balance owed before using this app (Rs)
+        <input id="fOpening" inputmode="numeric" autocomplete="off" placeholder="0">
+      </label>
+      <div class="row">
+        <button class="btn primary" type="submit" id="shopSave">Save shop</button>
+        <button class="btn" type="button" id="shopCancel">Cancel</button>
+      </div>
+    </form>
+    <input class="search" id="shopSearch" type="search" placeholder="Search by shop, name or area" aria-label="Search shops">
+    <div class="list" id="shopList"></div>
+  </section>
+
+  <!-- Shop account -->
+  <section id="view-shop" aria-label="Shop account" hidden>
+    <div id="shopHead"></div>
+    <div class="stats compact" id="shopStats"></div>
+    <p class="muted small" id="shopOpening"></p>
+    <div class="card" id="receiptBox" style="margin-top:12px" hidden>
+      <p class="title">Receipt</p>
+      <p class="small" id="rcTo" style="margin:4px 0"></p>
+      <img id="receiptImg" alt="Receipt preview">
+      <label style="display:flex;flex-direction:row;align-items:center;gap:8px;margin:8px 0" for="rcTxt"><input type="checkbox" id="rcTxt" style="width:auto;min-height:0"> Also put the text message in the chat</label>
+      <div class="row">
+        <button class="btn primary" type="button" id="rcBoth">Save image and open chat</button>
+        <button class="btn" type="button" id="rcSave">Save image</button>
+        <a class="btn" id="rcWa">Open WhatsApp chat</a>
+        <button class="btn" type="button" id="rcCopy">Copy text</button>
+        <button class="btn" type="button" id="rcClose">Close</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" type="button" id="rcShare">Share image</button>
+        <button class="btn" type="button" id="rcCopyImg">Copy image</button>
+        <button class="btn" type="button" id="rcCopyNum">Copy number</button>
+        <a class="btn" id="rcWa2">Chat, other way</a>
+        <a class="btn" id="rcWa3" target="_blank" rel="noopener noreferrer">Chat, online link</a>
+      </div>
+      <p class="muted small">Save image and open chat puts the receipt picture in your gallery and opens this shop's WhatsApp chat. In the chat tap the paperclip, choose Gallery, pick the receipt and send. Share image opens the phone's share menu instead, where you pick the chat yourself. If the chat does not open, try Chat, other way. The text message is left out unless you tick the box above.</p>
+    </div>
+    <div id="shopPending"></div>
+    <h2>Add a sale</h2>
+    <form id="saleForm">
+      <label for="sDate">Date
+        <input id="sDate" type="date" required>
+      </label>
+      <div id="saleRows"></div>
+      <button class="btn" type="button" id="addRowBtn">Add another item</button>
+      <div class="week-total"><span>Bill total</span><b id="saleTotal">Rs 0</b></div>
+      <label for="sPaid">Paid now (Rs)
+        <input id="sPaid" inputmode="numeric" autocomplete="off" placeholder="0">
+      </label>
+      <p class="muted small" id="saleOwed" style="margin:0"></p>
+      <label for="sNote">Note
+        <input id="sNote" autocomplete="off">
+      </label>
+      <button class="btn primary" type="submit" id="saleSave">Save sale</button>
+    </form>
+    <h2>Payment received</h2>
+    <form id="payForm">
+      <div class="two">
+        <label for="pDate">Date
+          <input id="pDate" type="date" required>
+        </label>
+        <label for="pAmount">Amount (Rs)
+          <input id="pAmount" inputmode="numeric" autocomplete="off" placeholder="0" required>
+        </label>
+      </div>
+      <label for="pNote">Note
+        <input id="pNote" autocomplete="off">
+      </label>
+      <button class="btn primary" type="submit" id="paySave">Save payment</button>
+    </form>
+    <h2>Account history</h2>
+    <div id="shopLedger"></div>
+  </section>
+
+  <!-- Collections -->
+  <section id="view-visits" aria-label="Collections" hidden>
+    <h2>Log a visit</h2>
+    <form id="visitForm">
+      <label for="vShop">Shop
+        <select id="vShop" required></select>
+      </label>
+      <div class="two">
+        <label for="vDate">Visit date
+          <input id="vDate" type="date" required>
+        </label>
+        <label for="vCollected">Collected (Rs)
+          <input id="vCollected" inputmode="numeric" autocomplete="off" placeholder="0">
+        </label>
+      </div>
+      <label for="vRemaining">Set total balance owed (Rs), optional
+        <input id="vRemaining" inputmode="numeric" autocomplete="off" placeholder="Leave empty to calculate from the shop account">
+      </label>
+      <label for="vItems">Order for next week (what they asked for)
+        <textarea id="vItems" placeholder="e.g. 6 cans of 20W-50, 5 litre"></textarea>
+      </label>
+      <label for="vDue">Deliver on
+        <input id="vDue" type="date">
+      </label>
+      <label for="vNote">Note
+        <input id="vNote" autocomplete="off">
+      </label>
+      <button class="btn primary" type="submit" id="visitSave">Save visit</button>
+    </form>
+    <h2>Weekly collections</h2>
+    <div id="visitHistory"></div>
+  </section>
+
+  <!-- Backup -->
+  <section id="view-backup" aria-label="Backup" hidden>
+    <h2>Backup</h2>
+    <div class="card">
+      <p><b>Your data lives on this phone</b></p>
+      <p class="muted small">Everything is saved on this device and works without internet. Save a backup file often and keep a copy outside the phone, so you can bring everything back if the phone or the app is lost.</p>
+      <p class="small" id="backupStatus" style="margin:8px 0"></p>
+      <div class="two" id="counts"></div>
+    </div>
+    <h3>Save a backup</h3>
+    <div class="card">
+      <div class="row">
+        <button class="btn primary" type="button" id="exportBtn">Save backup file</button>
+        <button class="btn" type="button" id="shareBackupBtn">Send backup file</button>
+      </div>
+      <p class="muted small">Tip: use Send backup file to put a copy in WhatsApp (message yourself) or Google Drive.</p>
+      <button class="btn" type="button" id="copyBackupBtn">Copy backup text</button>
+    </div>
+    <h3>Restore a backup</h3>
+    <div class="card">
+      <label for="importFile">Choose backup file
+        <input id="importFile" type="file">
+      </label>
+      <p class="muted small" id="importInfo"></p>
+      <button class="btn" type="button" id="importBtn" disabled>Restore data from file</button>
+      <details style="margin-top:12px">
+        <summary>Cannot choose the file? Paste the backup text instead</summary>
+        <label for="pasteBackup" style="margin-top:8px">Backup text
+          <textarea id="pasteBackup" placeholder="Paste the copied backup text here"></textarea>
+        </label>
+        <button class="btn" type="button" id="pasteRestoreBtn" style="margin-top:8px">Restore from pasted text</button>
+      </details>
+      <p class="muted small">Restoring adds the records from the backup. It does not delete what is already on the phone. Backups from the older Claude version of this app also work.</p>
+    </div>
+    <h3>Home screen</h3>
+    <div class="card">
+      <p class="muted small">Open the app link once with internet, then install it. After that it opens from the home screen and works with no internet.</p>
+      <button class="btn" type="button" id="installBtn" hidden>Install app</button>
+      <p class="muted small" id="installHelp" style="margin-bottom:0">If there is no Install button: open the Chrome menu and choose Add to Home screen or Install app.</p>
+      <p class="muted small" id="appVersion" style="margin:8px 0 0"></p>
+    </div>
+  </section>
+</div>
+
+<div id="toast" role="status" hidden></div>
+
+<nav class="tabs" id="tabsNav" aria-label="Main menu" hidden>
+  <div>
+    <button class="tab" type="button" data-tab="today" aria-current="page">Today <em id="todayBadge" hidden>0</em></button>
+    <button class="tab" type="button" data-tab="shops">Shops</button>
+    <button class="tab" type="button" data-tab="visits">Collections</button>
+    <button class="tab" type="button" data-tab="backup">Backup</button>
+  </div>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+  var APP_VERSION = '1.1';
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- helpers ---------- */
+  function h(tag, props) {
+    var e = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v === false || v == null) return;
+      if (k === 'class') e.className = v;
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v === true ? '' : v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var kids = [].concat(arguments[i]);
+      kids.forEach(function (c) {
+        if (c == null || c === false) return;
+        e.append(c.nodeType ? c : document.createTextNode(String(c)));
+      });
+    }
+    return e;
+  }
+  var DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function iso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function parse(s) { var p = String(s || '').split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return iso(d); }
+  function today() { return iso(new Date()); }
+  function dayLabel(s) { var d = parse(s); return DAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()]; }
+  function weekStart(s) { var d = parse(s); var back = (d.getDay() + 6) % 7; d.setDate(d.getDate() - back); return iso(d); }
+  function weekLabel(ws) {
+    var a = parse(ws), b = parse(addDays(ws, 6));
+    return a.getDate() + ' ' + MONTHS[a.getMonth()] + ' to ' + b.getDate() + ' ' + MONTHS[b.getMonth()];
+  }
+  function toAscii(s) {
+    return String(s == null ? '' : s)
+      .replace(/[۰-۹]/g, function (c) { return String(c.charCodeAt(0) - 0x06F0); })
+      .replace(/[٠-٩]/g, function (c) { return String(c.charCodeAt(0) - 0x0660); });
+  }
+  function num(s) {
+    var t = toAscii(s).replace(/[,\s٬]/g, '');
+    if (t === '') return null;
+    var n = Number(t);
+    return isFinite(n) ? n : null;
+  }
+  function money(n) { return 'Rs ' + (Number(n) || 0).toLocaleString('en-US'); }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function mapUrl(s) {
+    if (s.map && /^https?:\/\//i.test(s.map)) return s.map;
+    if (s.location) return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.location);
+    return '';
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.hidden = true; }, 2800);
+  }
+  function twoStep(label, cls, fn) {
+    var btn = h('button', { class: 'btn sm ' + cls, type: 'button' }, label);
+    var armed = false, timer;
+    btn.addEventListener('click', function () {
+      if (armed) { clearTimeout(timer); armed = false; btn.textContent = label; fn(); return; }
+      armed = true;
+      btn.textContent = 'Sure? Tap again';
+      timer = setTimeout(function () { armed = false; btn.textContent = label; }, 3000);
+    });
+    return btn;
+  }
+  function copyBtn(text) {
+    return h('button', { class: 'btn sm', type: 'button', onclick: function () {
+      var done = function () { toast('Number copied'); };
+      var fallback = function () {
+        var ta = h('textarea', { 'aria-hidden': 'true', style: 'position:fixed;opacity:0' });
+        ta.value = text; document.body.append(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) { toast(text); }
+        ta.remove();
+      };
+      try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+    } }, 'Copy');
+  }
+  function emptyBox(title, text) { return h('div', { class: 'empty' }, h('b', {}, title), text); }
+
+  /* ---------- state ---------- */
+  var S = { shops: [], visits: [], orders: [], entries: [], openShop: null, root: null, loaded: { shops: false, visits: false, orders: false, entries: false }, pendingImport: null };
+
+  function setSync(state, text) {
+    $('sync').setAttribute('data-state', state);
+    $('syncText').textContent = text;
+  }
+  function showBanner(text) { var b = $('banner'); b.textContent = text; b.hidden = !text; }
+  function shopById(id) { for (var i = 0; i < S.shops.length; i++) if (S.shops[i].id === id) return S.shops[i]; return null; }
+  function needDb() {
+    if (S.root) return false;
+    toast('Still opening, please wait a moment');
+    return true;
+  }
+  function failed() { toast('Could not save. Please try again.'); }
+  function byShopName(a, b) { return String(a.shopName).localeCompare(String(b.shopName), 'en'); }
+
+  /* ---------- tabs ---------- */
+  function showTab(name) {
+    S.openShop = null; $('view-shop').hidden = true; $('receiptBox').hidden = true;
+    ['today', 'shops', 'visits', 'backup'].forEach(function (n) { $('view-' + n).hidden = n !== name; });
+    document.querySelectorAll('.tab').forEach(function (b) {
+      if (b.getAttribute('data-tab') === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('.tab').forEach(function (b) {
+    b.addEventListener('click', function () { showTab(b.getAttribute('data-tab')); });
+  });
+
+  /* ---------- render: today ---------- */
+  function orderCard(o, late) {
+    var shop = shopById(o.shopId);
+    var phone = shop && shop.phone;
+    var card = h('div', { class: 'card' + (late ? ' is-bad' : '') });
+    card.append(
+      h('div', { class: 'row between' },
+        h('p', { class: 'title' }, o.shopName || (shop && shop.shopName) || 'Shop'),
+        h('span', { class: 'pill ' + (late ? 'bad' : (o.due === today() ? 'warn' : '')) }, dayLabel(o.due))
+      ),
+      h('p', { class: 'items' }, o.items)
+    );
+    if (phone) card.append(h('div', { class: 'row small' }, h('span', { class: 'num' }, phone), copyBtn(phone), h('a', { href: 'tel:' + phone.replace(/\s+/g, '') }, 'Call')));
+    card.append(h('div', { class: 'row', style: 'margin-top:8px' },
+      h('button', { class: 'btn sm primary', type: 'button', onclick: function () { setDone(o, true); } }, 'Mark delivered'),
+      twoStep('Delete', 'danger', function () { delOrder(o); })
+    ));
+    return card;
+  }
+  function group(title, items, late) {
+    var box = h('div');
+    box.append(h('h3', {}, title + ' (' + items.length + ')'));
+    var list = h('div', { class: 'list' });
+    items.forEach(function (o) { list.append(orderCard(o, late)); });
+    box.append(list);
+    return box;
+  }
+  function renderToday() {
+    var t = today(), end = addDays(t, 7);
+    var pending = S.orders.filter(function (o) { return !o.done; }).sort(function (a, b) { return a.due < b.due ? -1 : a.due > b.due ? 1 : 0; });
+    var late = pending.filter(function (o) { return o.due < t; });
+    var now = pending.filter(function (o) { return o.due === t; });
+    var soon = pending.filter(function (o) { return o.due > t && o.due <= end; });
+    var later = pending.filter(function (o) { return o.due > end; });
+
+    var st = $('stats'); st.textContent = '';
+    st.append(
+      h('div', { class: 'stat' + (late.length ? ' bad' : '') }, h('b', {}, late.length), h('span', {}, 'Overdue')),
+      h('div', { class: 'stat' + (now.length ? ' warn' : '') }, h('b', {}, now.length), h('span', {}, 'Due today')),
+      h('div', { class: 'stat' }, h('b', {}, soon.length), h('span', {}, 'Next 7 days'))
+    );
+    var ws = weekStart(t), we = addDays(ws, 6);
+    var total = 0, count = 0;
+    S.visits.forEach(function (v) { if (v.date >= ws && v.date <= we) { total += Number(v.collected) || 0; count++; } });
+    var wt = $('weekTotal'); wt.textContent = '';
+    wt.append(h('span', {}, 'Collected this week (' + plural(count, 'visit', 'visits') + ')'), h('b', {}, money(total)));
+
+    var box = $('todayLists'); box.textContent = '';
+    if (!pending.length) {
+      box.append(h('div', { style: 'margin-top:14px' }, emptyBox('No orders waiting', 'When you log a visit with an order for next week, it shows up here on its delivery date.')));
+    } else {
+      if (late.length) box.append(group('Overdue', late, true));
+      if (now.length) box.append(group('Today', now, false));
+      if (soon.length) box.append(group('Next 7 days', soon, false));
+      if (later.length) box.append(group('Later', later, false));
+    }
+
+    var done = S.orders.filter(function (o) { return o.done; }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); }).slice(0, 15);
+    $('doneSummary').textContent = 'Delivered orders (' + done.length + ')';
+    var dl = $('doneList'); dl.textContent = '';
+    done.forEach(function (o) {
+      dl.append(h('div', { class: 'card' },
+        h('div', { class: 'row between' }, h('p', { class: 'title' }, o.shopName || 'Shop'), h('span', { class: 'pill good' }, 'Delivered')),
+        h('p', { class: 'items muted' }, o.items),
+        h('button', { class: 'btn sm', type: 'button', onclick: function () { setDone(o, false); } }, 'Move back to pending')
+      ));
+    });
+    var badge = $('todayBadge'), urgent = late.length + now.length;
+    badge.textContent = urgent; badge.hidden = !urgent;
+  }
+
+  /* ---------- render: shops ---------- */
+  function lastVisit(shopId) {
+    var d = '';
+    S.visits.forEach(function (v) { if (v.shopId === shopId && v.date > d) d = v.date; });
+    return d;
+  }
+  function renderShops() {
+    var q = toAscii($('shopSearch').value).trim().toLowerCase();
+    var list = S.shops.slice().sort(byShopName)
+      .filter(function (s) {
+        if (!q) return true;
+        return [s.shopName, s.owner, s.phone, s.location].join(' ').toLowerCase().indexOf(q) !== -1;
+      });
+    var box = $('shopList'); box.textContent = '';
+    if (!S.shops.length) { box.append(emptyBox('No shops yet', 'Tap "Add shop" above to add your first one.')); return; }
+    if (!list.length) { box.append(emptyBox('No match found', 'Try a different word.')); return; }
+    list.forEach(function (s) {
+      var card = h('div', { class: 'card' });
+      var lv = lastVisit(s.id);
+      card.append(h('div', { class: 'row between' },
+        h('p', { class: 'title' }, s.shopName),
+        shopBalance(s) > 0 ? h('span', { class: 'pill bad' }, 'Owes ' + money(shopBalance(s))) : h('span', { class: 'pill good' }, 'Settled')
+      ));
+      if (s.owner) card.append(h('p', { class: 'muted', style: 'margin:0' }, s.owner));
+      if (s.phone) card.append(h('div', { class: 'row' }, h('span', { class: 'num' }, s.phone), copyBtn(s.phone), h('a', { href: 'tel:' + s.phone.replace(/\s+/g, '') }, 'Call')));
+      var m = mapUrl(s);
+      if (s.location || m) {
+        var r = h('div', { class: 'row small' }, s.location ? h('span', {}, s.location) : null);
+        if (m) r.append(h('a', { href: m, target: '_blank', rel: 'noopener noreferrer' }, 'Open in maps'));
+        card.append(r);
+      }
+      card.append(h('p', { class: 'muted small', style: 'margin:2px 0' }, lv ? 'Last visit: ' + dayLabel(lv) : 'No visits yet'));
+      card.append(h('div', { class: 'row', style: 'margin-top:6px' },
+        h('button', { class: 'btn sm primary', type: 'button', onclick: function () { openShopPage(s.id); } }, 'Open account'),
+        h('button', { class: 'btn sm', type: 'button', onclick: function () { startVisit(s.id); } }, 'Log visit'),
+        h('button', { class: 'btn sm', type: 'button', onclick: function () { editShop(s); } }, 'Edit'),
+        twoStep('Delete', 'danger', function () { delShop(s); })
+      ));
+      box.append(card);
+    });
+  }
+  function renderShopSelect() {
+    var sel = $('vShop'), cur = sel.value;
+    sel.textContent = '';
+    sel.append(h('option', { value: '' }, S.shops.length ? 'Choose a shop' : 'Add a shop first'));
+    S.shops.slice().sort(byShopName).forEach(function (s) {
+      sel.append(h('option', { value: s.id }, s.shopName + (s.owner ? ' - ' + s.owner : '')));
+    });
+    if (cur && shopById(cur)) sel.value = cur;
+  }
+
+  /* ---------- render: visits ---------- */
+  function renderVisits() {
+    var box = $('visitHistory'); box.textContent = '';
+    if (!S.visits.length) { box.append(emptyBox('No visits logged yet', 'Fill in the form above to log your first visit. Each week\'s total collection will show here.')); return; }
+    var weeks = {};
+    S.visits.forEach(function (v) { var k = weekStart(v.date); (weeks[k] = weeks[k] || []).push(v); });
+    Object.keys(weeks).sort().reverse().forEach(function (k) {
+      var vs = weeks[k].sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : (b.ts || 0) - (a.ts || 0); });
+      var total = vs.reduce(function (s, v) { return s + (Number(v.collected) || 0); }, 0);
+      box.append(h('div', { class: 'row between', style: 'margin-top:14px' },
+        h('h3', { style: 'margin:0' }, weekLabel(k)),
+        h('span', { class: 'pill good num' }, money(total))
+      ));
+      var list = h('div', { class: 'list' });
+      vs.forEach(function (v) {
+        var card = h('div', { class: 'card' });
+        card.append(h('div', { class: 'row between' },
+          h('p', { class: 'title' }, v.shopName || 'Shop'),
+          h('b', { class: 'num' }, money(v.collected))
+        ));
+        card.append(h('p', { class: 'muted small', style: 'margin:0' }, dayLabel(v.date) + (v.remaining != null ? ' | Balance ' + money(v.remaining) : '')));
+        if (v.note) card.append(h('p', { class: 'small', style: 'margin:2px 0' }, v.note));
+        card.append(h('div', { style: 'margin-top:6px' }, twoStep('Delete', 'danger', function () { delVisit(v); })));
+        list.append(card);
+      });
+      box.append(list);
+    });
+  }
+
+  function renderBackup() {
+    var c = $('counts'); c.textContent = '';
+    c.append(
+      h('div', { class: 'stat' }, h('b', {}, S.shops.length), h('span', {}, 'Shops')),
+      h('div', { class: 'stat' }, h('b', {}, S.visits.length), h('span', {}, 'Visits')),
+      h('div', { class: 'stat' }, h('b', {}, S.orders.length), h('span', {}, 'Orders')),
+      h('div', { class: 'stat' }, h('b', {}, S.entries.length), h('span', {}, 'Sales and payments'))
+    );
+  }
+  function renderAll() { renderToday(); renderShops(); renderShopSelect(); renderVisits(); renderBackup(); renderShopPage(); renderBackupStatus(); }
+
+  /* ---------- writes ---------- */
+  function setDone(o, done) {
+    if (needDb()) return;
+    S.root.collection('orders').doc(o.id).update({ done: done, doneAt: done ? Date.now() : null }).then(function () {
+      toast(done ? 'Order marked delivered' : 'Order moved back to pending');
+    }, failed);
+  }
+  function delOrder(o) {
+    if (needDb()) return;
+    S.root.collection('orders').doc(o.id).delete().then(function () { toast('Order deleted'); }, failed);
+  }
+  function delVisit(v) {
+    if (needDb()) return;
+    var root = S.root, linked = S.entries.filter(function (e) { return e.visitId === v.id; });
+    Promise.all(linked.map(function (e) { return root.collection('entries').doc(e.id).delete(); }))
+      .then(function () { return root.collection('visits').doc(v.id).delete(); })
+      .then(function () { toast('Visit deleted'); }, failed);
+  }
+  function delShop(s) {
+    if (needDb()) return;
+    var root = S.root, own = entriesOf(s.id);
+    Promise.all(own.map(function (e) { return root.collection('entries').doc(e.id).delete(); }))
+      .then(function () { return root.collection('shops').doc(s.id).delete(); })
+      .then(function () { toast('Shop deleted'); }, failed);
+  }
+
+  function openShopForm(on) { $('shopForm').hidden = !on; if (on) $('fShop').focus(); }
+  function clearShopForm() {
+    ['shopId', 'fShop', 'fOwner', 'fPhone', 'fLocation', 'fMap', 'fOpening'].forEach(function (id) { $(id).value = ''; });
+  }
+  function editShop(s) {
+    clearShopForm();
+    $('shopId').value = s.id; $('fShop').value = s.shopName || ''; $('fOwner').value = s.owner || '';
+    $('fPhone').value = s.phone || ''; $('fLocation').value = s.location || ''; $('fMap').value = s.map || ''; $('fOpening').value = openingOf(s) || '';
+    openShopForm(true);
+    $('shopForm').scrollIntoView({ block: 'center' });
+  }
+  $('newShopBtn').addEventListener('click', function () { clearShopForm(); openShopForm(true); });
+  $('shopCancel').addEventListener('click', function () { clearShopForm(); openShopForm(false); });
+  $('shopSearch').addEventListener('input', renderShops);
+  $('shopForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (needDb()) return;
+    var data = {
+      shopName: $('fShop').value.trim(),
+      owner: $('fOwner').value.trim(),
+      phone: toAscii($('fPhone').value).trim(),
+      location: $('fLocation').value.trim(),
+      map: $('fMap').value.trim(),
+      opening: num($('fOpening').value) || 0
+    };
+    if (!data.shopName) { toast('Enter the shop name'); return; }
+    var id = $('shopId').value;
+    var btn = $('shopSave'); btn.disabled = true;
+    var p;
+    if (id) { p = S.root.collection('shops').doc(id).update(data); }
+    else { data.balance = 0; data.createdAt = Date.now(); p = S.root.collection('shops').doc().set(data); }
+    p.then(function () { clearShopForm(); openShopForm(false); toast('Shop saved'); }, failed)
+      .then(function () { btn.disabled = false; });
+  });
+
+  var dueTouched = false;
+  function resetVisitForm(shopId) {
+    $('vShop').value = shopId || '';
+    $('vDate').value = today();
+    $('vCollected').value = ''; $('vRemaining').value = ''; $('vItems').value = ''; $('vNote').value = '';
+    $('vDue').value = addDays(today(), 7);
+    dueTouched = false;
+  }
+  function startVisit(shopId) { resetVisitForm(shopId); showTab('visits'); $('vCollected').focus(); }
+  $('vDate').addEventListener('change', function () { if (!dueTouched && $('vDate').value) $('vDue').value = addDays($('vDate').value, 7); });
+  $('vDue').addEventListener('change', function () { dueTouched = true; });
+  $('visitForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (needDb()) return;
+    var shop = shopById($('vShop').value);
+    if (!shop) { toast('Choose a shop first'); return; }
+    var date = $('vDate').value || today();
+    var collected = num($('vCollected').value);
+    var remaining = num($('vRemaining').value);
+    var items = $('vItems').value.trim();
+    var due = $('vDue').value || addDays(date, 7);
+    if ($('vCollected').value.trim() && collected == null) { toast('Enter the collected amount as a number'); return; }
+    if ($('vRemaining').value.trim() && remaining == null) { toast('Enter the balance as a number'); return; }
+    var btn = $('visitSave'); btn.disabled = true;
+    var root = S.root;
+    var before = ledgerTotals(shop.id);
+    var visitRef = root.collection('visits').doc();
+    visitRef.set({
+      shopId: shop.id, shopName: shop.shopName, date: date, collected: collected || 0,
+      remaining: remaining, note: $('vNote').value.trim(), ts: Date.now()
+    }).then(function () {
+      if (!collected) return;
+      return root.collection('entries').doc().set({ shopId: shop.id, shopName: shop.shopName, type: 'payment', amount: collected, date: date, note: 'Collected on visit', visitId: visitRef.id, ts: Date.now() });
+    }).then(function () {
+      if (!items) return;
+      return root.collection('orders').doc().set({ shopId: shop.id, shopName: shop.shopName, items: items, due: due, done: false, ts: Date.now() });
+    }).then(function () {
+      if (remaining == null) return;
+      return root.collection('shops').doc(shop.id).update({ opening: r2(remaining - before.billed + before.paid + (collected || 0)) });
+    }).then(function () {
+      toast(items ? 'Visit and order saved. It will show on Today on ' + dayLabel(due) : 'Visit saved');
+      resetVisitForm('');
+    }, failed).then(function () { btn.disabled = false; });
+  });
+
+  /* ---------- shop account page ---------- */
+  function r2(n) { return Math.round(n * 100) / 100; }
+  function qtyText(n) { return String(Math.round(Number(n) * 1000) / 1000); }
+  function openingOf(s) { return Number(s.opening != null ? s.opening : s.balance) || 0; }
+  function entriesOf(shopId) { return S.entries.filter(function (e) { return e.shopId === shopId; }); }
+  function ledgerTotals(shopId) {
+    var billed = 0, paid = 0;
+    entriesOf(shopId).forEach(function (e) {
+      if (e.type === 'sale') { billed += Number(e.total) || 0; paid += Number(e.paid) || 0; }
+      else if (e.type === 'payment') { paid += Number(e.amount) || 0; }
+    });
+    return { billed: billed, paid: paid };
+  }
+  function shopBalance(s) { var t = ledgerTotals(s.id); return r2(openingOf(s) + t.billed - t.paid); }
+
+  var saleRows = [], rowSeq = 0;
+  function updateSaleTotal() {
+    var total = 0;
+    saleRows.forEach(function (r) {
+      var q = num(r.qty.value), p = num(r.rate.value);
+      var line = (q != null && p != null) ? r2(q * p) : 0;
+      r.line.textContent = money(line);
+      total += line;
+    });
+    total = r2(total);
+    $('saleTotal').textContent = money(total);
+    var paid = num($('sPaid').value) || 0;
+    var owed = r2(total - paid);
+    $('saleOwed').textContent = total === 0 ? '' : (owed > 0 ? 'Left owed on this bill: ' + money(owed) : (owed < 0 ? 'Paid ' + money(-owed) + ' extra, it reduces the older balance' : 'Paid in full'));
+  }
+  function addSaleRow() {
+    var n = ++rowSeq, r = {};
+    r.name = h('input', { id: 'sName' + n, autocomplete: 'off', placeholder: 'Item, e.g. 20W-50 engine oil 4L', 'aria-label': 'Item name' });
+    r.qty = h('input', { id: 'sQty' + n, inputmode: 'decimal', autocomplete: 'off', placeholder: 'Quantity', 'aria-label': 'Quantity' });
+    r.rate = h('input', { id: 'sRate' + n, inputmode: 'decimal', autocomplete: 'off', placeholder: 'Price each (Rs)', 'aria-label': 'Price each' });
+    r.line = h('b', { class: 'num' }, 'Rs 0');
+    r.el = h('div', { class: 'item-row' },
+      r.name,
+      h('div', { class: 'two' }, r.qty, r.rate),
+      h('div', { class: 'row between' }, h('span', { class: 'muted small' }, 'Item total'), r.line,
+        h('button', { class: 'btn sm danger', type: 'button', onclick: function () {
+          if (saleRows.length < 2) { r.name.value = ''; r.qty.value = ''; r.rate.value = ''; updateSaleTotal(); return; }
+          saleRows.splice(saleRows.indexOf(r), 1); r.el.remove(); updateSaleTotal();
+        } }, 'Remove'))
+    );
+    saleRows.push(r);
+    $('saleRows').append(r.el);
+  }
+  function resetSaleForm() {
+    saleRows = []; $('saleRows').textContent = '';
+    addSaleRow();
+    $('sDate').value = today(); $('sPaid').value = ''; $('sNote').value = '';
+    updateSaleTotal();
+  }
+  function resetPayForm() { $('pDate').value = today(); $('pAmount').value = ''; $('pNote').value = ''; }
+  $('saleRows').addEventListener('input', updateSaleTotal);
+  $('sPaid').addEventListener('input', updateSaleTotal);
+  $('addRowBtn').addEventListener('click', function () { addSaleRow(); saleRows[saleRows.length - 1].name.focus(); });
+
+  $('saleForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (needDb()) return;
+    var s = shopById(S.openShop); if (!s) return;
+    var items = [], bad = false;
+    saleRows.forEach(function (r) {
+      var name = r.name.value.trim(), q = num(r.qty.value), p = num(r.rate.value);
+      if (!name && r.qty.value.trim() === '' && r.rate.value.trim() === '') return;
+      if (!name || q == null || q <= 0 || p == null || p < 0) { bad = true; return; }
+      items.push({ name: name, qty: q, price: p });
+    });
+    if (bad) { toast('Each item needs a name, quantity and price'); return; }
+    if (!items.length) { toast('Add at least one item'); return; }
+    var total = r2(items.reduce(function (a, i) { return a + i.qty * i.price; }, 0));
+    var paidTxt = $('sPaid').value.trim(), paid = num(paidTxt);
+    if (paidTxt && (paid == null || paid < 0)) { toast('Enter the paid amount as a number'); return; }
+    var btn = $('saleSave'); btn.disabled = true;
+    S.root.collection('entries').doc().set({ shopId: s.id, shopName: s.shopName, type: 'sale', date: $('sDate').value || today(), items: items, total: total, paid: paid || 0, note: $('sNote').value.trim(), ts: Date.now() })
+      .then(function () { resetSaleForm(); toast('Sale saved'); }, failed).then(function () { btn.disabled = false; });
+  });
+  $('payForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (needDb()) return;
+    var s = shopById(S.openShop); if (!s) return;
+    var amt = num($('pAmount').value);
+    if (amt == null || amt <= 0) { toast('Enter the amount received'); return; }
+    var btn = $('paySave'); btn.disabled = true;
+    var entry = { shopId: s.id, shopName: s.shopName, type: 'payment', amount: amt, date: $('pDate').value || today(), note: $('pNote').value.trim(), ts: Date.now() };
+    var after = r2(shopBalance(s) - amt);
+    S.root.collection('entries').doc().set(entry)
+      .then(function () { resetPayForm(); toast('Payment saved'); showReceipt(s, entry, after); }, failed).then(function () { btn.disabled = false; });
+  });
+
+  function openShopPage(id) {
+    S.openShop = id;
+    ['today', 'shops', 'visits', 'backup'].forEach(function (n) { $('view-' + n).hidden = true; });
+    $('view-shop').hidden = false;
+    document.querySelectorAll('.tab').forEach(function (b) {
+      if (b.getAttribute('data-tab') === 'shops') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    $('receiptBox').hidden = true;
+    resetSaleForm(); resetPayForm();
+    renderShopPage();
+    window.scrollTo(0, 0);
+  }
+  function closeShopPage() { showTab('shops'); }
+
+  function entryCard(e, after) {
+    var card = h('div', { class: 'card' });
+    if (e.type === 'sale') {
+      var left = r2((Number(e.total) || 0) - (Number(e.paid) || 0));
+      card.append(h('div', { class: 'row between' }, h('span', { class: 'pill warn' }, 'Sale'), h('span', { class: 'muted small' }, dayLabel(e.date))));
+      var lines = h('div', { class: 'lines' });
+      (e.items || []).forEach(function (i) {
+        lines.append(h('div', { class: 'line' }, h('span', {}, i.name + ' x ' + qtyText(i.qty) + ' @ ' + money(i.price)), h('b', { class: 'num' }, money(r2(i.qty * i.price)))));
+      });
+      card.append(lines, h('div', { class: 'sum' },
+        h('div', { class: 'line' }, h('span', {}, 'Bill total'), h('b', { class: 'num' }, money(e.total))),
+        h('div', { class: 'line' }, h('span', {}, 'Paid'), h('span', { class: 'num' }, money(e.paid))),
+        h('div', { class: 'line' }, h('span', {}, 'Left on this bill'), h('b', { class: 'num' }, money(left)))
+      ));
+    } else {
+      card.append(h('div', { class: 'row between' }, h('span', { class: 'pill good' }, 'Payment received'), h('span', { class: 'muted small' }, dayLabel(e.date))),
+        h('div', { class: 'line', style: 'margin-top:6px' }, h('span', {}, 'Amount'), h('b', { class: 'num' }, money(e.amount))));
+    }
+    if (e.note) card.append(h('p', { class: 'small', style: 'margin:6px 0 0' }, e.note));
+    card.append(h('p', { class: 'muted small', style: 'margin:6px 0' }, 'Balance after this: ' + money(after)));
+    card.append(h('div', { class: 'row' },
+      h('button', { class: 'btn sm primary', type: 'button', onclick: function () { var sh = shopById(e.shopId); if (sh) showReceipt(sh, e, after); } }, 'Send receipt'),
+      twoStep('Delete', 'danger', function () {
+        if (needDb()) return;
+        S.root.collection('entries').doc(e.id).delete().then(function () { toast('Entry deleted'); }, failed);
+      })));
+    return card;
+  }
+
+  function renderShopPage() {
+    if (!S.openShop) return;
+    var s = shopById(S.openShop);
+    if (!s) { closeShopPage(); return; }
+    var hd = $('shopHead'); hd.textContent = '';
+    hd.append(h('button', { class: 'btn sm', type: 'button', onclick: closeShopPage }, 'Back to shops'),
+      h('h2', { style: 'margin:12px 0 0' }, s.shopName));
+    if (s.owner) hd.append(h('p', { class: 'muted', style: 'margin:0' }, s.owner));
+    if (s.phone) hd.append(h('div', { class: 'row' }, h('span', { class: 'num' }, s.phone), copyBtn(s.phone), h('a', { href: 'tel:' + s.phone.replace(/\s+/g, '') }, 'Call')));
+    var m = mapUrl(s);
+    if (s.location || m) {
+      var loc = h('div', { class: 'row small' }, s.location ? h('span', {}, s.location) : null);
+      if (m) loc.append(h('a', { href: m, target: '_blank', rel: 'noopener noreferrer' }, 'Open in maps'));
+      hd.append(loc);
+    }
+    hd.append(h('div', { class: 'row', style: 'margin-top:8px' },
+      h('button', { class: 'btn sm primary', type: 'button', onclick: function () { startVisit(s.id); } }, 'Log visit'),
+      h('button', { class: 'btn sm', type: 'button', onclick: function () { closeShopPage(); editShop(s); } }, 'Edit shop')));
+
+    var t = ledgerTotals(s.id), op = openingOf(s), bal = r2(op + t.billed - t.paid);
+    var st = $('shopStats'); st.textContent = '';
+    st.append(
+      h('div', { class: 'stat' }, h('b', {}, money(t.billed)), h('span', {}, 'Total sold')),
+      h('div', { class: 'stat' }, h('b', {}, money(t.paid)), h('span', {}, 'Total paid')),
+      h('div', { class: 'stat' + (bal > 0 ? ' bad' : '') }, h('b', {}, money(bal)), h('span', {}, 'Balance owed'))
+    );
+    $('shopOpening').textContent = op ? 'Balance includes ' + money(op) + ' owed from before this app.' : '';
+
+    var po = $('shopPending'); po.textContent = '';
+    var pend = S.orders.filter(function (o) { return o.shopId === s.id && !o.done; }).sort(function (a, b) { return a.due < b.due ? -1 : a.due > b.due ? 1 : 0; });
+    if (pend.length) {
+      po.append(h('h3', {}, 'Orders waiting (' + pend.length + ')'));
+      var pl = h('div', { class: 'list' });
+      pend.forEach(function (o) {
+        pl.append(h('div', { class: 'card' },
+          h('div', { class: 'row between' }, h('span', { class: 'pill ' + (o.due < today() ? 'bad' : 'warn') }, dayLabel(o.due))),
+          h('p', { class: 'items' }, o.items),
+          h('div', { class: 'row' },
+            h('button', { class: 'btn sm primary', type: 'button', onclick: function () {
+              $('sNote').value = o.items;
+              $('saleForm').scrollIntoView({ block: 'start' });
+              if (saleRows.length) saleRows[0].name.focus();
+              toast('Fill the items and prices, then save the sale');
+            } }, 'Record as sale'),
+            h('button', { class: 'btn sm', type: 'button', onclick: function () { setDone(o, true); } }, 'Mark delivered'))
+        ));
+      });
+      po.append(pl);
+    }
+
+    var list = entriesOf(s.id).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0); });
+    var run = op, rows = [];
+    list.forEach(function (e) {
+      if (e.type === 'sale') run += (Number(e.total) || 0) - (Number(e.paid) || 0);
+      else run -= Number(e.amount) || 0;
+      rows.push({ e: e, after: r2(run) });
+    });
+    var lg = $('shopLedger'); lg.textContent = '';
+    if (!rows.length && !op) { lg.append(emptyBox('No sales or payments yet', 'Use Add a sale above to record what you gave, its price and what was paid.')); return; }
+    var box = h('div', { class: 'list' });
+    rows.reverse().forEach(function (r) { box.append(entryCard(r.e, r.after)); });
+    if (op) box.append(h('div', { class: 'card' }, h('div', { class: 'line' }, h('span', {}, 'Old balance brought forward'), h('b', { class: 'num' }, money(op)))));
+    lg.append(box);
+  }
+
+  /* ---------- receipts ---------- */
+  function fullDate(s) { return dayLabel(s) + ' ' + parse(s).getFullYear(); }
+  function waNumber(p) {
+    var d = toAscii(p).replace(/\D/g, '');
+    if (!d) return '';
+    if (d.indexOf('00') === 0) d = d.slice(2);
+    else if (d.charAt(0) === '0') d = '92' + d.slice(1);
+    else if (d.length === 10 && d.charAt(0) === '3') d = '92' + d;
+    return d;
+  }
+  function receiptText(s, e, after) {
+    var L = ['Adnan Traders', e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date), ''];
+    if (e.type === 'sale') {
+      (e.items || []).forEach(function (i) { L.push(i.name + ' x ' + qtyText(i.qty) + ' @ ' + money(i.price) + ' = ' + money(r2(i.qty * i.price))); });
+      L.push('', 'Bill total: ' + money(e.total), 'Paid: ' + money(e.paid));
+    } else {
+      L.push('Payment received: ' + money(e.amount));
+      if (e.note) L.push('Note: ' + e.note);
+    }
+    L.push('Balance remaining: ' + money(after), '', 'Thank you.');
+    return L.join('\n');
+  }
+  function drawReceipt(s, e, after) {
+    var W = 720, pad = 40, items = e.type === 'sale' ? (e.items || []) : [];
+    var c = document.createElement('canvas'); c.width = W; c.height = 900 + items.length * 60;
+    var g = c.getContext('2d');
+    var F = ' "Public Sans", "Segoe UI", Arial, sans-serif';
+    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = '#16201C'; g.fillRect(0, 0, W, 130);
+    g.textAlign = 'left';
+    g.fillStyle = '#FFFFFF'; g.font = '800 40px "Archivo",' + F; g.fillText('Adnan Traders', pad, 64);
+    g.fillStyle = '#E6A532'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
+    function fit(t, maxW) {
+      t = String(t); var cut = false;
+      while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; }
+      return cut ? t.trim() + '...' : t;
+    }
+    var y = 190;
+    function row(label, value, o) {
+      o = o || {};
+      g.textAlign = 'left'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText(label, pad, y);
+      g.textAlign = 'right'; g.font = (o.bold ? '700' : '500') + ' 26px' + F; g.fillStyle = o.color || '#16201C';
+      g.fillText(fit(value, W - 2 * pad - 170), W - pad, y);
+      g.textAlign = 'left'; y += 46;
+    }
+    function rule() { g.strokeStyle = '#CAD2CE'; g.lineWidth = 2; g.beginPath(); g.moveTo(pad, y - 22); g.lineTo(W - pad, y - 22); g.stroke(); y += 12; }
+    row('Shop', s.shopName, { bold: true });
+    row('Date', fullDate(e.date));
+    rule();
+    if (e.type === 'sale') {
+      items.forEach(function (i) {
+        g.textAlign = 'left'; g.font = '600 25px' + F; g.fillStyle = '#16201C'; g.fillText(fit(i.name, W - 2 * pad - 190), pad, y);
+        g.textAlign = 'right'; g.fillText(money(r2(i.qty * i.price)), W - pad, y);
+        g.textAlign = 'left'; g.font = '400 21px' + F; g.fillStyle = '#56655E'; g.fillText(qtyText(i.qty) + ' x ' + money(i.price), pad, y + 28);
+        y += 60;
+      });
+      rule();
+      row('Bill total', money(e.total), { bold: true });
+      row('Paid', money(e.paid));
+    } else {
+      g.textAlign = 'center'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText('Amount received', W / 2, y + 10);
+      g.font = '800 68px "Archivo",' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
+      g.textAlign = 'left'; y += 150;
+      if (e.note) row('Note', e.note);
+      rule();
+    }
+    row('Balance remaining', money(after), { bold: true, color: after > 0 ? '#B3261E' : '#1F7A4D' });
+    y += 30;
+    g.textAlign = 'center'; g.font = '400 22px' + F; g.fillStyle = '#56655E'; g.fillText('Thank you for your business', W / 2, y); g.textAlign = 'left';
+    var out = document.createElement('canvas'); out.width = W; out.height = y + 50;
+    out.getContext('2d').drawImage(c, 0, 0);
+    return out;
+  }
+  function showReceipt(s, e, after) {
+    var c = drawReceipt(s, e, after);
+    var text = receiptText(s, e, after);
+    S.rc = { canvas: c, text: text, filename: 'receipt-' + (String(s.shopName).replace(/[^A-Za-z0-9]+/g, '-').slice(0, 30) || 'shop') + '-' + (e.date || today()) + '.png' };
+    $('receiptImg').src = c.toDataURL('image/png');
+    var wn = waNumber(s.phone || ''), q = encodeURIComponent(text), to = $('rcTo');
+    S.rc.number = wn;
+    setWaLinks();
+    if (!wn) { to.textContent = 'No contact number is saved for this shop, so WhatsApp will ask you to pick a contact. Add the number with Edit shop.'; to.style.color = 'var(--bad)'; }
+    else if (wn.length < 11) { to.textContent = 'Sending to +' + wn + '. This number looks incomplete, check it with Edit shop.'; to.style.color = 'var(--bad)'; }
+    else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + ')'; to.style.color = ''; }
+    $('receiptBox').hidden = false;
+    $('receiptBox').scrollIntoView({ block: 'start' });
+  }
+  function setWaLinks() {
+    if (!S.rc) return;
+    var wn = S.rc.number || '', withText = $('rcTxt').checked, q = encodeURIComponent(S.rc.text);
+    var qs = (wn ? 'phone=' + wn : '') + (withText ? (wn ? '&' : '') + 'text=' + q : '');
+    $('rcWa').href = 'whatsapp://send' + (qs ? '?' + qs : '');
+    $('rcWa2').href = 'intent://send/' + (qs ? '?' + qs : '') + '#Intent;scheme=whatsapp;package=com.whatsapp;end';
+    $('rcWa3').href = 'https://wa.me/' + wn + (withText ? '?text=' + q : '');
+  }
+  $('rcTxt').addEventListener('change', setWaLinks);
+  $('rcClose').addEventListener('click', function () { $('receiptBox').hidden = true; });
+  $('rcCopy').addEventListener('click', function () {
+    if (!S.rc) return;
+    try { navigator.clipboard.writeText(S.rc.text).then(function () { toast('Receipt text copied'); }, function () { toast('Could not copy'); }); } catch (err) { toast('Could not copy'); }
+  });
+  $('rcSave').addEventListener('click', function () {
+    if (!S.rc) return;
+    S.rc.canvas.toBlob(function (blob) {
+      if (!blob) { toast('Could not make the image'); return; }
+      saveBlob(S.rc.filename, blob);
+      toast('Receipt image saved');
+    }, 'image/png');
+  });
+
+  $('rcBoth').addEventListener('click', function () {
+    if (!S.rc) return;
+    S.rc.canvas.toBlob(function (blob) {
+      if (!blob) { toast('Could not make the image'); return; }
+      saveBlob(S.rc.filename, blob);
+      toast('Receipt image saved. Opening WhatsApp...');
+      var link = $('rcWa').href;
+      setTimeout(function () { window.location.href = link; }, 700);
+    }, 'image/png');
+  });
+  $('rcShare').addEventListener('click', function () {
+    if (!S.rc) return;
+    S.rc.canvas.toBlob(function (blob) {
+      try {
+        var f = new File([blob], S.rc.filename, { type: 'image/png' });
+        if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing images is not supported on this phone. Use Save image, then attach it in the chat.'); return; }
+        navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); });
+      } catch (err) { toast('Sharing is blocked here. Use Save image.'); }
+    }, 'image/png');
+  });
+  $('rcCopyNum').addEventListener('click', function () {
+    if (!S.rc || !S.rc.number) { toast('No number saved for this shop'); return; }
+    try { navigator.clipboard.writeText('+' + S.rc.number).then(function () { toast('Number copied'); }, function () { toast('Could not copy'); }); } catch (err) { toast('Could not copy'); }
+  });
+  $('rcCopyImg').addEventListener('click', function () {
+    if (!S.rc) return;
+    S.rc.canvas.toBlob(function (blob) {
+      try {
+        if (!blob || !window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) { toast('Copying images does not work here. Use Save image.'); return; }
+        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () { toast('Image copied. Paste it in the chat.'); }, function () { toast('Could not copy the image. Use Save image.'); });
+      } catch (err) { toast('Could not copy the image. Use Save image.'); }
+    }, 'image/png');
+  });
+
+  /* ---------- backup ---------- */
+  function strip(d) { var o = {}; Object.keys(d).forEach(function (k) { o[k] = d[k]; }); return o; }
+  var META = (function () {
+    try { var t = JSON.parse(localStorage.getItem('adnan-traders-meta') || '{}'); return { lastBackup: t.lastBackup || 0, changes: t.changes || 0 }; }
+    catch (e) { return { lastBackup: 0, changes: 0 }; }
+  })();
+  function saveMeta() { try { localStorage.setItem('adnan-traders-meta', JSON.stringify(META)); } catch (e) {} }
+  function markBackedUp() { META.lastBackup = Date.now(); META.changes = 0; saveMeta(); renderBackupStatus(); }
+  function renderBackupStatus() {
+    var el = $('backupStatus');
+    var last = META.lastBackup ? 'Last backup: ' + fullDate(iso(new Date(META.lastBackup))) : 'No backup file saved yet';
+    el.textContent = last + (META.changes ? ' | ' + plural(META.changes, 'change', 'changes') + ' since then' : '');
+    var old = META.lastBackup ? (Date.now() - META.lastBackup) > 7 * 86400000 : true;
+    var need = META.changes >= 10 || (META.changes > 0 && old);
+    showBanner(need ? 'Please save a backup file. ' + plural(META.changes, 'change is', 'changes are') + ' not in a backup yet. Open the Backup tab.' : '');
+  }
+  function backupPayload() {
+    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(),
+      shops: S.shops.map(strip), visits: S.visits.map(strip), orders: S.orders.map(strip), entries: S.entries.map(strip) };
+  }
+  function backupName() { return 'adnan-traders-backup-' + today() + '.json'; }
+  $('exportBtn').addEventListener('click', function () {
+    saveBlob(backupName(), new Blob([JSON.stringify(backupPayload(), null, 1)], { type: 'application/json' }));
+    markBackedUp();
+    toast('Backup file saved. Keep a copy outside the phone.');
+  });
+  $('shareBackupBtn').addEventListener('click', function () {
+    try {
+      var f = new File([JSON.stringify(backupPayload(), null, 1)], backupName(), { type: 'text/plain' });
+      if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sending files is not supported here. Use Save backup file.'); return; }
+      navigator.share({ files: [f] }).then(markBackedUp).catch(function (err) { if (err && err.name !== 'AbortError') toast('Could not send. Use Save backup file.'); });
+    } catch (err) { toast('Could not send. Use Save backup file.'); }
+  });
+  $('copyBackupBtn').addEventListener('click', function () {
+    var text = JSON.stringify(backupPayload());
+    try { navigator.clipboard.writeText(text).then(function () { toast('Backup text copied. Paste it somewhere safe, like Notes.'); }, function () { toast('Could not copy. Use Save backup file.'); }); }
+    catch (err) { toast('Could not copy. Use Save backup file.'); }
+  });
+  function parseBackup(text) {
+    var j = JSON.parse(String(text).replace(/^﻿/, '').trim());
+    if (!j || (j.app !== 'adnan-traders' && j.app !== 'koyama-register') || !Array.isArray(j.shops)) throw new Error('bad');
+    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [] };
+  }
+  function describeBackup(d) {
+    return 'This backup has ' + plural(d.shops.length, 'shop', 'shops') + ', ' + plural(d.visits.length, 'visit', 'visits') + ', ' + plural(d.orders.length, 'order', 'orders') + ' and ' + plural(d.entries.length, 'sale or payment', 'sales and payments') + '.';
+  }
+  function runRestore(done) {
+    var jobs = [], ok = /^[A-Za-z0-9_.~:@+-]+$/;
+    ['shops', 'visits', 'orders', 'entries'].forEach(function (col) {
+      S.pendingImport[col].forEach(function (d) {
+        if (!d || typeof d !== 'object') return;
+        var body = strip(d), id = body.id; delete body.id;
+        jobs.push({ col: col, id: (typeof id === 'string' && ok.test(id)) ? id : null, body: body });
+      });
+    });
+    var n = 0;
+    S.bulk = true;
+    jobs.reduce(function (p, j) {
+      return p.then(function () {
+        var ref = j.id ? S.root.collection(j.col).doc(j.id) : S.root.collection(j.col).doc();
+        return ref.set(j.body).then(function () { n++; });
+      });
+    }, Promise.resolve()).then(function () {
+      S.bulk = false; markBackedUp(); renderAll();
+      toast(plural(n, 'record', 'records') + ' restored');
+    }, function () {
+      S.bulk = false; renderAll();
+      toast('Some records could not be restored (' + n + ' done)');
+    }).then(function () { S.pendingImport = null; done(); });
+  }
+  $('importFile').addEventListener('change', function () {
+    var f = $('importFile').files[0];
+    S.pendingImport = null; $('importBtn').disabled = true;
+    $('importInfo').textContent = '';
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      try {
+        S.pendingImport = parseBackup(rd.result);
+        $('importInfo').textContent = describeBackup(S.pendingImport);
+        $('importBtn').disabled = false;
+      } catch (err) { $('importInfo').textContent = 'This is not a valid Adnan Traders backup file.'; }
+    };
+    rd.onerror = function () { $('importInfo').textContent = 'Could not read this file. Try the paste option below.'; };
+    rd.readAsText(f);
+  });
+  var importArmed = false;
+  $('importBtn').addEventListener('click', function () {
+    if (!S.root || !S.pendingImport) return;
+    var btn = $('importBtn');
+    if (!importArmed) {
+      importArmed = true; btn.textContent = 'Sure? Tap again to restore';
+      setTimeout(function () { importArmed = false; if (!btn.disabled) btn.textContent = 'Restore data from file'; }, 3500);
+      return;
+    }
+    importArmed = false; btn.disabled = true; btn.textContent = 'Restoring...';
+    runRestore(function () { btn.textContent = 'Restore data from file'; $('importFile').value = ''; $('importInfo').textContent = ''; });
+  });
+  $('pasteRestoreBtn').addEventListener('click', function () {
+    if (!S.root) return;
+    var btn = $('pasteRestoreBtn');
+    try { S.pendingImport = parseBackup($('pasteBackup').value); } catch (err) { toast('This text is not a valid Adnan Traders backup'); return; }
+    btn.disabled = true;
+    runRestore(function () { btn.disabled = false; $('pasteBackup').value = ''; });
+  });
+
+  /* ---------- files ---------- */
+  function saveBlob(name, blob) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+  }
+
+  /* ---------- local database: saved on this phone, works with no internet ---------- */
+  var LDB = (function () {
+    var mem = {}, listeners = [], idb = null, LS_KEY = 'adnan-traders-data-v1';
+    function clone(o) { return JSON.parse(JSON.stringify(o)); }
+    function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+    function openIdb() {
+      return new Promise(function (res) {
+        try {
+          var r = indexedDB.open('adnan-traders', 1);
+          r.onupgradeneeded = function () { r.result.createObjectStore('docs', { keyPath: 'path' }); };
+          r.onsuccess = function () { res(r.result); };
+          r.onerror = function () { res(null); };
+          r.onblocked = function () { res(null); };
+        } catch (e) { res(null); }
+      });
+    }
+    function idbAll() {
+      return new Promise(function (res) {
+        if (!idb) return res([]);
+        try { var q = idb.transaction('docs').objectStore('docs').getAll(); q.onsuccess = function () { res(q.result || []); }; q.onerror = function () { res([]); }; }
+        catch (e) { res([]); }
+      });
+    }
+    function idbWrite(fn) {
+      return new Promise(function (res, rej) {
+        if (!idb) return res();
+        try {
+          var tx = idb.transaction('docs', 'readwrite'); fn(tx.objectStore('docs'));
+          tx.oncomplete = function () { res(); };
+          tx.onerror = tx.onabort = function () { rej(tx.error || new Error('storage')); };
+        } catch (e) { rej(e); }
+      });
+    }
+    function lsSave() { try { localStorage.setItem(LS_KEY, JSON.stringify(mem)); } catch (e) {} }
+    function lsLoad() { try { var t = localStorage.getItem(LS_KEY); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+    function snapOf(col) {
+      var docs = Object.keys(mem).filter(function (k) { return k.indexOf(col + '/') === 0; }).map(function (k) {
+        return { id: k.slice(col.length + 1), data: function () { return clone(mem[k]); } };
+      });
+      return { docs: docs, metadata: { fromCache: false } };
+    }
+    function notify(col) { listeners.slice().forEach(function (l) { if (l.col === col) l.fn(snapOf(col)); }); }
+    function commit(col, path) {
+      META.changes++; saveMeta();
+      var val = mem[path];
+      lsSave(); notify(col);
+      return idbWrite(function (store) { if (val === undefined) store.delete(path); else store.put({ path: path, data: val }); });
+    }
+    function docRef(col, id) {
+      var path = col + '/' + id;
+      return {
+        id: id,
+        set: function (d) { mem[path] = clone(d); return commit(col, path); },
+        update: function (d) {
+          if (!mem[path]) return Promise.reject(new Error('missing'));
+          var c = clone(d); Object.keys(c).forEach(function (k) { mem[path][k] = c[k]; });
+          return commit(col, path);
+        },
+        delete: function () { delete mem[path]; return commit(col, path); }
+      };
+    }
+    var root = {
+      collection: function (col) {
+        return {
+          doc: function (id) { return docRef(col, id || newId()); },
+          onSnapshot: function (fn) {
+            var l = { col: col, fn: fn }; listeners.push(l);
+            setTimeout(function () { fn(snapOf(col)); }, 0);
+            return function () { listeners = listeners.filter(function (x) { return x !== l; }); };
+          }
+        };
+      }
+    };
+    function init() {
+      return openIdb().then(function (db) {
+        idb = db;
+        return idbAll();
+      }).then(function (rows) {
+        rows.forEach(function (r) { mem[r.path] = r.data; });
+        var copy = lsLoad();
+        if (copy) {
+          var missing = Object.keys(copy).filter(function (k) { return mem[k] === undefined; });
+          if (missing.length && !rows.length) {
+            missing.forEach(function (k) { mem[k] = copy[k]; });
+            return idbWrite(function (store) { missing.forEach(function (k) { store.put({ path: k, data: mem[k] }); }); });
+          }
+        }
+      }).then(function () {
+        lsSave();
+        try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+        return root;
+      });
+    }
+    return { init: init };
+  })();
+
+  function docsOf(snap) { return snap.docs.map(function (d) { var o = strip(d.data() || {}); o.id = d.id; return o; }); }
+  function connect() {
+    LDB.init().then(function (root) {
+      S.root = root;
+      ['shops', 'visits', 'orders', 'entries'].forEach(function (col) {
+        root.collection(col).onSnapshot(function (snap) { S[col] = docsOf(snap); if (!S.bulk) renderAll(); });
+      });
+      $('view-load').hidden = true; $('tabsNav').hidden = false;
+      showTab('today');
+      setSync('ok', 'Saved on this phone');
+      renderAll();
+    }).catch(function () {
+      $('view-load').textContent = 'Could not open the storage on this phone. Please reload the page.';
+    });
+  }
+  var installEvent = null;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installEvent = e; $('installBtn').hidden = false; });
+  $('installBtn').addEventListener('click', function () {
+    if (!installEvent) return;
+    installEvent.prompt();
+    installEvent.userChoice.then(function () { installEvent = null; $('installBtn').hidden = true; });
+  });
+
+  resetVisitForm('');
+  /* display mode: Auto follows the phone, Light and Dark are chosen by the user */
+  var MODES = ['auto', 'light', 'dark'], MODE_LABEL = { auto: 'Mode: Auto', light: 'Mode: Light', dark: 'Mode: Dark' };
+  function applyMode(m) {
+    if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-theme', m);
+    else document.documentElement.removeAttribute('data-theme');
+    $('themeBtn').textContent = MODE_LABEL[m];
+  }
+  var mode = 'auto';
+  try { var saved = localStorage.getItem('adnan-traders-mode'); if (MODES.indexOf(saved) !== -1) mode = saved; } catch (e) {}
+  applyMode(mode);
+  $('themeBtn').addEventListener('click', function () {
+    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
+    applyMode(mode);
+    try { localStorage.setItem('adnan-traders-mode', mode); } catch (e) {}
+  });
+
+  renderAll();
+  connect();
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    var hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadController) $('updateBar').hidden = false; hadController = true; });
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+  $('updateBtn').addEventListener('click', function () { location.reload(); });
+  $('appVersion').textContent = 'App version ' + APP_VERSION;
+})();
+</script>
+</body>
+</html>
