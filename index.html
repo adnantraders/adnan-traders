@@ -291,14 +291,14 @@ img { max-width: 100%; }
       <img id="receiptImg" alt="Receipt preview">
       <label style="display:flex;flex-direction:row;align-items:center;gap:8px;margin:8px 0" for="rcTxt"><input type="checkbox" id="rcTxt" style="width:auto;min-height:0"> Also put the text message in the chat</label>
       <div class="row">
-        <button class="btn primary" type="button" id="rcBoth">Save image and open chat</button>
+        <button class="btn primary" type="button" id="rcShare">Send receipt on WhatsApp</button>
+        <button class="btn" type="button" id="rcBoth">Save image and open chat</button>
         <button class="btn" type="button" id="rcSave">Save image</button>
         <a class="btn" id="rcWa">Open WhatsApp chat</a>
         <button class="btn" type="button" id="rcCopy">Copy text</button>
         <button class="btn" type="button" id="rcClose">Close</button>
       </div>
       <div class="row" style="margin-top:8px">
-        <button class="btn" type="button" id="rcShare">Share image</button>
         <button class="btn" type="button" id="rcCopyImg">Copy image</button>
         <button class="btn" type="button" id="rcCopyNum">Copy number</button>
         <a class="btn" id="rcWa2">Chat, other way</a>
@@ -434,7 +434,7 @@ img { max-width: 100%; }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.1';
+  var APP_VERSION = '1.2';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1103,7 +1103,7 @@ img { max-width: 100%; }
     setWaLinks();
     if (!wn) { to.textContent = 'No contact number is saved for this shop, so WhatsApp will ask you to pick a contact. Add the number with Edit shop.'; to.style.color = 'var(--bad)'; }
     else if (wn.length < 11) { to.textContent = 'Sending to +' + wn + '. This number looks incomplete, check it with Edit shop.'; to.style.color = 'var(--bad)'; }
-    else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + ')'; to.style.color = ''; }
+    else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + '). In WhatsApp choose this shop, then tap Send.'; to.style.color = ''; }
     $('receiptBox').hidden = false;
     $('receiptBox').scrollIntoView({ block: 'start' });
   }
@@ -1146,6 +1146,7 @@ img { max-width: 100%; }
       try {
         var f = new File([blob], S.rc.filename, { type: 'image/png' });
         if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing images is not supported on this phone. Use Save image, then attach it in the chat.'); return; }
+        if (S.rc.number) { try { navigator.clipboard.writeText('+' + S.rc.number); } catch (e2) {} }
         navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); });
       } catch (err) { toast('Sharing is blocked here. Use Save image.'); }
     }, 'image/png');
