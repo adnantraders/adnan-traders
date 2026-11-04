@@ -474,6 +474,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       <p class="small" id="backupStatus" style="margin:8px 0"></p>
       <div class="two" id="counts"></div>
     </div>
+    <h3>Cloud backup (Google account)</h3>
+    <div class="card" id="cloudCard">
+      <p><span class="lockState off" id="cloudState">Not set up</span></p>
+      <p class="muted small">Keeps a safe copy of everything in your own Google account's cloud. If the phone is lost, install the app on a new phone, sign in with the same Google account and press Restore from cloud.</p>
+      <div id="cloudSetup">
+        <label for="cfgText">Paste the Firebase settings here
+          <textarea id="cfgText" placeholder="const firebaseConfig = { apiKey: ..., authDomain: ..., projectId: ..., appId: ... }"></textarea>
+        </label>
+        <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="cfgSave">Save settings</button></div>
+      </div>
+      <div id="cloudOut" hidden>
+        <div class="row"><button class="btn primary" type="button" id="cloudSignIn">Sign in with Google</button><button class="btn" type="button" id="cfgChange">Change settings</button></div>
+      </div>
+      <div id="cloudIn" hidden>
+        <p style="margin:6px 0"><b id="cloudWho"></b></p>
+        <p class="muted small" id="cloudLast" style="margin:2px 0 10px"></p>
+        <div class="row"><button class="btn primary" type="button" id="cloudNow">Back up now</button><button class="btn" type="button" id="cloudRestore">Restore from cloud</button></div>
+        <label style="display:flex;flex-direction:row;align-items:center;gap:8px;margin:12px 0" for="cloudAuto"><input type="checkbox" id="cloudAuto" style="width:auto;min-height:0" checked> Back up automatically when there is internet</label>
+        <button class="btn danger" type="button" id="cloudOutBtn">Sign out</button>
+      </div>
+      <p class="muted small" id="cloudMsg" style="margin-bottom:0"></p>
+    </div>
     <h3>Save a backup</h3>
     <div class="card">
       <div class="row">
@@ -550,7 +572,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.5';
+  var APP_VERSION = '1.6';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1290,6 +1312,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     if (!j || (j.app !== 'adnan-traders' && j.app !== 'koyama-register') || !Array.isArray(j.shops)) throw new Error('bad');
     return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '' };
   }
+  window.__AT = {
+    payload: function () { return backupPayload(); },
+    markBackedUp: function () { markBackedUp(); },
+    changes: function () { return META.changes; },
+    restoreText: function (text, done) { S.pendingImport = parseBackup(text); runRestore(done || function () {}); }
+  };
   function describeBackup(d) {
     return 'This backup has ' + plural(d.shops.length, 'shop', 'shops') + ', ' + plural(d.visits.length, 'visit', 'visits') + ', ' + plural(d.orders.length, 'order', 'orders') + ' and ' + plural(d.entries.length, 'sale or payment', 'sales and payments') + '.';
   }
@@ -1406,6 +1434,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     function notify(col) { listeners.slice().forEach(function (l) { if (l.col === col) l.fn(snapOf(col)); }); }
     function commit(col, path) {
       META.changes++; saveMeta();
+      try { window.dispatchEvent(new Event('at-changed')); } catch (e) {}
       var val = mem[path];
       lsSave(); notify(col);
       return idbWrite(function (store) { if (val === undefined) store.delete(path); else store.put({ path: path, data: val }); });
@@ -1756,6 +1785,171 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   showLock();
 })();
 </script>
+<script>
+/* ===== v1.6 cloud backup with Google sign-in (Firebase). The app stays offline-first: the cloud is only a safe copy. ===== */
+(function () {
+  'use strict';
+  var CK = 'adnan-traders-fbcfg', UK = 'adnan-traders-fbuser', LK2 = 'adnan-traders-cloudlast', AK = 'adnan-traders-cloudauto';
+  var FV = '10.12.2', BASE = 'https://www.gstatic.com/firebasejs/' + FV + '/';
+  function $(id) { return document.getElementById(id); }
+  if (!$('cloudCard')) return;
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 3200); }
+  function msg(t, bad) { var m = $('cloudMsg'); m.textContent = t || ''; m.style.color = bad ? 'var(--bad)' : ''; }
+  function cfg() { try { return JSON.parse(get(CK) || 'null'); } catch (e) { return null; } }
+  function when(ts) { try { return new Date(ts).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
+
+  /* ---- read the pasted Firebase settings, whatever shape they were copied in ---- */
+  function parseCfg(text) {
+    var out = {}, re = /["']?(apiKey|authDomain|projectId|appId|storageBucket|messagingSenderId)["']?\s*[:=]\s*["']([^"']+)["']/g, m;
+    while ((m = re.exec(text))) out[m[1]] = m[2].trim();
+    return (out.apiKey && out.authDomain && out.projectId && out.appId) ? out : null;
+  }
+
+  /* ---- thin wrapper over the Firebase SDK (loaded only when needed, so the app opens fine offline) ---- */
+  var fbp = null;
+  function loadFb() {
+    if (fbp) return fbp;
+    var c = cfg(); if (!c) return Promise.reject(new Error('no config'));
+    if (window.__FB_STUB) { fbp = Promise.resolve(window.__FB_STUB(c)); return fbp; }
+    fbp = Promise.all([import(BASE + 'firebase-app.js'), import(BASE + 'firebase-auth.js'), import(BASE + 'firebase-firestore.js')]).then(function (m) {
+      var A = m[0], U = m[1], F = m[2], app = A.initializeApp(c), auth = U.getAuth(app), db = F.getFirestore(app);
+      function d(uid, id) { return F.doc(db, 'users', uid, 'backups', id); }
+      return {
+        onAuth: function (cb) { return U.onAuthStateChanged(auth, cb); },
+        signIn: function () { return U.signInWithPopup(auth, new U.GoogleAuthProvider()); },
+        redirect: function () { return U.signInWithRedirect(auth, new U.GoogleAuthProvider()); },
+        redirectResult: function () { return U.getRedirectResult(auth); },
+        signOut: function () { return U.signOut(auth); },
+        save: function (uid, chunks, oldN, meta) {
+          var b = F.writeBatch(db), i;
+          for (i = 0; i < chunks.length; i++) b.set(d(uid, 'c' + i), { i: i, t: chunks[i] });
+          for (i = chunks.length; i < oldN; i++) b.delete(d(uid, 'c' + i));
+          b.set(d(uid, 'meta'), meta);
+          return b.commit();
+        },
+        meta: function (uid) { return F.getDoc(d(uid, 'meta')).then(function (s) { return s.exists() ? s.data() : null; }); },
+        load: function (uid, n) {
+          var ps = []; for (var i = 0; i < n; i++) ps.push(F.getDoc(d(uid, 'c' + i)).then(function (s) { return s.exists() ? s.data().t : null; }));
+          return Promise.all(ps).then(function (a) { if (a.indexOf(null) !== -1) throw new Error('missing part'); return a.join(''); });
+        }
+      };
+    });
+    fbp.catch(function () { fbp = null; });
+    return fbp;
+  }
+
+  /* ---- UI state ---- */
+  var user = null, busy = false, restoring = false;
+  function render() {
+    var c = cfg(), st = $('cloudState');
+    $('cloudSetup').hidden = !!c; $('cloudOut').hidden = !c || !!user; $('cloudIn').hidden = !user;
+    if (user) { st.textContent = 'Signed in'; st.className = 'lockState on'; $('cloudWho').textContent = user.email || user.displayName || 'Google account'; }
+    else if (c) { st.textContent = 'Not signed in'; st.className = 'lockState off'; }
+    else { st.textContent = 'Not set up'; st.className = 'lockState off'; }
+    var last = Number(get(LK2) || 0);
+    $('cloudLast').textContent = last ? 'Last cloud backup: ' + when(last) : 'No cloud backup yet';
+    $('cloudAuto').checked = get(AK) !== '0';
+  }
+  function setUser(u) { user = u ? { uid: u.uid, email: u.email, displayName: u.displayName } : null; if (user) put(UK, user.email || ''); else del(UK); render(); if (user) maybeAuto(true); }
+
+  function start() {
+    if (!cfg()) { render(); return; }
+    if (!navigator.onLine) { var e = get(UK); render(); if (e) { $('cloudState').textContent = 'Offline'; $('cloudWho').textContent = e; } return; }
+    loadFb().then(function (api) {
+      api.onAuth(setUser);
+      api.redirectResult().then(function (r) { if (r && r.user) note('Signed in'); }, function () {});
+    }, function () { render(); msg('Could not reach Google right now. The app still works offline.', true); });
+  }
+
+  /* ---- actions ---- */
+  $('cfgSave').addEventListener('click', function () {
+    var c = parseCfg($('cfgText').value);
+    if (!c) { msg('Could not find apiKey, authDomain, projectId and appId in that text. Copy the whole firebaseConfig block.', true); return; }
+    put(CK, JSON.stringify(c)); $('cfgText').value = ''; msg('Settings saved. Now sign in.'); fbp = null; render(); start();
+  });
+  $('cfgChange').addEventListener('click', function () { del(CK); fbp = null; user = null; render(); msg(''); });
+  function authErr(err) {
+    var c = (err && err.code) || '';
+    if (c === 'auth/unauthorized-domain') return 'Google sign-in is blocked for this website. In Firebase open Authentication, then Settings, then Authorized domains and add adnantraders.github.io';
+    if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return 'Sign-in was cancelled.';
+    if (c === 'auth/network-request-failed') return 'No internet. Try again when you are online.';
+    if (c === 'auth/operation-not-allowed') return 'Google sign-in is not turned on in Firebase. Open Authentication, Sign-in method and enable Google.';
+    return 'Sign-in did not work (' + (c || 'unknown') + ').';
+  }
+  $('cloudSignIn').addEventListener('click', function () {
+    if (!navigator.onLine) { msg('You need internet to sign in.', true); return; }
+    msg('Opening Google sign-in...');
+    loadFb().then(function (api) {
+      return api.signIn().then(function () { msg(''); }, function (err) {
+        var c = (err && err.code) || '';
+        if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') return api.redirect();
+        msg(authErr(err), true);
+      });
+    }, function () { msg('Could not load Google sign-in. Check your internet.', true); });
+  });
+  $('cloudOutBtn').addEventListener('click', function () {
+    loadFb().then(function (api) { return api.signOut(); }).then(function () { msg('Signed out. Your data on this phone is untouched.'); }, function () {});
+  });
+  $('cloudAuto').addEventListener('change', function () { put(AK, $('cloudAuto').checked ? '1' : '0'); });
+
+  var CHUNK = 200000;
+  function withTimeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, ms); })]); }
+  function backupNow(silent) {
+    if (busy || restoring || !user || !window.__AT) return Promise.resolve();
+    if (!navigator.onLine) { if (!silent) msg('No internet. It will back up by itself when you are online.', true); return Promise.resolve(); }
+    busy = true; if (!silent) msg('Backing up...');
+    var text = JSON.stringify(window.__AT.payload()), chunks = [];
+    for (var i = 0; i < text.length; i += CHUNK) chunks.push(text.slice(i, i + CHUNK));
+    if (!chunks.length) chunks.push('');
+    var counts = {}; try { var j = JSON.parse(text); counts = { shops: j.shops.length, entries: j.entries.length }; } catch (e) {}
+    return loadFb().then(function (api) {
+      return api.meta(user.uid).then(function (m) {
+        return withTimeout(api.save(user.uid, chunks, m ? m.n || 0 : 0, { n: chunks.length, savedAt: Date.now(), counts: counts, app: 'adnan-traders' }), 30000);
+      });
+    }).then(function () {
+      var ts = Date.now(); put(LK2, String(ts)); window.__AT.markBackedUp(); render();
+      msg('Backed up to your Google account at ' + when(ts) + '.'); if (!silent) note('Cloud backup done');
+    }, function (err) {
+      msg(err && err.code === 'permission-denied' ? 'Firebase refused the save. Check the Firestore rules.' : 'Could not back up now. It will try again later.', true);
+    }).then(function () { busy = false; });
+  }
+  $('cloudNow').addEventListener('click', function () { backupNow(false); });
+
+  var armed = false;
+  $('cloudRestore').addEventListener('click', function () {
+    var b = $('cloudRestore');
+    if (!navigator.onLine) { msg('You need internet to restore.', true); return; }
+    if (!armed) { armed = true; b.textContent = 'Sure? Tap again'; setTimeout(function () { armed = false; b.textContent = 'Restore from cloud'; }, 3500); return; }
+    armed = false; b.textContent = 'Restoring...'; b.disabled = true; restoring = true; msg('Reading your cloud backup...');
+    loadFb().then(function (api) {
+      return api.meta(user.uid).then(function (m) {
+        if (!m) throw new Error('empty');
+        return withTimeout(api.load(user.uid, m.n), 40000);
+      });
+    }).then(function (text) {
+      return new Promise(function (res) { window.__AT.restoreText(text, res); });
+    }).then(function () { msg('Restored from your cloud backup.'); }, function (err) {
+      msg(err && err.message === 'empty' ? 'There is no cloud backup in this Google account yet.' : 'Could not restore. Check your internet and try again.', true);
+    }).then(function () { restoring = false; b.disabled = false; b.textContent = 'Restore from cloud'; });
+  });
+
+  /* automatic backup: a short while after changes, and again when internet returns */
+  var timer = null;
+  function maybeAuto(now) {
+    if (!user || get(AK) === '0' || !window.__AT) return;
+    if (!now && !window.__AT.changes()) return;
+    if (now && !window.__AT.changes() && Number(get(LK2) || 0)) return;
+    clearTimeout(timer); timer = setTimeout(function () { backupNow(true); }, now ? 1500 : 15000);
+  }
+  window.addEventListener('at-changed', function () { if (!restoring) maybeAuto(false); });
+  window.addEventListener('online', function () { if (cfg() && !user) start(); else maybeAuto(true); });
+  render(); start();
+})();
+</script>
+
 
 
 </body>
