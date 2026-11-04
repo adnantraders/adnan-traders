@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#16201C">
+<meta name="theme-color" content="#5B3FE0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -155,6 +155,13 @@ p { margin: 6px 0; }
   cursor: pointer;
 }
 .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn .ico { width: 20px; height: 20px; flex: none; }
+.btn.wa, .btn.cancel, #rcSave { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; font-size: 17px; }
+.btn.wa { background: #25D366; border-color: #25D366; color: #fff; font-weight: 700; min-height: 54px; box-shadow: 0 2px 0 #1DA851; }
+.btn.wa:active { background: #1DA851; }
+.btn.cancel { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); font-weight: 600; }
+.rc-actions { display: grid; gap: 10px; margin: 12px 0 6px; }
+#rcTo { font-weight: 600; }
 .btn.danger { color: var(--bad); }
 .btn.sm { min-height: 38px; padding: 0 12px; font-size: 14px; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
@@ -221,6 +228,79 @@ details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
 body { margin: 0; }
 img { max-width: 100%; }
 #loginErr { margin: 12px 0; }
+/* ===== v1.4 colourful modern theme ===== */
+:root {
+  --bg: #F2F0FF; --surface: #FFFFFF; --surface2: #E9E6FB; --ink: #1B1840; --muted: #5E5A86; --line: #D9D4F3;
+  --accent: #5B3FE0; --accent-ink: #FFFFFF; --good: #0E9F5B; --good-bg: #D6F5E5; --warn: #C2600A; --warn-bg: #FFE9CF; --bad: #D62839; --bad-bg: #FFDDE1;
+  --blue: #1E6FF0; --blue-bg: #DCEAFF; --teal: #0B9AA8; --pink: #D6336C; --wa: #25D366; --wa-dark: #128C7E;
+  --grad: linear-gradient(135deg, #5B3FE0 0%, #1E6FF0 55%, #0B9AA8 100%);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F0D24; --surface: #1A1740; --surface2: #262256; --ink: #F1EFFF; --muted: #A9A4D6; --line: #34306B;
+  --accent: #9B87FF; --accent-ink: #130F33; --good: #4FE0A0; --good-bg: #123B2B; --warn: #FFB566; --warn-bg: #3F2810; --bad: #FF8A96; --bad-bg: #44161D;
+  --blue: #6BA6FF; --blue-bg: #14264D; --teal: #4DD6E3; --pink: #FF7BAA; } }
+:root[data-theme="dark"] {
+  --bg: #0F0D24; --surface: #1A1740; --surface2: #262256; --ink: #F1EFFF; --muted: #A9A4D6; --line: #34306B;
+  --accent: #9B87FF; --accent-ink: #130F33; --good: #4FE0A0; --good-bg: #123B2B; --warn: #FFB566; --warn-bg: #3F2810; --bad: #FF8A96; --bad-bg: #44161D;
+  --blue: #6BA6FF; --blue-bg: #14264D; --teal: #4DD6E3; --pink: #FF7BAA; }
+body { background: var(--bg) radial-gradient(900px 400px at 100% -10%, rgba(91,63,224,.14), transparent 60%), radial-gradient(700px 360px at -10% 20%, rgba(11,154,168,.12), transparent 60%) no-repeat fixed; }
+body::before { background: transparent; }
+.top { background: var(--grad); color: #fff; margin: 0 -16px; padding: 14px 16px 12px; border-bottom: 0; border-radius: 0 0 22px 22px; box-shadow: 0 8px 24px rgba(91,63,224,.28); transition: box-shadow .2s; }
+.top .brand { color: #fff; display: flex; align-items: center; gap: 10px; }
+.top .brand small { color: rgba(255,255,255,.85); }
+.top .logo { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,.2); display: grid; place-items: center; flex: none; font-weight: 800; font-size: 15px; letter-spacing: .02em; }
+.top .sync { color: #fff; }
+.top #themeBtn { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.35); color: #fff; }
+h2 { color: var(--accent); display: flex; align-items: center; gap: 8px; }
+h2::before { content: ""; width: 5px; height: 22px; border-radius: 4px; background: var(--grad); flex: none; }
+h3 { color: var(--teal); }
+.title { color: var(--ink); }
+.card, form, .stat, .week-total { border-radius: 18px; box-shadow: 0 2px 10px rgba(40,30,120,.07); }
+.card { border-left: 5px solid var(--accent); }
+.card.is-bad { border-left-color: var(--bad); }
+.card:nth-child(4n+2) { border-left-color: var(--blue); } .card:nth-child(4n+3) { border-left-color: var(--teal); } .card:nth-child(4n) { border-left-color: var(--pink); }
+.stat { border: 0; color: #fff; position: relative; overflow: hidden; }
+.stat span { color: rgba(255,255,255,.92); font-weight: 600; }
+.stats .stat:nth-child(1) { background: linear-gradient(135deg, #E5384F, #FF7A59); }
+.stats .stat:nth-child(2) { background: linear-gradient(135deg, #F08A00, #FFC043); }
+.stats .stat:nth-child(3) { background: linear-gradient(135deg, #1E6FF0, #4CC3FF); }
+.stats.compact .stat:nth-child(1) { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
+.stats.compact .stat:nth-child(2) { background: linear-gradient(135deg, #0E9F5B, #4FD39A); }
+.stats.compact .stat:nth-child(3) { background: linear-gradient(135deg, #D62839, #FF7A59); }
+.stat.bad b, .stat.warn b { color: #fff; }
+.stat b { text-shadow: 0 1px 6px rgba(0,0,0,.18); }
+.week-total { background: linear-gradient(135deg, #0E9F5B, #0B9AA8); color: #fff; border: 0; font-weight: 600; }
+.pill { background: var(--blue-bg); color: var(--blue); font-weight: 600; }
+.btn { border-radius: 14px; font-weight: 600; background: var(--surface); border-color: var(--line); }
+.btn .ico { width: 18px; height: 18px; margin-right: 6px; vertical-align: -3px; flex: none; }
+.btn.primary { background: var(--grad); border: 0; color: #fff; box-shadow: 0 4px 12px rgba(91,63,224,.35); }
+.btn.danger { background: var(--bad-bg); border-color: transparent; color: var(--bad); }
+.btn.wa .ico, #rcSave .ico, .btn.cancel .ico { width: 22px; height: 22px; margin: 0; }
+.btn { position: relative; overflow: hidden; }
+.btn:active, .tab:active { transform: scale(.97); }
+.ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.55); transform: scale(0); animation: rip .55s ease-out; pointer-events: none; }
+@keyframes rip { to { transform: scale(3.4); opacity: 0; } }
+.tabs { border-top: 0; border-radius: 22px 22px 0 0; box-shadow: 0 -6px 24px rgba(40,30,120,.16); }
+.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; position: relative; }
+.tab .ico { width: 24px; height: 24px; }
+.tab[data-c="today"] { --tc: #E5384F; } .tab[data-c="shops"] { --tc: #1E6FF0; } .tab[data-c="visits"] { --tc: #0E9F5B; } .tab[data-c="backup"] { --tc: #F08A00; }
+.tab .ico { color: var(--tc); opacity: .75; }
+.tab[aria-current="page"] { background: color-mix(in srgb, var(--tc) 14%, transparent); color: var(--tc); box-shadow: none; }
+.tab[aria-current="page"] .ico { opacity: 1; transform: translateY(-1px) scale(1.12); }
+.tab em { position: absolute; top: 2px; right: 14px; margin: 0; }
+.banner { background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 16px; }
+input, select, textarea { border-radius: 12px; background: var(--surface); border: 1.5px solid var(--line); }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+.empty { border-radius: 18px; background: var(--surface); }
+.empty b { color: var(--accent); }
+#toast { background: var(--accent); color: #fff; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.25); animation: toastin .25s ease-out; }
+@keyframes toastin { from { transform: translate(-50%, 12px); opacity: 0; } }
+#receiptBox { border-left-color: var(--wa) !important; }
+.btn.wa { background: var(--wa); box-shadow: 0 4px 14px rgba(37,211,102,.45); border: 0; }
+.btn.cancel { background: var(--bad-bg); color: var(--bad); border: 1.5px solid var(--bad); }
+#rcSave { background: var(--blue-bg); color: var(--blue); border-color: transparent; }
+.fadein { animation: fin .35s ease-out; } @keyframes fin { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .fadein, .ripple, #toast { animation: none; } }
 </style>
 </head>
 <body>
@@ -289,22 +369,12 @@ img { max-width: 100%; }
       <p class="title">Receipt</p>
       <p class="small" id="rcTo" style="margin:4px 0"></p>
       <img id="receiptImg" alt="Receipt preview">
-      <label style="display:flex;flex-direction:row;align-items:center;gap:8px;margin:8px 0" for="rcTxt"><input type="checkbox" id="rcTxt" style="width:auto;min-height:0"> Also put the text message in the chat</label>
-      <div class="row">
-        <button class="btn primary" type="button" id="rcShare">Send receipt on WhatsApp</button>
-        <button class="btn" type="button" id="rcBoth">Save image and open chat</button>
-        <button class="btn" type="button" id="rcSave">Save image</button>
-        <a class="btn" id="rcWa">Open WhatsApp chat</a>
-        <button class="btn" type="button" id="rcCopy">Copy text</button>
-        <button class="btn" type="button" id="rcClose">Close</button>
+      <div class="rc-actions">
+        <button class="btn wa" type="button" id="rcShare"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.18 1.6 6L4 28l7.1-1.86a12 12 0 0 0 4.94 1.06h.01C22.7 27.2 28 21.8 28 15.16 28 8.5 22.7 3 16.04 3zm0 22.1a10 10 0 0 1-5.1-1.4l-.37-.22-4.2 1.1 1.12-4.1-.24-.38a9.9 9.9 0 0 1-1.52-5.3c0-5.5 4.5-10 10.03-10 5.5 0 9.98 4.5 9.98 10 0 5.52-4.5 10.3-9.7 10.3zm5.5-7.5c-.3-.15-1.78-.88-2.05-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.18.2-.35.22-.65.08-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.52-.07-.15-.68-1.64-.93-2.25-.24-.58-.5-.5-.68-.5h-.58c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.5.7.3 1.27.5 1.7.62.72.23 1.37.2 1.88.12.58-.08 1.78-.73 2.03-1.43.25-.7.25-1.3.18-1.43-.08-.13-.28-.2-.58-.35z"/></svg><span>Send receipt on WhatsApp</span></button>
+        <button class="btn" type="button" id="rcSave"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 20h14v-2H5v2zM12 3v10.2l3.6-3.6L17 11l-5 5-5-5 1.4-1.4 3.6 3.6V3h0z"/></svg><span>Save image</span></button>
+        <button class="btn cancel" type="button" id="rcClose"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/></svg><span>Cancel</span></button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="btn" type="button" id="rcCopyImg">Copy image</button>
-        <button class="btn" type="button" id="rcCopyNum">Copy number</button>
-        <a class="btn" id="rcWa2">Chat, other way</a>
-        <a class="btn" id="rcWa3" target="_blank" rel="noopener noreferrer">Chat, online link</a>
-      </div>
-      <p class="muted small">Save image and open chat puts the receipt picture in your gallery and opens this shop's WhatsApp chat. In the chat tap the paperclip, choose Gallery, pick the receipt and send. Share image opens the phone's share menu instead, where you pick the chat yourself. If the chat does not open, try Chat, other way. The text message is left out unless you tick the box above.</p>
+      <p class="muted small">Tap the green button, choose WhatsApp, pick this shop's chat and tap Send. The shop number is copied for you to paste in WhatsApp search.</p>
     </div>
     <div id="shopPending"></div>
     <h2>Add a sale</h2>
@@ -434,7 +504,7 @@ img { max-width: 100%; }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.2';
+  var APP_VERSION = '1.4';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1048,10 +1118,10 @@ img { max-width: 100%; }
     var g = c.getContext('2d');
     var F = ' "Public Sans", "Segoe UI", Arial, sans-serif';
     g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
-    g.fillStyle = '#16201C'; g.fillRect(0, 0, W, 130);
+    var gr = g.createLinearGradient(0, 0, W, 130); gr.addColorStop(0, '#5B3FE0'); gr.addColorStop(0.55, '#1E6FF0'); gr.addColorStop(1, '#0B9AA8'); g.fillStyle = gr; g.fillRect(0, 0, W, 130);
     g.textAlign = 'left';
     g.fillStyle = '#FFFFFF'; g.font = '800 40px "Archivo",' + F; g.fillText('Adnan Traders', pad, 64);
-    g.fillStyle = '#E6A532'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
+    g.fillStyle = '#FFE08A'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
     function fit(t, maxW) {
       t = String(t); var cut = false;
       while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; }
@@ -1098,71 +1168,36 @@ img { max-width: 100%; }
     var text = receiptText(s, e, after);
     S.rc = { canvas: c, text: text, filename: 'receipt-' + (String(s.shopName).replace(/[^A-Za-z0-9]+/g, '-').slice(0, 30) || 'shop') + '-' + (e.date || today()) + '.png' };
     $('receiptImg').src = c.toDataURL('image/png');
-    var wn = waNumber(s.phone || ''), q = encodeURIComponent(text), to = $('rcTo');
+    var wn = waNumber(s.phone || ''), to = $('rcTo');
     S.rc.number = wn;
-    setWaLinks();
     if (!wn) { to.textContent = 'No contact number is saved for this shop, so WhatsApp will ask you to pick a contact. Add the number with Edit shop.'; to.style.color = 'var(--bad)'; }
     else if (wn.length < 11) { to.textContent = 'Sending to +' + wn + '. This number looks incomplete, check it with Edit shop.'; to.style.color = 'var(--bad)'; }
     else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + '). In WhatsApp choose this shop, then tap Send.'; to.style.color = ''; }
     $('receiptBox').hidden = false;
     $('receiptBox').scrollIntoView({ block: 'start' });
   }
-  function setWaLinks() {
-    if (!S.rc) return;
-    var wn = S.rc.number || '', withText = $('rcTxt').checked, q = encodeURIComponent(S.rc.text);
-    var qs = (wn ? 'phone=' + wn : '') + (withText ? (wn ? '&' : '') + 'text=' + q : '');
-    $('rcWa').href = 'whatsapp://send' + (qs ? '?' + qs : '');
-    $('rcWa2').href = 'intent://send/' + (qs ? '?' + qs : '') + '#Intent;scheme=whatsapp;package=com.whatsapp;end';
-    $('rcWa3').href = 'https://wa.me/' + wn + (withText ? '?text=' + q : '');
+  function receiptFile(unique) {
+    return new Promise(function (resolve, reject) {
+      if (!S.rc) { reject(new Error('no receipt')); return; }
+      var jpg = !unique;
+      S.rc.canvas.toBlob(function (blob) {
+        if (!blob) { reject(new Error('no image')); return; }
+        var base = S.rc.filename.replace(/\.png$/, '');
+        resolve({ blob: blob, name: jpg ? base + '.jpg' : base + '-' + Date.now().toString(36) + '.png', type: jpg ? 'image/jpeg' : 'image/png' });
+      }, jpg ? 'image/jpeg' : 'image/png', 0.95);
+    });
   }
-  $('rcTxt').addEventListener('change', setWaLinks);
   $('rcClose').addEventListener('click', function () { $('receiptBox').hidden = true; });
-  $('rcCopy').addEventListener('click', function () {
-    if (!S.rc) return;
-    try { navigator.clipboard.writeText(S.rc.text).then(function () { toast('Receipt text copied'); }, function () { toast('Could not copy'); }); } catch (err) { toast('Could not copy'); }
-  });
   $('rcSave').addEventListener('click', function () {
-    if (!S.rc) return;
-    S.rc.canvas.toBlob(function (blob) {
-      if (!blob) { toast('Could not make the image'); return; }
-      saveBlob(S.rc.filename, blob);
-      toast('Receipt image saved');
-    }, 'image/png');
-  });
-
-  $('rcBoth').addEventListener('click', function () {
-    if (!S.rc) return;
-    S.rc.canvas.toBlob(function (blob) {
-      if (!blob) { toast('Could not make the image'); return; }
-      saveBlob(S.rc.filename, blob);
-      toast('Receipt image saved. Opening WhatsApp...');
-      var link = $('rcWa').href;
-      setTimeout(function () { window.location.href = link; }, 700);
-    }, 'image/png');
+    receiptFile(true).then(function (r) { saveBlob(r.name, r.blob); toast('Receipt image saved in your gallery'); }, function () { toast('Could not make the image'); });
   });
   $('rcShare').addEventListener('click', function () {
-    if (!S.rc) return;
-    S.rc.canvas.toBlob(function (blob) {
-      try {
-        var f = new File([blob], S.rc.filename, { type: 'image/png' });
-        if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing images is not supported on this phone. Use Save image, then attach it in the chat.'); return; }
-        if (S.rc.number) { try { navigator.clipboard.writeText('+' + S.rc.number); } catch (e2) {} }
-        navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); });
-      } catch (err) { toast('Sharing is blocked here. Use Save image.'); }
-    }, 'image/png');
-  });
-  $('rcCopyNum').addEventListener('click', function () {
-    if (!S.rc || !S.rc.number) { toast('No number saved for this shop'); return; }
-    try { navigator.clipboard.writeText('+' + S.rc.number).then(function () { toast('Number copied'); }, function () { toast('Could not copy'); }); } catch (err) { toast('Could not copy'); }
-  });
-  $('rcCopyImg').addEventListener('click', function () {
-    if (!S.rc) return;
-    S.rc.canvas.toBlob(function (blob) {
-      try {
-        if (!blob || !window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) { toast('Copying images does not work here. Use Save image.'); return; }
-        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () { toast('Image copied. Paste it in the chat.'); }, function () { toast('Could not copy the image. Use Save image.'); });
-      } catch (err) { toast('Could not copy the image. Use Save image.'); }
-    }, 'image/png');
+    receiptFile(false).then(function (r) {
+      var f = new File([r.blob], r.name, { type: r.type });
+      if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing is not supported on this phone. Use Save image.'); return; }
+      if (S.rc.number) { try { navigator.clipboard.writeText('+' + S.rc.number); } catch (e2) {} }
+      return navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); });
+    }, function () { toast('Could not make the image'); });
   });
 
   /* ---------- backup ---------- */
@@ -1426,5 +1461,117 @@ img { max-width: 100%; }
   $('appVersion').textContent = 'App version ' + APP_VERSION;
 })();
 </script>
+<script>
+/* ===== v1.4 interface layer: icons, colours, greeting, animations, touch feedback ===== */
+(function () {
+  'use strict';
+  try {
+    var I = {
+      today: '<path fill="currentColor" d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2zm12 8H5v10h14V10zM7 12h4v4H7v-4z"/>',
+      shops: '<path fill="currentColor" d="M4 4h16l1.5 5.2c.3 1-.4 2-1.4 2.2V20H3.9v-8.6c-1-.2-1.7-1.2-1.4-2.2L4 4zm2 8.6V18h5v-5H6zM13 13v5h5v-5.4a3 3 0 0 1-2.2-.9 3 3 0 0 1-2.8.9z"/>',
+      visits: '<path fill="currentColor" d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>',
+      backup: '<path fill="currentColor" d="M19.4 10A7.5 7.5 0 0 0 5 8.7 5.5 5.5 0 0 0 6 19.5h12.5a4.5 4.5 0 0 0 .9-9.5zM12 9l4 4h-3v4h-2v-4H8l4-4z"/>',
+      add: '<path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/>',
+      save: '<path fill="currentColor" d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2 2v5h8V5H7zm5 8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>',
+      del: '<path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zM6 9h12l-1 12H7L6 9z"/>',
+      edit: '<path fill="currentColor" d="M4 17.2V20h2.8L18 8.8 15.2 6 4 17.2zM20.7 7a1 1 0 0 0 0-1.4l-2.3-2.3a1 1 0 0 0-1.4 0L15.2 5l3.8 3.8L20.7 7z"/>',
+      call: '<path fill="currentColor" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.6 3.6a1 1 0 0 1-.25 1l-2.25 2.2z"/>',
+      map: '<path fill="currentColor" d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>',
+      down: '<path fill="currentColor" d="M5 20h14v-2H5v2zM11 3h2v9.2l3.6-3.6L18 10l-6 6-6-6 1.4-1.4 3.6 3.6V3z"/>',
+      up: '<path fill="currentColor" d="M5 20h14v-2H5v2zM13 16h-2V6.8L7.4 10.4 6 9l6-6 6 6-1.4 1.4L13 6.8V16z"/>',
+      share: '<path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.5-3.7a3 3 0 0 0 0-3l6.5-3.7A3 3 0 1 0 15 5a3 3 0 0 0 .1.8L8.6 9.5a3 3 0 1 0 0 5l6.5 3.7A3 3 0 1 0 18 16z"/>',
+      cancel: '<path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/>',
+      refresh: '<path fill="currentColor" d="M17.6 6.4A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.8-4.2L13 11h8V3l-3.4 3.4z"/>',
+      theme: '<path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/>'
+    };
+    function svg(name) { return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">' + (I[name] || '') + '</svg>'; }
+    var greeting = function () { var h = new Date().getHours(); return h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 21 ? 'Good evening' : 'Good night'; };
+    var RULES = [
+      [/^(add|new)\b.*(shop|visit|collection|sale|payment|item)/i, 'add'], [/add another/i, 'add'], [/^(save|update|record)/i, 'save'],
+      [/delete|remove/i, 'del'], [/^edit/i, 'edit'], [/call/i, 'call'], [/map|location|navigate/i, 'map'],
+      [/restore|choose backup|paste/i, 'up'], [/backup|download|export/i, 'down'], [/send|share/i, 'share'],
+      [/cancel|close|clear/i, 'cancel'], [/reload/i, 'refresh']
+    ];
+    var TABICON = { today: 'today', shops: 'shops', visits: 'visits', backup: 'backup' };
+
+    function decorateHeader() {
+      var brand = document.getElementById('brand');
+      if (!brand || brand.dataset.done) return;
+      brand.dataset.done = '1';
+      var logo = document.createElement('span'); logo.className = 'logo'; logo.textContent = 'AT';
+      var box = document.createElement('span'); box.innerHTML = 'Adnan Traders<small></small>';
+      brand.textContent = ''; brand.appendChild(logo); brand.appendChild(box);
+      var small = box.querySelector('small');
+      var d = new Date();
+      small.textContent = greeting() + ' · ' + d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+    function decorateTabs() {
+      document.querySelectorAll('.tab').forEach(function (t) {
+        var key = t.getAttribute('data-tab'); if (!key) return;
+        t.setAttribute('data-c', key);
+        if (t.querySelector('.ico')) return;
+        t.insertAdjacentHTML('afterbegin', svg(TABICON[key]));
+      });
+    }
+    function decorateButtons() {
+      document.querySelectorAll('.btn:not(.wa):not(.cancel):not(#rcSave)').forEach(function (b) {
+        if (b.dataset.ic || b.id === 'themeBtn') return;
+        b.dataset.ic = '1';
+        var txt = (b.textContent || '').trim();
+        for (var i = 0; i < RULES.length; i++) if (RULES[i][0].test(txt)) { b.insertAdjacentHTML('afterbegin', svg(RULES[i][1])); break; }
+      });
+      var tb = document.getElementById('themeBtn');
+      if (tb && !tb.dataset.ic) { tb.dataset.ic = '1'; tb.insertAdjacentHTML('afterbegin', svg('theme')); }
+    }
+    function animateNumbers() {
+      document.querySelectorAll('.stat b').forEach(function (b) {
+        var raw = b.textContent, m = /^(Rs\s*)?(-?[\d,]+)$/.exec(raw.trim());
+        if (!m || b.dataset.anim === raw) return;
+        b.dataset.anim = raw;
+        var to = parseInt(m[2].replace(/,/g, ''), 10), pre = m[1] || '', t0 = performance.now();
+        if (!isFinite(to) || to === 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        (function step(now) {
+          var k = Math.min(1, (now - t0) / 600), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
+          b.textContent = pre + v.toLocaleString('en-US');
+          if (k < 1) requestAnimationFrame(step); else { b.textContent = raw; b.dataset.anim = raw; }
+        })(t0);
+      });
+    }
+    function fadeCards() {
+      document.querySelectorAll('.card:not(.fadein), .empty:not(.fadein)').forEach(function (c) { c.classList.add('fadein'); });
+    }
+    function run() { decorateHeader(); decorateTabs(); decorateButtons(); animateNumbers(); fadeCards(); }
+
+    var queued = false;
+    new MutationObserver(function () {
+      if (queued) return; queued = true;
+      requestAnimationFrame(function () { queued = false; run(); });
+    }).observe(document.body, { childList: true, subtree: true });
+    run();
+
+    /* touch feedback: ripple + short vibration */
+    document.addEventListener('pointerdown', function (e) {
+      var b = e.target.closest && e.target.closest('.btn, .tab');
+      if (!b || b.disabled) return;
+      try { if (navigator.vibrate) navigator.vibrate(8); } catch (x) {}
+      if (!b.classList.contains('btn')) return;
+      var r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) / 2, d = document.createElement('span');
+      d.className = 'ripple'; d.style.width = d.style.height = s + 'px';
+      d.style.left = (e.clientX - r.left - s / 2) + 'px'; d.style.top = (e.clientY - r.top - s / 2) + 'px';
+      b.appendChild(d); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 600);
+    }, { passive: true });
+
+    /* header shadow grows when scrolling; greeting refreshes when the app is reopened */
+    window.addEventListener('scroll', function () {
+      var t = document.querySelector('.top'); if (t) t.style.boxShadow = window.scrollY > 6 ? '0 10px 30px rgba(91,63,224,.38)' : '';
+    }, { passive: true });
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible') return;
+      var s = document.querySelector('#brand small'); if (s) s.textContent = greeting() + ' · ' + new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+    });
+  } catch (err) { /* the app keeps working even if decoration fails */ }
+})();
+</script>
+
 </body>
 </html>
