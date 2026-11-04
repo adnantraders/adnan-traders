@@ -228,6 +228,25 @@ details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
 body { margin: 0; }
 img { max-width: 100%; }
 #loginErr { margin: 12px 0; }
+/* ===== v1.5 stat cards everywhere ===== */
+.two .stat:nth-child(4n+1) { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
+.two .stat:nth-child(4n+2) { background: linear-gradient(135deg, #1E6FF0, #4CC3FF); }
+.two .stat:nth-child(4n+3) { background: linear-gradient(135deg, #F08A00, #FFC043); }
+.two .stat:nth-child(4n+4) { background: linear-gradient(135deg, #0E9F5B, #4FD39A); }
+.stat { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
+/* lock screen + settings */
+#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--grad); color: #fff; display: grid; place-items: center; padding: 24px; }
+#lockScr .box { width: 100%; max-width: 360px; text-align: center; display: grid; gap: 14px; }
+#lockScr .logo2 { width: 76px; height: 76px; border-radius: 22px; background: rgba(255,255,255,.22); display: grid; place-items: center; margin: 0 auto; font: 800 28px var(--font-display); }
+#lockScr h1 { margin: 0; font-family: var(--font-display); font-size: 28px; }
+#lockScr p { margin: 0; opacity: .9; }
+#lockScr input { background: rgba(255,255,255,.95); color: #1B1840; text-align: center; font-size: 20px; letter-spacing: .15em; border: 0; }
+#lockScr .btn { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; background: #fff; color: #5B3FE0; border: 0; font-weight: 700; }
+#lockScr .btn.fp { background: rgba(255,255,255,.2); color: #fff; }
+#lockScr a { color: #fff; opacity: .85; font-size: 14px; }
+#lockErr { min-height: 22px; font-weight: 600; color: #FFE08A; }
+.lockState { display: inline-block; padding: 2px 12px; border-radius: 99px; font-weight: 700; font-size: 13px; }
+.lockState.on { background: var(--good-bg); color: var(--good); } .lockState.off { background: var(--bad-bg); color: var(--bad); }
 /* ===== v1.4 colourful modern theme ===== */
 :root {
   --bg: #F2F0FF; --surface: #FFFFFF; --surface2: #E9E6FB; --ink: #1B1840; --muted: #5E5A86; --line: #D9D4F3;
@@ -480,6 +499,33 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       </details>
       <p class="muted small">Restoring adds the records from the backup. It does not delete what is already on the phone. Backups from the older Claude version of this app also work.</p>
     </div>
+    <h3>Your business</h3>
+    <div class="card">
+      <label for="bizIn">Business name (shown at the top and on every receipt)
+        <input id="bizIn" maxlength="40" autocomplete="off" placeholder="Adnan Traders">
+      </label>
+      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="bizSave">Save name</button></div>
+    </div>
+    <h3>App lock</h3>
+    <div class="card">
+      <p><span class="lockState off" id="lockState">Lock is off</span></p>
+      <div id="lockOff">
+        <label for="lkA">New password (at least 4 characters)
+          <input id="lkA" type="password" autocomplete="new-password">
+        </label>
+        <label for="lkB" style="margin-top:8px">Repeat password
+          <input id="lkB" type="password" autocomplete="new-password">
+        </label>
+        <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="lockOn">Turn on app lock</button></div>
+      </div>
+      <div id="lockOnBox" hidden>
+        <div class="row">
+          <button class="btn" type="button" id="fpEnroll">Use fingerprint</button>
+          <button class="btn danger" type="button" id="lockOffBtn">Turn off lock</button>
+        </div>
+      </div>
+      <p class="muted small">The lock keeps other people out of the app on this phone. If you forget the password, the only way back in erases the data on this phone, so keep a backup file. Backup files themselves are not locked, keep them private.</p>
+    </div>
     <h3>Home screen</h3>
     <div class="card">
       <p class="muted small">Open the app link once with internet, then install it. After that it opens from the home screen and works with no internet.</p>
@@ -504,7 +550,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.4';
+  var APP_VERSION = '1.5';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1100,8 +1146,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     else if (d.length === 10 && d.charAt(0) === '3') d = '92' + d;
     return d;
   }
+  function bizName() { try { return (localStorage.getItem('adnan-traders-biz') || '').trim() || 'Adnan Traders'; } catch (e) { return 'Adnan Traders'; } }
   function receiptText(s, e, after) {
-    var L = ['Adnan Traders', e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date), ''];
+    var L = [bizName(), e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date), ''];
     if (e.type === 'sale') {
       (e.items || []).forEach(function (i) { L.push(i.name + ' x ' + qtyText(i.qty) + ' @ ' + money(i.price) + ' = ' + money(r2(i.qty * i.price))); });
       L.push('', 'Bill total: ' + money(e.total), 'Paid: ' + money(e.paid));
@@ -1120,7 +1167,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
     var gr = g.createLinearGradient(0, 0, W, 130); gr.addColorStop(0, '#5B3FE0'); gr.addColorStop(0.55, '#1E6FF0'); gr.addColorStop(1, '#0B9AA8'); g.fillStyle = gr; g.fillRect(0, 0, W, 130);
     g.textAlign = 'left';
-    g.fillStyle = '#FFFFFF'; g.font = '800 40px "Archivo",' + F; g.fillText('Adnan Traders', pad, 64);
+    g.fillStyle = '#FFFFFF'; g.font = '800 40px "Archivo",' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
     g.fillStyle = '#FFE08A'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
     function fit(t, maxW) {
       t = String(t); var cut = false;
@@ -1217,7 +1264,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     showBanner(need ? 'Please save a backup file. ' + plural(META.changes, 'change is', 'changes are') + ' not in a backup yet. Open the Backup tab.' : '');
   }
   function backupPayload() {
-    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(),
+    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(), settings: { biz: bizName() },
       shops: S.shops.map(strip), visits: S.visits.map(strip), orders: S.orders.map(strip), entries: S.entries.map(strip) };
   }
   function backupName() { return 'adnan-traders-backup-' + today() + '.json'; }
@@ -1241,13 +1288,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   function parseBackup(text) {
     var j = JSON.parse(String(text).replace(/^﻿/, '').trim());
     if (!j || (j.app !== 'adnan-traders' && j.app !== 'koyama-register') || !Array.isArray(j.shops)) throw new Error('bad');
-    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [] };
+    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '' };
   }
   function describeBackup(d) {
     return 'This backup has ' + plural(d.shops.length, 'shop', 'shops') + ', ' + plural(d.visits.length, 'visit', 'visits') + ', ' + plural(d.orders.length, 'order', 'orders') + ' and ' + plural(d.entries.length, 'sale or payment', 'sales and payments') + '.';
   }
   function runRestore(done) {
     var jobs = [], ok = /^[A-Za-z0-9_.~:@+-]+$/;
+    if (S.pendingImport.biz) { try { localStorage.setItem('adnan-traders-biz', S.pendingImport.biz); window.dispatchEvent(new Event('biz-changed')); } catch (e) {} }
     ['shops', 'visits', 'orders', 'entries'].forEach(function (col) {
       S.pendingImport[col].forEach(function (d) {
         if (!d || typeof d !== 'object') return;
@@ -1492,6 +1540,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       [/restore|choose backup|paste/i, 'up'], [/backup|download|export/i, 'down'], [/send|share/i, 'share'],
       [/cancel|close|clear/i, 'cancel'], [/reload/i, 'refresh']
     ];
+    function bizNow() { try { return (localStorage.getItem('adnan-traders-biz') || '').trim() || 'Adnan Traders'; } catch (e) { return 'Adnan Traders'; } }
+    window.addEventListener('biz-changed', function () { var t = document.getElementById('bizTitle'); if (t) t.textContent = bizNow(); document.title = bizNow(); });
     var TABICON = { today: 'today', shops: 'shops', visits: 'visits', backup: 'backup' };
 
     function decorateHeader() {
@@ -1499,7 +1549,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       if (!brand || brand.dataset.done) return;
       brand.dataset.done = '1';
       var logo = document.createElement('span'); logo.className = 'logo'; logo.textContent = 'AT';
-      var box = document.createElement('span'); box.innerHTML = 'Adnan Traders<small></small>';
+      var box = document.createElement('span'); box.innerHTML = '<span id="bizTitle"></span><small></small>'; box.querySelector('#bizTitle').textContent = bizNow();
       brand.textContent = ''; brand.appendChild(logo); brand.appendChild(box);
       var small = box.querySelector('small');
       var d = new Date();
@@ -1523,24 +1573,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       var tb = document.getElementById('themeBtn');
       if (tb && !tb.dataset.ic) { tb.dataset.ic = '1'; tb.insertAdjacentHTML('afterbegin', svg('theme')); }
     }
-    function animateNumbers() {
-      document.querySelectorAll('.stat b').forEach(function (b) {
-        var raw = b.textContent, m = /^(Rs\s*)?(-?[\d,]+)$/.exec(raw.trim());
-        if (!m || b.dataset.anim === raw) return;
-        b.dataset.anim = raw;
-        var to = parseInt(m[2].replace(/,/g, ''), 10), pre = m[1] || '', t0 = performance.now();
-        if (!isFinite(to) || to === 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        (function step(now) {
-          var k = Math.min(1, (now - t0) / 600), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
-          b.textContent = pre + v.toLocaleString('en-US');
-          if (k < 1) requestAnimationFrame(step); else { b.textContent = raw; b.dataset.anim = raw; }
-        })(t0);
-      });
-    }
     function fadeCards() {
       document.querySelectorAll('.card:not(.fadein), .empty:not(.fadein)').forEach(function (c) { c.classList.add('fadein'); });
     }
-    function run() { decorateHeader(); decorateTabs(); decorateButtons(); animateNumbers(); fadeCards(); }
+    function run() { decorateHeader(); decorateTabs(); decorateButtons(); fadeCards(); }
 
     var queued = false;
     new MutationObserver(function () {
@@ -1572,6 +1608,155 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   } catch (err) { /* the app keeps working even if decoration fails */ }
 })();
 </script>
+<script>
+/* ===== v1.5 business name + app lock (password / fingerprint) ===== */
+(function () {
+  'use strict';
+  var LK = 'adnan-traders-lock', BK = 'adnan-traders-biz';
+  function $(id) { return document.getElementById(id); }
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 2800); }
+  function b64(buf) { var a = new Uint8Array(buf), s = ''; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
+  function unb64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function biz() { return (get(BK) || '').trim() || 'Adnan Traders'; }
+  function lockData() { try { return JSON.parse(get(LK) || 'null'); } catch (e) { return null; } }
+
+  /* ---- business name ---- */
+  var bi = $('bizIn'); if (bi) bi.value = get(BK) || '';
+  if ($('bizSave')) $('bizSave').addEventListener('click', function () {
+    var v = bi.value.trim().slice(0, 40);
+    if (v) put(BK, v); else { try { localStorage.removeItem(BK); } catch (e) {} }
+    window.dispatchEvent(new Event('biz-changed'));
+    note(v ? 'Name saved. New receipts will use it.' : 'Name reset to Adnan Traders');
+  });
+  document.title = biz();
+
+  /* ---- password hashing ---- */
+  function hashPw(pw, saltB64) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']).then(function (k) {
+      return crypto.subtle.deriveBits({ name: 'PBKDF2', salt: unb64(saltB64), iterations: 120000, hash: 'SHA-256' }, k, 256);
+    }).then(b64);
+  }
+
+  /* ---- fingerprint (WebAuthn platform authenticator, checks this phone's own fingerprint/screen lock) ---- */
+  function fpSupported() {
+    return !!(window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable)
+      ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(function () { return false; }) : Promise.resolve(false);
+  }
+  function fpEnroll() {
+    return navigator.credentials.create({ publicKey: {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      rp: { name: biz() },
+      user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'owner', displayName: 'Owner' },
+      pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
+      timeout: 60000
+    } }).then(function (c) { return b64(c.rawId); });
+  }
+  function fpCheck(credB64) {
+    return navigator.credentials.get({ publicKey: {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      allowCredentials: [{ type: 'public-key', id: unb64(credB64) }],
+      userVerification: 'required', timeout: 60000
+    } });
+  }
+
+  /* ---- lock screen ---- */
+  var scr = null, hiddenAt = 0;
+  function build() {
+    if (scr) return scr;
+    scr = document.createElement('div'); scr.id = 'lockScr';
+    scr.innerHTML = '<div class="box"><div class="logo2">AT</div><h1></h1><p>Enter your password to open the app</p>' +
+      '<input id="lockPw" type="password" autocomplete="current-password" placeholder="Password">' +
+      '<div id="lockErr" role="alert"></div>' +
+      '<button class="btn" type="button" id="lockGo">Unlock</button>' +
+      '<button class="btn fp" type="button" id="lockFp" hidden>Use fingerprint</button>' +
+      '<a href="#" id="lockForgot">Forgot password?</a></div>';
+    scr.querySelector('h1').textContent = biz();
+    document.body.appendChild(scr);
+    $('lockGo').addEventListener('click', tryPw);
+    $('lockPw').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryPw(); });
+    $('lockFp').addEventListener('click', tryFp);
+    $('lockForgot').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!confirm('Forgot password erases ALL data on this phone and removes the lock. You can then restore from your backup file. Erase now?')) return;
+      try { localStorage.clear(); } catch (x) {}
+      try { indexedDB.deleteDatabase('adnan-traders'); } catch (x) {}
+      setTimeout(function () { location.reload(); }, 400);
+    });
+    return scr;
+  }
+  function unlock() { if (scr) { scr.remove(); scr = null; } hiddenAt = 0; }
+  function tryPw() {
+    var d = lockData(), pw = $('lockPw').value;
+    if (!d || !pw) return;
+    hashPw(pw, d.salt).then(function (h) {
+      if (h === d.hash) unlock();
+      else { $('lockErr').textContent = 'Wrong password'; $('lockPw').value = ''; try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {} }
+    });
+  }
+  function tryFp() {
+    var d = lockData(); if (!d || !d.cred) return;
+    fpCheck(d.cred).then(unlock, function () { var e = $('lockErr'); if (e) e.textContent = 'Fingerprint did not work. Use your password.'; });
+  }
+  function showLock() {
+    var d = lockData(); if (!d || scr) return;
+    build();
+    if (d.cred) { $('lockFp').hidden = false; setTimeout(tryFp, 350); }
+    else setTimeout(function () { var i = $('lockPw'); if (i) i.focus(); }, 100);
+  }
+
+  /* ---- settings card ---- */
+  function renderState() {
+    var d = lockData(), on = !!(d && d.hash);
+    var st = $('lockState'); if (!st) return;
+    st.textContent = on ? ('Lock is on' + (d.cred ? ' (password + fingerprint)' : ' (password)')) : 'Lock is off';
+    st.className = 'lockState ' + (on ? 'on' : 'off');
+    $('lockOff').hidden = on; $('lockOnBox').hidden = !on;
+    var fb = $('fpEnroll'); if (fb) fb.textContent = (d && d.cred) ? 'Fingerprint is on, tap to redo' : 'Use fingerprint';
+  }
+  if ($('lockOn')) $('lockOn').addEventListener('click', function () {
+    var a = $('lkA').value, b = $('lkB').value;
+    if (a.length < 4) { note('Password must be at least 4 characters'); return; }
+    if (a !== b) { note('The two passwords are different'); return; }
+    var salt = b64(crypto.getRandomValues(new Uint8Array(16)));
+    hashPw(a, salt).then(function (h) {
+      if (!put(LK, JSON.stringify({ salt: salt, hash: h }))) { note('Could not save the lock'); return; }
+      $('lkA').value = ''; $('lkB').value = '';
+      renderState(); note('App lock is on. Remember this password.');
+    });
+  });
+  if ($('fpEnroll')) $('fpEnroll').addEventListener('click', function () {
+    var d = lockData(); if (!d) return;
+    fpSupported().then(function (ok) {
+      if (!ok) { note('This phone has no fingerprint or screen lock set up for browsers'); return; }
+      return fpEnroll().then(function (cred) { d.cred = cred; put(LK, JSON.stringify(d)); renderState(); note('Fingerprint added'); },
+        function () { note('Fingerprint was not added'); });
+    });
+  });
+  if ($('lockOffBtn')) $('lockOffBtn').addEventListener('click', function () {
+    var d = lockData(); if (!d) return;
+    var pw = prompt('Enter your password to turn the lock off');
+    if (pw == null) return;
+    hashPw(pw, d.salt).then(function (h) {
+      if (h !== d.hash) { note('Wrong password'); return; }
+      try { localStorage.removeItem(LK); } catch (e) {}
+      renderState(); note('App lock is off');
+    });
+  });
+
+  /* lock on open, and again after the app was away for a minute */
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') hiddenAt = Date.now();
+    else if (hiddenAt && Date.now() - hiddenAt > 60000) showLock();
+  });
+  renderState();
+  showLock();
+})();
+</script>
+
 
 </body>
 </html>
