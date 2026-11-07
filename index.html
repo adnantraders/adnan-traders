@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F4F6F8">
+<meta name="theme-color" content="#1A73E8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Adnan Traders</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: one column, sticky header, four-tab bar fixed at the bottom. Built for one hand on a phone. */
 :root {
@@ -26,8 +26,8 @@
   --warn-bg: #F6E7CB;
   --bad: #B3261E;
   --bad-bg: #F8E1DF;
-  --font-display: 'Inter', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-body: 'Inter', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: Roboto, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: Roboto, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -228,86 +228,102 @@ details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
 body { margin: 0; }
 img { max-width: 100%; }
 #loginErr { margin: 12px 0; }
-/* ===== v1.8 standard theme: one blue accent, neutral surfaces, Inter font ===== */
+/* ===== v1.9 standard theme: Google-style blue app bar, tinted cards, Roboto ===== */
 :root {
-  --bg: #F4F6F8; --surface: #FFFFFF; --surface2: #EEF2F6; --ink: #0F172A; --muted: #64748B; --line: #E2E8F0;
-  --accent: #2563EB; --accent-ink: #FFFFFF; --accent-soft: #DBEAFE;
-  --good: #15803D; --good-bg: #DCFCE7; --warn: #B45309; --warn-bg: #FEF3C7; --bad: #DC2626; --bad-bg: #FEE2E2;
+  --bg: #F1F3F4; --surface: #FFFFFF; --surface2: #F1F3F4; --ink: #202124; --muted: #5F6368; --line: #DADCE0;
+  --accent: #1A73E8; --accent-ink: #FFFFFF; --accent-soft: #E8F0FE; --bar: #1A73E8;
+  --good: #188038; --good-bg: #E6F4EA; --warn: #E37400; --warn-bg: #FEF3E0; --bad: #D93025; --bad-bg: #FCE8E6;
   --wa: #25D366; color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0B1220; --surface: #111A2E; --surface2: #1A2540; --ink: #E5E7EB; --muted: #94A3B8; --line: #243049;
-  --accent: #60A5FA; --accent-ink: #0B1220; --accent-soft: #1E3A5F;
-  --good: #4ADE80; --good-bg: #0F2A1B; --warn: #FBBF24; --warn-bg: #33260A; --bad: #F87171; --bad-bg: #3A1515; color-scheme: dark; } }
+  --bg: #1B1F27; --surface: #262C37; --surface2: #1F242D; --ink: #E8EAED; --muted: #9AA0A6; --line: #3C4350;
+  --accent: #8AB4F8; --accent-ink: #14213D; --accent-soft: #2A3A55; --bar: #1E4D9B;
+  --good: #81C995; --good-bg: #1F3A2A; --warn: #FDA14E; --warn-bg: #43301A; --bad: #F28B82; --bad-bg: #4A2523; color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #0B1220; --surface: #111A2E; --surface2: #1A2540; --ink: #E5E7EB; --muted: #94A3B8; --line: #243049;
-  --accent: #60A5FA; --accent-ink: #0B1220; --accent-soft: #1E3A5F;
-  --good: #4ADE80; --good-bg: #0F2A1B; --warn: #FBBF24; --warn-bg: #33260A; --bad: #F87171; --bad-bg: #3A1515; color-scheme: dark; }
+  --bg: #1B1F27; --surface: #262C37; --surface2: #1F242D; --ink: #E8EAED; --muted: #9AA0A6; --line: #3C4350;
+  --accent: #8AB4F8; --accent-ink: #14213D; --accent-soft: #2A3A55; --bar: #1E4D9B;
+  --good: #81C995; --good-bg: #1F3A2A; --warn: #FDA14E; --warn-bg: #43301A; --bad: #F28B82; --bad-bg: #4A2523; color-scheme: dark; }
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); }
 body::before { background: transparent; }
-.top { background: var(--surface); color: var(--ink); margin: 0 -16px; padding: 12px 16px; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; }
-.top .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
-.top .brand small { font-size: 12px; font-weight: 400; color: var(--muted); }
-.top .logo { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; flex: none; font-weight: 700; font-size: 14px; }
-.top .sync { color: var(--muted); }
-.top #themeBtn { background: var(--surface2); border: 1px solid var(--line); color: var(--ink); }
-h2 { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--ink); margin: 20px 0 8px; display: block; }
+.top { background: var(--bar); color: #fff; margin: 0 -16px; padding: 12px 16px; border-bottom: 0; border-radius: 0; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+.top .brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-size: 19px; font-weight: 700; color: #fff; }
+.top .brand small { font-size: 12px; font-weight: 400; color: rgba(255,255,255,.85); }
+.top .logo { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.22) center / cover no-repeat; color: #fff; display: grid; place-items: center; flex: none; font-weight: 700; font-size: 15px; }
+.top .sync { color: #fff; }
+.top #themeBtn { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4); color: #fff; }
+h2 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ink); margin: 18px 0 8px; display: block; }
 h2::before { content: none; }
-h3 { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px; }
-.card, form, .stat, .week-total, .empty { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
-.card { border-left: 1px solid var(--line); }
-.card.is-bad { border-color: var(--bad); }
+h3 { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin: 22px 0 8px; }
+.card, form, .stat, .week-total, .empty { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 1px 2px rgba(60,64,67,.12); }
+.card { border-left: 4px solid var(--accent); }
+.card.is-bad { border-left-color: var(--bad); }
 .title { color: var(--ink); }
-.stat { color: var(--ink); background: var(--surface); }
-.stat b { font-size: 26px; font-weight: 700; text-shadow: none; color: var(--ink); }
+.stat { color: var(--ink); border-color: transparent; }
+.stat b { font-size: 28px; font-weight: 700; text-shadow: none; }
 .stat span { color: var(--muted); font-weight: 500; }
-.stat.bad b { color: var(--bad); } .stat.warn b { color: var(--warn); }
-#stats .stat:nth-child(3) b { color: var(--accent); }
-#shopStats .stat:nth-child(2) b { color: var(--good); } #shopStats .stat:nth-child(3) b { color: var(--bad); }
+#stats .stat:nth-child(1), #shopStats .stat:nth-child(3), .two .stat:nth-child(4n+4) { background: var(--bad-bg); }
+#stats .stat:nth-child(2), .two .stat:nth-child(4n+3) { background: var(--warn-bg); }
+#stats .stat:nth-child(3), #shopStats .stat:nth-child(1), .two .stat:nth-child(4n+1) { background: var(--accent-soft); }
+#shopStats .stat:nth-child(2), .two .stat:nth-child(4n+2) { background: var(--good-bg); }
+#stats .stat:nth-child(1) b, #shopStats .stat:nth-child(3) b, .two .stat:nth-child(4n+4) b { color: var(--bad); }
+#stats .stat:nth-child(2) b, .two .stat:nth-child(4n+3) b { color: var(--warn); }
+#stats .stat:nth-child(3) b, #shopStats .stat:nth-child(1) b, .two .stat:nth-child(4n+1) b { color: var(--accent); }
+#shopStats .stat:nth-child(2) b, .two .stat:nth-child(4n+2) b { color: var(--good); }
 .week-total { background: var(--good-bg); color: var(--good); border-color: transparent; font-weight: 600; }
 .empty b { color: var(--ink); }
-.btn { font-family: var(--font-body); font-weight: 600; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: none; position: relative; overflow: hidden; }
+.btn { font-family: var(--font-body); font-weight: 500; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); color: var(--accent); box-shadow: none; position: relative; overflow: hidden; }
 .btn .ico { width: 18px; height: 18px; margin-right: 6px; vertical-align: -3px; flex: none; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn.danger { background: var(--bad-bg); border-color: transparent; color: var(--bad); }
 .btn.wa, .btn.cancel, #rcSave { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; font-size: 16px; min-height: 50px; }
 .btn.wa .ico, #rcSave .ico, .btn.cancel .ico { width: 22px; height: 22px; margin: 0; }
-.btn.wa { background: var(--wa); border-color: var(--wa); color: #fff; }
+.btn.wa { background: var(--wa); border-color: var(--wa); color: #fff; font-weight: 700; }
 .btn.cancel { background: var(--bad-bg); border-color: transparent; color: var(--bad); }
 #rcSave { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
 .rc-actions { display: grid; gap: 10px; margin: 12px 0 6px; }
-.btn:active, .tab:active { transform: scale(.98); }
+.btn:active, .tab:active, .setrow:active { transform: scale(.985); }
 .ripple { position: absolute; border-radius: 50%; background: rgba(127,127,127,.28); transform: scale(0); animation: rip .5s ease-out; pointer-events: none; }
 @keyframes rip { to { transform: scale(3.4); opacity: 0; } }
-.tabs { background: var(--surface); border-top: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+.tabs { background: var(--surface); border-top: 1px solid var(--line); border-radius: 0; box-shadow: 0 -1px 4px rgba(60,64,67,.12); }
 .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; font-weight: 500; color: var(--muted); position: relative; }
 .tab .ico { width: 24px; height: 24px; color: var(--muted); opacity: 1; }
-.tab[aria-current="page"] { background: var(--accent-soft); color: var(--accent); box-shadow: none; font-weight: 600; }
+.tab[aria-current="page"] { background: var(--accent-soft); color: var(--accent); box-shadow: none; font-weight: 700; }
 .tab[aria-current="page"] .ico { color: var(--accent); transform: none; }
 .tab em { position: absolute; top: 2px; right: 14px; margin: 0; }
 .banner { background: var(--warn-bg); color: var(--warn); border: 1px solid transparent; border-radius: 12px; }
 input, select, textarea { font-family: var(--font-body); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); outline-color: var(--accent); }
+input[readonly] { background: var(--surface2); color: var(--muted); }
 input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22px !important; height: 22px; min-height: 0; accent-color: var(--accent); flex: none; }
-#toast { background: var(--ink); color: var(--bg); border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.2); animation: toastin .2s ease-out; }
+#toast { background: #323232; color: #fff; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.25); animation: toastin .2s ease-out; }
 @keyframes toastin { from { transform: translate(-50%, 10px); opacity: 0; } }
 .fadein { animation: fin .25s ease-out; } @keyframes fin { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .fadein, .ripple, #toast { animation: none; } }
 .lockState { display: inline-block; padding: 2px 12px; border-radius: 99px; font-weight: 600; font-size: 13px; }
 .lockState.on { background: var(--good-bg); color: var(--good); } .lockState.off { background: var(--bad-bg); color: var(--bad); }
-#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--ink); display: grid; place-items: center; padding: 24px; }
+#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--bar); color: #fff; display: grid; place-items: center; padding: 24px; }
 #lockScr .box { width: 100%; max-width: 340px; text-align: center; display: grid; gap: 14px; }
-#lockScr .logo2 { width: 68px; height: 68px; border-radius: 18px; background: var(--accent); color: #fff; display: grid; place-items: center; margin: 0 auto; font: 700 24px var(--font-display); }
+#lockScr .logo2 { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,.22) center / cover no-repeat; color: #fff; display: grid; place-items: center; margin: 0 auto; font: 700 24px var(--font-display); }
 #lockScr h1 { margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 700; }
-#lockScr p { margin: 0; color: var(--muted); }
-#lockScr input { text-align: center; font-size: 18px; letter-spacing: .12em; }
-#lockScr .btn { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; }
-#lockScr .btn#lockGo { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-#lockScr a { color: var(--muted); font-size: 14px; }
-#lockErr { min-height: 22px; font-weight: 600; color: var(--bad); }
+#lockScr p { margin: 0; opacity: .9; }
+#lockScr input { text-align: center; font-size: 18px; letter-spacing: .12em; background: #fff; color: #202124; border: 0; }
+#lockScr .btn { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.2); border: 0; color: #fff; }
+#lockScr .btn#lockGo { background: #fff; color: #1A73E8; font-weight: 700; }
+#lockScr a { color: #fff; opacity: .85; font-size: 14px; }
+#lockErr { min-height: 22px; font-weight: 700; color: #FFD6D2; }
 #prodList2 { display: grid; gap: 6px; margin-top: 10px; }
 .prod { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
 .prod span { overflow: hidden; text-overflow: ellipsis; }
+/* settings */
+#setMenu { display: grid; gap: 10px; margin-top: 6px; }
+.setrow { display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--ink); text-align: left; font: inherit; cursor: pointer; box-shadow: 0 1px 2px rgba(60,64,67,.12); }
+.setrow .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: #fff; flex: none; }
+.setrow .tx { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.setrow .tx b { font-size: 16px; font-weight: 700; }
+.setrow .tx small { font-size: 13px; color: var(--muted); }
+.setrow .chev { color: var(--muted); flex: none; }
+.btn.back { margin: 4px 0 0; padding-left: 12px; }
+.avatar { width: 96px; height: 96px; border-radius: 50%; background: var(--accent) center / cover no-repeat; color: #fff; display: grid; place-items: center; font-size: 32px; font-weight: 700; margin: 6px auto 0; }
 </style>
 </head>
 <body>
@@ -455,8 +471,72 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   </section>
 
   <!-- Backup -->
-  <section id="view-backup" aria-label="Backup" hidden>
-    <h2>Backup</h2>
+  <section id="view-backup" aria-label="Settings" hidden>
+    <h2 id="setTitle">Settings</h2>
+  <div id="setMenu">
+    <button class="setrow" type="button" data-open="profile"><span class="ic" style="background:#1A73E8"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></span><span class="tx"><b>Profile</b><small>Name, photo, phone number and address</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="security"><span class="ic" style="background:#188038"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3zm-1 14-3.5-3.5L9 11l2 2 4-4 1.5 1.5L11 16z"/></svg></span><span class="tx"><b>Security</b><small>Password and fingerprint lock</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="backup"><span class="ic" style="background:#E37400"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.4 10A7.5 7.5 0 0 0 5 8.7 5.5 5.5 0 0 0 6 19.5h12.5a4.5 4.5 0 0 0 .9-9.5zM12 9l4 4h-3v4h-2v-4H8l4-4z"/></svg></span><span class="tx"><b>Backup and restore</b><small>Google account cloud backup and backup file</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="items"><span class="ic" style="background:#00897B"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.4 11.6 12.4 2.6A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .5.2 1 .6 1.4l9 9a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8zM6.5 8A1.5 1.5 0 1 1 8 6.5 1.5 1.5 0 0 1 6.5 8z"/></svg></span><span class="tx"><b>Items and prices</b><small>Your item list for quick sales</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="about"><span class="ic" style="background:#5F6368"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span><span class="tx"><b>About and help</b><small>Install on home screen, app version</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+  </div>
+  <div class="pane" data-pane="profile" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
+    <h3>Profile</h3>
+    <div class="card" id="profCard">
+      <div class="avatar" id="profAvatar" aria-label="Profile photo">AT</div>
+      <div class="row" style="justify-content:center;margin:10px 0 4px">
+        <label class="btn" for="profPick" style="cursor:pointer;margin:0">Change photo</label>
+        <input id="profPick" type="file" accept="image/*" hidden>
+        <button class="btn" type="button" id="profG" hidden>Use Google photo</button>
+        <button class="btn danger" type="button" id="profRm" hidden>Remove</button>
+      </div>
+      <label for="profName" style="margin-top:10px">Your name
+        <input id="profName" maxlength="40" autocomplete="off" placeholder="Muhammad Adnan">
+      </label>
+      <label for="profMail" style="margin-top:8px">Email
+        <input id="profMail" readonly placeholder="Shows after you sign in with Google">
+      </label>
+    </div>
+    <h3>Business details on receipts</h3>
+    <div class="card">
+      <label for="bizIn">Business name
+        <input id="bizIn" maxlength="40" autocomplete="off" placeholder="Adnan Traders">
+      </label>
+      <label for="bizPhone" style="margin-top:8px">Phone number
+        <input id="bizPhone" type="tel" inputmode="tel" maxlength="30" autocomplete="off" placeholder="03xx xxxxxxx">
+      </label>
+      <label for="bizAddr" style="margin-top:8px">Address
+        <input id="bizAddr" maxlength="80" autocomplete="off" placeholder="Shop, area, city">
+      </label>
+      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="bizSave">Save profile</button></div>
+    </div>
+  </div>
+  <div class="pane" data-pane="security" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
+    <h3>App lock</h3>
+    <div class="card">
+      <p><span class="lockState off" id="lockState">Lock is off</span></p>
+      <div id="lockOff">
+        <label for="lkA">New password (at least 4 characters)
+          <input id="lkA" type="password" autocomplete="new-password">
+        </label>
+        <label for="lkB" style="margin-top:8px">Repeat password
+          <input id="lkB" type="password" autocomplete="new-password">
+        </label>
+        <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="lockOn">Turn on app lock</button></div>
+      </div>
+      <div id="lockOnBox" hidden>
+        <div class="row">
+          <button class="btn" type="button" id="fpEnroll">Use fingerprint</button>
+          <button class="btn danger" type="button" id="lockOffBtn">Turn off lock</button>
+        </div>
+      </div>
+      <p class="muted small">The lock keeps other people out of the app on this phone. If you forget the password, the only way back in erases the data on this phone, so keep a backup file. Backup files themselves are not locked, keep them private.</p>
+    </div>
+  </div>
+  <div class="pane" data-pane="backup" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
     <div class="card">
       <p><b>Your data lives on this phone</b></p>
       <p class="muted small">Everything is saved on this device and works without internet. Save a backup file often and keep a copy outside the phone, so you can bring everything back if the phone or the app is lost.</p>
@@ -511,19 +591,9 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       </details>
       <p class="muted small">Restoring adds the records from the backup. It does not delete what is already on the phone. Backups from the older Claude version of this app also work.</p>
     </div>
-    <h3>Your business</h3>
-    <div class="card">
-      <label for="bizIn">Business name (shown at the top and on every receipt)
-        <input id="bizIn" maxlength="40" autocomplete="off" placeholder="Adnan Traders">
-      </label>
-      <label for="bizPhone" style="margin-top:8px">Phone number on receipts
-        <input id="bizPhone" type="tel" inputmode="tel" maxlength="30" autocomplete="off" placeholder="03xx xxxxxxx">
-      </label>
-      <label for="bizAddr" style="margin-top:8px">Address on receipts
-        <input id="bizAddr" maxlength="80" autocomplete="off" placeholder="Shop, area, city">
-      </label>
-      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="bizSave">Save details</button></div>
-    </div>
+  </div>
+  <div class="pane" data-pane="items" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
     <h3>Items and prices</h3>
     <div class="card">
       <p class="muted small" style="margin-top:0">Save your items once. When you add a sale, type the item name, pick it from the list and the price fills in by itself.</p>
@@ -540,26 +610,9 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       <div class="row" style="margin-top:10px"><button class="btn" type="button" id="pdBulkAdd">Add pasted items</button></div>
       <div id="prodList2"></div>
     </div>
-    <h3>App lock</h3>
-    <div class="card">
-      <p><span class="lockState off" id="lockState">Lock is off</span></p>
-      <div id="lockOff">
-        <label for="lkA">New password (at least 4 characters)
-          <input id="lkA" type="password" autocomplete="new-password">
-        </label>
-        <label for="lkB" style="margin-top:8px">Repeat password
-          <input id="lkB" type="password" autocomplete="new-password">
-        </label>
-        <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="lockOn">Turn on app lock</button></div>
-      </div>
-      <div id="lockOnBox" hidden>
-        <div class="row">
-          <button class="btn" type="button" id="fpEnroll">Use fingerprint</button>
-          <button class="btn danger" type="button" id="lockOffBtn">Turn off lock</button>
-        </div>
-      </div>
-      <p class="muted small">The lock keeps other people out of the app on this phone. If you forget the password, the only way back in erases the data on this phone, so keep a backup file. Backup files themselves are not locked, keep them private.</p>
-    </div>
+  </div>
+  <div class="pane" data-pane="about" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
     <h3>Home screen</h3>
     <div class="card">
       <p class="muted small">Open the app link once with internet, then install it. After that it opens from the home screen and works with no internet.</p>
@@ -567,6 +620,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       <p class="muted small" id="installHelp" style="margin-bottom:0">If there is no Install button: open the Chrome menu and choose Add to Home screen or Install app.</p>
       <p class="muted small" id="appVersion" style="margin:8px 0 0"></p>
     </div>
+  </div>
   </section>
 </div>
 
@@ -577,14 +631,14 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     <button class="tab" type="button" data-tab="today" aria-current="page">Today <em id="todayBadge" hidden>0</em></button>
     <button class="tab" type="button" data-tab="shops">Shops</button>
     <button class="tab" type="button" data-tab="visits">Collections</button>
-    <button class="tab" type="button" data-tab="backup">Backup</button>
+    <button class="tab" type="button" data-tab="backup">Settings</button>
   </div>
 </nav>
 
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.8';
+  var APP_VERSION = '1.9';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1211,12 +1265,12 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     var W = 720, pad = 40, items = e.type === 'sale' ? (e.items || []) : [];
     var c = document.createElement('canvas'); c.width = W; c.height = 900 + items.length * 60;
     var g = c.getContext('2d');
-    var F = ' "Inter", "Segoe UI", Arial, sans-serif';
+    var F = ' Roboto, "Segoe UI", Arial, sans-serif';
     g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
-    g.fillStyle = '#1D4ED8'; g.fillRect(0, 0, W, 130);
+    g.fillStyle = '#1A73E8'; g.fillRect(0, 0, W, 130);
     g.textAlign = 'left';
-    g.fillStyle = '#FFFFFF'; g.font = '700 40px "Inter",' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
-    g.fillStyle = '#DBEAFE'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
+    g.fillStyle = '#FFFFFF'; g.font = '700 40px Roboto,' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
+    g.fillStyle = '#E8F0FE'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
     function fit(t, maxW) {
       t = String(t); var cut = false;
       while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; }
@@ -1246,7 +1300,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       row('Paid', money(e.paid));
     } else {
       g.textAlign = 'center'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText('Amount received', W / 2, y + 10);
-      g.font = '700 68px "Inter",' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
+      g.font = '700 68px Roboto,' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
       g.textAlign = 'left'; y += 150;
       if (e.note) row('Note', e.note);
       rule();
@@ -1314,10 +1368,10 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     el.textContent = last + (META.changes ? ' | ' + plural(META.changes, 'change', 'changes') + ' since then' : '');
     var old = META.lastBackup ? (Date.now() - META.lastBackup) > 7 * 86400000 : true;
     var need = META.changes >= 10 || (META.changes > 0 && old);
-    showBanner(need ? 'Please save a backup file. ' + plural(META.changes, 'change is', 'changes are') + ' not in a backup yet. Open the Backup tab.' : '');
+    showBanner(need ? 'Please save a backup file. ' + plural(META.changes, 'change is', 'changes are') + ' not in a backup yet. Open Settings, then Backup and restore.' : '');
   }
   function backupPayload() {
-    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(), settings: { biz: bizName(), info: bizInfo(), products: (function () { try { return JSON.parse(localStorage.getItem('adnan-traders-products') || '[]'); } catch (e) { return []; } })() },
+    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(), settings: { biz: bizName(), info: bizInfo(), profile: (function () { try { return JSON.parse(localStorage.getItem('adnan-traders-profile') || 'null'); } catch (e) { return null; } })(), products: (function () { try { return JSON.parse(localStorage.getItem('adnan-traders-products') || '[]'); } catch (e) { return []; } })() },
       shops: S.shops.map(strip), visits: S.visits.map(strip), orders: S.orders.map(strip), entries: S.entries.map(strip) };
   }
   function backupName() { return 'adnan-traders-backup-' + today() + '.json'; }
@@ -1341,7 +1395,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   function parseBackup(text) {
     var j = JSON.parse(String(text).replace(/^﻿/, '').trim());
     if (!j || (j.app !== 'adnan-traders' && j.app !== 'koyama-register') || !Array.isArray(j.shops)) throw new Error('bad');
-    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '', info: (j.settings && j.settings.info) || null, products: (j.settings && Array.isArray(j.settings.products)) ? j.settings.products : null };
+    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '', info: (j.settings && j.settings.info) || null, profile: (j.settings && j.settings.profile && typeof j.settings.profile === 'object') ? j.settings.profile : null, products: (j.settings && Array.isArray(j.settings.products)) ? j.settings.products : null };
   }
   window.__AT = {
     payload: function () { return backupPayload(); },
@@ -1354,6 +1408,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   }
   function runRestore(done) {
     var jobs = [], ok = /^[A-Za-z0-9_.~:@+-]+$/;
+    try { if (S.pendingImport.profile) localStorage.setItem('adnan-traders-profile', JSON.stringify({ name: String(S.pendingImport.profile.name || '').slice(0, 40), photo: String(S.pendingImport.profile.photo || '').slice(0, 120000) })); } catch (e) {}
     try { if (S.pendingImport.info) localStorage.setItem('adnan-traders-bizinfo', JSON.stringify(S.pendingImport.info)); if (S.pendingImport.products && S.pendingImport.products.length) localStorage.setItem('adnan-traders-products', JSON.stringify(S.pendingImport.products)); window.dispatchEvent(new Event('settings-changed')); } catch (e) {}
     if (S.pendingImport.biz) { try { localStorage.setItem('adnan-traders-biz', S.pendingImport.biz); window.dispatchEvent(new Event('biz-changed')); } catch (e) {} }
     ['shops', 'visits', 'orders', 'entries'].forEach(function (col) {
@@ -1591,6 +1646,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       share: '<path fill="currentColor" d="M18 16a3 3 0 0 0-2.4 1.2l-6.5-3.7a3 3 0 0 0 0-3l6.5-3.7A3 3 0 1 0 15 5a3 3 0 0 0 .1.8L8.6 9.5a3 3 0 1 0 0 5l6.5 3.7A3 3 0 1 0 18 16z"/>',
       cancel: '<path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/>',
       refresh: '<path fill="currentColor" d="M17.6 6.4A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.8-4.2L13 11h8V3l-3.4 3.4z"/>',
+      gear: '<path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7 7 0 0 0-1.7-1l-.4-2.5a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4l-.4 2.5a7 7 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.5 8.8a.5.5 0 0 0 .1.6l2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6a.5.5 0 0 0-.1.6l1.9 3.3a.5.5 0 0 0 .6.2l2.4-1a7 7 0 0 0 1.7 1l.4 2.5a.5.5 0 0 0 .5.4h3.8a.5.5 0 0 0 .5-.4l.4-2.5a7 7 0 0 0 1.7-1l2.4 1a.5.5 0 0 0 .6-.2l1.9-3.3a.5.5 0 0 0-.1-.6l-2-1.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>',
       theme: '<path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/>'
     };
     function svg(name) { return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">' + (I[name] || '') + '</svg>'; }
@@ -1603,8 +1659,11 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     ];
     function bizNow() { try { return (localStorage.getItem('adnan-traders-biz') || '').trim() || 'Adnan Traders'; } catch (e) { return 'Adnan Traders'; } }
     window.addEventListener('biz-changed', function () { var t = document.getElementById('bizTitle'); if (t) t.textContent = bizNow(); document.title = bizNow(); });
-    var TABICON = { today: 'today', shops: 'shops', visits: 'visits', backup: 'backup' };
+    var TABICON = { today: 'today', shops: 'shops', visits: 'visits', backup: 'gear' };
 
+    function profNow() { try { return JSON.parse(localStorage.getItem('adnan-traders-profile') || '{}') || {}; } catch (e) { return {}; } }
+    function subtitle() { var n = String(profNow().name || '').trim().split(/\s+/)[0]; return greeting() + (n ? ', ' + n : '') + ' \u00b7 ' + new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); }
+    window.addEventListener('settings-changed', function () { var sm = document.querySelector('#brand small'); if (sm) sm.textContent = subtitle(); });
     function decorateHeader() {
       var brand = document.getElementById('brand');
       if (!brand || brand.dataset.done) return;
@@ -1614,7 +1673,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       brand.textContent = ''; brand.appendChild(logo); brand.appendChild(box);
       var small = box.querySelector('small');
       var d = new Date();
-      small.textContent = greeting() + ' · ' + d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      small.textContent = subtitle();
     }
     function decorateTabs() {
       document.querySelectorAll('.tab').forEach(function (t) {
@@ -1664,7 +1723,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     }, { passive: true });
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState !== 'visible') return;
-      var s = document.querySelector('#brand small'); if (s) s.textContent = greeting() + ' · ' + new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      var s = document.querySelector('#brand small'); if (s) s.textContent = subtitle();
     });
   } catch (err) { /* the app keeps working even if decoration fails */ }
 })();
@@ -1893,7 +1952,13 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     $('cloudLast').textContent = last ? 'Last cloud backup: ' + when(last) : 'No cloud backup yet';
     $('cloudAuto').checked = get(AK) !== '0';
   }
-  function setUser(u) { user = u ? { uid: u.uid, email: u.email, displayName: u.displayName } : null; if (user) put(UK, user.email || ''); else del(UK); render(); if (user) maybeAuto(true); }
+  function setUser(u) {
+    user = u ? { uid: u.uid, email: u.email, displayName: u.displayName } : null;
+    if (user) { put(UK, user.email || ''); put('adnan-traders-guser', JSON.stringify({ email: u.email || '', name: u.displayName || '', photo: u.photoURL || '' })); }
+    else { del(UK); del('adnan-traders-guser'); }
+    render(); try { window.dispatchEvent(new Event('settings-changed')); } catch (e) {}
+    if (user) maybeAuto(true);
+  }
 
   function start() {
     if (!cfg()) { render(); return; }
@@ -2037,6 +2102,94 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   render();
 })();
 </script>
+<script>
+/* ===== v1.9 Settings pages and profile ===== */
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  var sec = $('view-backup'); if (!sec) return;
+  var PK = 'adnan-traders-profile';
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 2600); }
+  function prof() { try { return JSON.parse(get(PK) || '{}') || {}; } catch (e) { return {}; } }
+  function guser() { try { return JSON.parse(get('adnan-traders-guser') || 'null'); } catch (e) { return null; } }
+  function bizNow() { return (get('adnan-traders-biz') || '').trim() || 'Adnan Traders'; }
+  function initials() {
+    var p = prof(), src = (p.name || '').trim() || bizNow();
+    var w = src.split(/\s+/).filter(Boolean); return ((w[0] || 'A')[0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase();
+  }
+  function photoUrl() { var p = prof(); if (p.photo) return p.photo; return ''; }
+
+  /* ---- menu and pages ---- */
+  var panes = sec.querySelectorAll('.pane'), menu = $('setMenu'), title = $('setTitle');
+  var NAMES = { profile: 'Profile', security: 'Security', backup: 'Backup and restore', items: 'Items and prices', about: 'About and help' };
+  function show(key) {
+    for (var i = 0; i < panes.length; i++) panes[i].hidden = panes[i].getAttribute('data-pane') !== key;
+    menu.hidden = !!key; title.textContent = key ? NAMES[key] : 'Settings';
+    window.scrollTo(0, 0);
+  }
+  sec.addEventListener('click', function (e) {
+    var o = e.target.closest && e.target.closest('[data-open]'); if (o) { show(o.getAttribute('data-open')); return; }
+    if (e.target.closest && e.target.closest('[data-back]')) show('');
+  });
+  var tabBtn = document.querySelector('.tab[data-tab="backup"]');
+  if (tabBtn) tabBtn.addEventListener('click', function () { show(''); });
+  show('');
+
+  /* ---- avatar everywhere ---- */
+  function paint(el, big) {
+    if (!el) return; var u = photoUrl();
+    el.style.backgroundImage = u ? 'url("' + u + '")' : '';
+    el.textContent = u ? '' : initials();
+  }
+  function refresh() {
+    var g = guser(), p = prof();
+    paint($('profAvatar')); paint(document.querySelector('.top .logo'));
+    var lk = document.querySelector('#lockScr .logo2'); paint(lk);
+    if ($('profName') && !$('profName').value) $('profName').value = p.name || (g && g.name) || '';
+    if ($('profMail')) $('profMail').value = (g && g.email) || '';
+    if ($('profG')) $('profG').hidden = !(g && g.photo);
+    if ($('profRm')) $('profRm').hidden = !p.photo;
+  }
+  window.addEventListener('settings-changed', refresh);
+  window.addEventListener('biz-changed', refresh);
+  new MutationObserver(function () { var l = document.querySelector('.top .logo'); if (l && !l.dataset.p) { l.dataset.p = '1'; paint(l); } var k = document.querySelector('#lockScr .logo2'); if (k && !k.dataset.p) { k.dataset.p = '1'; paint(k); } }).observe(document.body, { childList: true, subtree: true });
+
+  /* ---- photo: shrink to a small square so storage stays tiny ---- */
+  function shrink(src, done) {
+    var img = new Image();
+    img.onload = function () {
+      var n = 240, c = document.createElement('canvas'); c.width = c.height = n;
+      var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height, m = Math.min(w, h);
+      c.getContext('2d').drawImage(img, (w - m) / 2, (h - m) / 2, m, m, 0, 0, n, n);
+      done(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = function () { note('Could not read that picture'); };
+    img.src = src;
+  }
+  function savePhoto(url) { var p = prof(); p.photo = url; put(PK, JSON.stringify(p)); try { window.dispatchEvent(new Event('settings-changed')); } catch (e) {} }
+  $('profPick').addEventListener('change', function () {
+    var f = $('profPick').files[0]; if (!f) return;
+    var rd = new FileReader(); rd.onload = function () { shrink(rd.result, function (u) { savePhoto(u); note('Photo updated'); }); };
+    rd.readAsDataURL(f); $('profPick').value = '';
+  });
+  $('profRm').addEventListener('click', function () { savePhoto(''); note('Photo removed'); });
+  $('profG').addEventListener('click', function () {
+    var g = guser(); if (!g || !g.photo) return;
+    if (!navigator.onLine) { note('Needs internet to fetch the Google photo'); return; }
+    fetch(g.photo, { mode: 'cors' }).then(function (r) { return r.blob(); }).then(function (b) {
+      var rd = new FileReader(); rd.onload = function () { shrink(rd.result, function (u) { savePhoto(u); note('Google photo set'); }); }; rd.readAsDataURL(b);
+    }).catch(function () { note('Could not fetch the Google photo. Use Change photo.'); });
+  });
+  $('bizSave').addEventListener('click', function () {
+    var p = prof(); p.name = ($('profName').value || '').trim().slice(0, 40); put(PK, JSON.stringify(p));
+    try { window.dispatchEvent(new Event('settings-changed')); } catch (e) {}
+  });
+  refresh();
+})();
+</script>
+
 
 
 
