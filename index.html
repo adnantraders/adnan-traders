@@ -228,6 +228,8 @@ details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
 body { margin: 0; }
 img { max-width: 100%; }
 #loginErr { margin: 12px 0; }
+/* ===== v1.7 ===== */
+input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 24px !important; height: 24px; min-height: 0; accent-color: #25D366; flex: none; }
 /* ===== v1.5 stat cards everywhere ===== */
 .two .stat:nth-child(4n+1) { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
 .two .stat:nth-child(4n+2) { background: linear-gradient(135deg, #1E6FF0, #4CC3FF); }
@@ -477,7 +479,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     <h3>Cloud backup (Google account)</h3>
     <div class="card" id="cloudCard">
       <p><span class="lockState off" id="cloudState">Not set up</span></p>
-      <p class="muted small">Keeps a safe copy of everything in your own Google account's cloud. If the phone is lost, install the app on a new phone, sign in with the same Google account and press Restore from cloud.</p>
+      <p class="muted small">Sign in with your Gmail and your data is backed up automatically, like WhatsApp. If the phone is lost, install the app on a new phone, sign in with the same Gmail and press Restore from cloud. Each Gmail has its own separate data.</p>
       <div id="cloudSetup">
         <label for="cfgText">Paste the Firebase settings here
           <textarea id="cfgText" placeholder="const firebaseConfig = { apiKey: ..., authDomain: ..., projectId: ..., appId: ... }"></textarea>
@@ -495,6 +497,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
         <button class="btn danger" type="button" id="cloudOutBtn">Sign out</button>
       </div>
       <p class="muted small" id="cloudMsg" style="margin-bottom:0"></p>
+      <p class="muted small" id="cloudCheck" style="margin:6px 0 0"></p>
     </div>
     <h3>Save a backup</h3>
     <div class="card">
@@ -572,7 +575,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.6';
+  var APP_VERSION = '1.7';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1798,7 +1801,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   function del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 3200); }
   function msg(t, bad) { var m = $('cloudMsg'); m.textContent = t || ''; m.style.color = bad ? 'var(--bad)' : ''; }
-  function cfg() { try { return JSON.parse(get(CK) || 'null'); } catch (e) { return null; } }
+  var DEFAULT_CFG = { apiKey: 'AIzaSyA8N-g1WGuQZYu-p13S_hDuEltpcwTvygY', authDomain: 'adnan-traders-7a1c5.firebaseapp.com', projectId: 'adnan-traders-7a1c5', storageBucket: 'adnan-traders-7a1c5.firebasestorage.app', messagingSenderId: '782690042699', appId: '1:782690042699:web:af91aec944337b27f65ece' };
+  function stored() { try { return JSON.parse(get(CK) || 'null'); } catch (e) { return null; } }
+  function cfg() { return stored() || DEFAULT_CFG; }
   function when(ts) { try { return new Date(ts).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
 
   /* ---- read the pasted Firebase settings, whatever shape they were copied in ---- */
@@ -1845,7 +1850,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   var user = null, busy = false, restoring = false;
   function render() {
     var c = cfg(), st = $('cloudState');
-    $('cloudSetup').hidden = !!c; $('cloudOut').hidden = !c || !!user; $('cloudIn').hidden = !user;
+    $('cloudSetup').hidden = true; $('cfgChange').hidden = true; $('cloudOut').hidden = !!user; $('cloudIn').hidden = !user;
+    var sv = stored(), chk = $('cloudCheck');
+    if (chk) chk.textContent = sv ? (sv.apiKey === DEFAULT_CFG.apiKey && sv.appId === DEFAULT_CFG.appId ? 'Setup check: built-in setup matches your saved setup.' : 'Setup check: built-in setup DIFFERS from your saved setup. Tell Claude.') : '';
     if (user) { st.textContent = 'Signed in'; st.className = 'lockState on'; $('cloudWho').textContent = user.email || user.displayName || 'Google account'; }
     else if (c) { st.textContent = 'Not signed in'; st.className = 'lockState off'; }
     else { st.textContent = 'Not set up'; st.className = 'lockState off'; }
