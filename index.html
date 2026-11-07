@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#5B3FE0">
+<meta name="theme-color" content="#F4F6F8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Adnan Traders</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: one column, sticky header, four-tab bar fixed at the bottom. Built for one hand on a phone. */
 :root {
@@ -26,8 +26,8 @@
   --warn-bg: #F6E7CB;
   --bad: #B3261E;
   --bad-bg: #F8E1DF;
-  --font-display: 'Archivo', 'Public Sans', system-ui, sans-serif;
-  --font-body: 'Public Sans', 'Segoe UI', Roboto, system-ui, sans-serif;
+  --font-display: 'Inter', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -228,100 +228,86 @@ details > summary { cursor: pointer; padding: 6px 0; color: var(--muted); }
 body { margin: 0; }
 img { max-width: 100%; }
 #loginErr { margin: 12px 0; }
-/* ===== v1.7 ===== */
-input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 24px !important; height: 24px; min-height: 0; accent-color: #25D366; flex: none; }
-/* ===== v1.5 stat cards everywhere ===== */
-.two .stat:nth-child(4n+1) { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
-.two .stat:nth-child(4n+2) { background: linear-gradient(135deg, #1E6FF0, #4CC3FF); }
-.two .stat:nth-child(4n+3) { background: linear-gradient(135deg, #F08A00, #FFC043); }
-.two .stat:nth-child(4n+4) { background: linear-gradient(135deg, #0E9F5B, #4FD39A); }
-.stat { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
-/* lock screen + settings */
-#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--grad); color: #fff; display: grid; place-items: center; padding: 24px; }
-#lockScr .box { width: 100%; max-width: 360px; text-align: center; display: grid; gap: 14px; }
-#lockScr .logo2 { width: 76px; height: 76px; border-radius: 22px; background: rgba(255,255,255,.22); display: grid; place-items: center; margin: 0 auto; font: 800 28px var(--font-display); }
-#lockScr h1 { margin: 0; font-family: var(--font-display); font-size: 28px; }
-#lockScr p { margin: 0; opacity: .9; }
-#lockScr input { background: rgba(255,255,255,.95); color: #1B1840; text-align: center; font-size: 20px; letter-spacing: .15em; border: 0; }
-#lockScr .btn { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; background: #fff; color: #5B3FE0; border: 0; font-weight: 700; }
-#lockScr .btn.fp { background: rgba(255,255,255,.2); color: #fff; }
-#lockScr a { color: #fff; opacity: .85; font-size: 14px; }
-#lockErr { min-height: 22px; font-weight: 600; color: #FFE08A; }
-.lockState { display: inline-block; padding: 2px 12px; border-radius: 99px; font-weight: 700; font-size: 13px; }
-.lockState.on { background: var(--good-bg); color: var(--good); } .lockState.off { background: var(--bad-bg); color: var(--bad); }
-/* ===== v1.4 colourful modern theme ===== */
+/* ===== v1.8 standard theme: one blue accent, neutral surfaces, Inter font ===== */
 :root {
-  --bg: #F2F0FF; --surface: #FFFFFF; --surface2: #E9E6FB; --ink: #1B1840; --muted: #5E5A86; --line: #D9D4F3;
-  --accent: #5B3FE0; --accent-ink: #FFFFFF; --good: #0E9F5B; --good-bg: #D6F5E5; --warn: #C2600A; --warn-bg: #FFE9CF; --bad: #D62839; --bad-bg: #FFDDE1;
-  --blue: #1E6FF0; --blue-bg: #DCEAFF; --teal: #0B9AA8; --pink: #D6336C; --wa: #25D366; --wa-dark: #128C7E;
-  --grad: linear-gradient(135deg, #5B3FE0 0%, #1E6FF0 55%, #0B9AA8 100%);
+  --bg: #F4F6F8; --surface: #FFFFFF; --surface2: #EEF2F6; --ink: #0F172A; --muted: #64748B; --line: #E2E8F0;
+  --accent: #2563EB; --accent-ink: #FFFFFF; --accent-soft: #DBEAFE;
+  --good: #15803D; --good-bg: #DCFCE7; --warn: #B45309; --warn-bg: #FEF3C7; --bad: #DC2626; --bad-bg: #FEE2E2;
+  --wa: #25D366; color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0F0D24; --surface: #1A1740; --surface2: #262256; --ink: #F1EFFF; --muted: #A9A4D6; --line: #34306B;
-  --accent: #9B87FF; --accent-ink: #130F33; --good: #4FE0A0; --good-bg: #123B2B; --warn: #FFB566; --warn-bg: #3F2810; --bad: #FF8A96; --bad-bg: #44161D;
-  --blue: #6BA6FF; --blue-bg: #14264D; --teal: #4DD6E3; --pink: #FF7BAA; } }
+  --bg: #0B1220; --surface: #111A2E; --surface2: #1A2540; --ink: #E5E7EB; --muted: #94A3B8; --line: #243049;
+  --accent: #60A5FA; --accent-ink: #0B1220; --accent-soft: #1E3A5F;
+  --good: #4ADE80; --good-bg: #0F2A1B; --warn: #FBBF24; --warn-bg: #33260A; --bad: #F87171; --bad-bg: #3A1515; color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #0F0D24; --surface: #1A1740; --surface2: #262256; --ink: #F1EFFF; --muted: #A9A4D6; --line: #34306B;
-  --accent: #9B87FF; --accent-ink: #130F33; --good: #4FE0A0; --good-bg: #123B2B; --warn: #FFB566; --warn-bg: #3F2810; --bad: #FF8A96; --bad-bg: #44161D;
-  --blue: #6BA6FF; --blue-bg: #14264D; --teal: #4DD6E3; --pink: #FF7BAA; }
-body { background: var(--bg) radial-gradient(900px 400px at 100% -10%, rgba(91,63,224,.14), transparent 60%), radial-gradient(700px 360px at -10% 20%, rgba(11,154,168,.12), transparent 60%) no-repeat fixed; }
+  --bg: #0B1220; --surface: #111A2E; --surface2: #1A2540; --ink: #E5E7EB; --muted: #94A3B8; --line: #243049;
+  --accent: #60A5FA; --accent-ink: #0B1220; --accent-soft: #1E3A5F;
+  --good: #4ADE80; --good-bg: #0F2A1B; --warn: #FBBF24; --warn-bg: #33260A; --bad: #F87171; --bad-bg: #3A1515; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); }
 body::before { background: transparent; }
-.top { background: var(--grad); color: #fff; margin: 0 -16px; padding: 14px 16px 12px; border-bottom: 0; border-radius: 0 0 22px 22px; box-shadow: 0 8px 24px rgba(91,63,224,.28); transition: box-shadow .2s; }
-.top .brand { color: #fff; display: flex; align-items: center; gap: 10px; }
-.top .brand small { color: rgba(255,255,255,.85); }
-.top .logo { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,.2); display: grid; place-items: center; flex: none; font-weight: 800; font-size: 15px; letter-spacing: .02em; }
-.top .sync { color: #fff; }
-.top #themeBtn { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.35); color: #fff; }
-h2 { color: var(--accent); display: flex; align-items: center; gap: 8px; }
-h2::before { content: ""; width: 5px; height: 22px; border-radius: 4px; background: var(--grad); flex: none; }
-h3 { color: var(--teal); }
+.top { background: var(--surface); color: var(--ink); margin: 0 -16px; padding: 12px 16px; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+.top .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.top .brand small { font-size: 12px; font-weight: 400; color: var(--muted); }
+.top .logo { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; flex: none; font-weight: 700; font-size: 14px; }
+.top .sync { color: var(--muted); }
+.top #themeBtn { background: var(--surface2); border: 1px solid var(--line); color: var(--ink); }
+h2 { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--ink); margin: 20px 0 8px; display: block; }
+h2::before { content: none; }
+h3 { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px; }
+.card, form, .stat, .week-total, .empty { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+.card { border-left: 1px solid var(--line); }
+.card.is-bad { border-color: var(--bad); }
 .title { color: var(--ink); }
-.card, form, .stat, .week-total { border-radius: 18px; box-shadow: 0 2px 10px rgba(40,30,120,.07); }
-.card { border-left: 5px solid var(--accent); }
-.card.is-bad { border-left-color: var(--bad); }
-.card:nth-child(4n+2) { border-left-color: var(--blue); } .card:nth-child(4n+3) { border-left-color: var(--teal); } .card:nth-child(4n) { border-left-color: var(--pink); }
-.stat { border: 0; color: #fff; position: relative; overflow: hidden; }
-.stat span { color: rgba(255,255,255,.92); font-weight: 600; }
-.stats .stat:nth-child(1) { background: linear-gradient(135deg, #E5384F, #FF7A59); }
-.stats .stat:nth-child(2) { background: linear-gradient(135deg, #F08A00, #FFC043); }
-.stats .stat:nth-child(3) { background: linear-gradient(135deg, #1E6FF0, #4CC3FF); }
-.stats.compact .stat:nth-child(1) { background: linear-gradient(135deg, #5B3FE0, #8E6BFF); }
-.stats.compact .stat:nth-child(2) { background: linear-gradient(135deg, #0E9F5B, #4FD39A); }
-.stats.compact .stat:nth-child(3) { background: linear-gradient(135deg, #D62839, #FF7A59); }
-.stat.bad b, .stat.warn b { color: #fff; }
-.stat b { text-shadow: 0 1px 6px rgba(0,0,0,.18); }
-.week-total { background: linear-gradient(135deg, #0E9F5B, #0B9AA8); color: #fff; border: 0; font-weight: 600; }
-.pill { background: var(--blue-bg); color: var(--blue); font-weight: 600; }
-.btn { border-radius: 14px; font-weight: 600; background: var(--surface); border-color: var(--line); }
+.stat { color: var(--ink); background: var(--surface); }
+.stat b { font-size: 26px; font-weight: 700; text-shadow: none; color: var(--ink); }
+.stat span { color: var(--muted); font-weight: 500; }
+.stat.bad b { color: var(--bad); } .stat.warn b { color: var(--warn); }
+#stats .stat:nth-child(3) b { color: var(--accent); }
+#shopStats .stat:nth-child(2) b { color: var(--good); } #shopStats .stat:nth-child(3) b { color: var(--bad); }
+.week-total { background: var(--good-bg); color: var(--good); border-color: transparent; font-weight: 600; }
+.empty b { color: var(--ink); }
+.btn { font-family: var(--font-body); font-weight: 600; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: none; position: relative; overflow: hidden; }
 .btn .ico { width: 18px; height: 18px; margin-right: 6px; vertical-align: -3px; flex: none; }
-.btn.primary { background: var(--grad); border: 0; color: #fff; box-shadow: 0 4px 12px rgba(91,63,224,.35); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: none; }
 .btn.danger { background: var(--bad-bg); border-color: transparent; color: var(--bad); }
+.btn.wa, .btn.cancel, #rcSave { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; font-size: 16px; min-height: 50px; }
 .btn.wa .ico, #rcSave .ico, .btn.cancel .ico { width: 22px; height: 22px; margin: 0; }
-.btn { position: relative; overflow: hidden; }
-.btn:active, .tab:active { transform: scale(.97); }
-.ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.55); transform: scale(0); animation: rip .55s ease-out; pointer-events: none; }
+.btn.wa { background: var(--wa); border-color: var(--wa); color: #fff; }
+.btn.cancel { background: var(--bad-bg); border-color: transparent; color: var(--bad); }
+#rcSave { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.rc-actions { display: grid; gap: 10px; margin: 12px 0 6px; }
+.btn:active, .tab:active { transform: scale(.98); }
+.ripple { position: absolute; border-radius: 50%; background: rgba(127,127,127,.28); transform: scale(0); animation: rip .5s ease-out; pointer-events: none; }
 @keyframes rip { to { transform: scale(3.4); opacity: 0; } }
-.tabs { border-top: 0; border-radius: 22px 22px 0 0; box-shadow: 0 -6px 24px rgba(40,30,120,.16); }
-.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; position: relative; }
-.tab .ico { width: 24px; height: 24px; }
-.tab[data-c="today"] { --tc: #E5384F; } .tab[data-c="shops"] { --tc: #1E6FF0; } .tab[data-c="visits"] { --tc: #0E9F5B; } .tab[data-c="backup"] { --tc: #F08A00; }
-.tab .ico { color: var(--tc); opacity: .75; }
-.tab[aria-current="page"] { background: color-mix(in srgb, var(--tc) 14%, transparent); color: var(--tc); box-shadow: none; }
-.tab[aria-current="page"] .ico { opacity: 1; transform: translateY(-1px) scale(1.12); }
+.tabs { background: var(--surface); border-top: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; font-weight: 500; color: var(--muted); position: relative; }
+.tab .ico { width: 24px; height: 24px; color: var(--muted); opacity: 1; }
+.tab[aria-current="page"] { background: var(--accent-soft); color: var(--accent); box-shadow: none; font-weight: 600; }
+.tab[aria-current="page"] .ico { color: var(--accent); transform: none; }
 .tab em { position: absolute; top: 2px; right: 14px; margin: 0; }
-.banner { background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 16px; }
-input, select, textarea { border-radius: 12px; background: var(--surface); border: 1.5px solid var(--line); }
-input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-.empty { border-radius: 18px; background: var(--surface); }
-.empty b { color: var(--accent); }
-#toast { background: var(--accent); color: #fff; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.25); animation: toastin .25s ease-out; }
-@keyframes toastin { from { transform: translate(-50%, 12px); opacity: 0; } }
-#receiptBox { border-left-color: var(--wa) !important; }
-.btn.wa { background: var(--wa); box-shadow: 0 4px 14px rgba(37,211,102,.45); border: 0; }
-.btn.cancel { background: var(--bad-bg); color: var(--bad); border: 1.5px solid var(--bad); }
-#rcSave { background: var(--blue-bg); color: var(--blue); border-color: transparent; }
-.fadein { animation: fin .35s ease-out; } @keyframes fin { from { opacity: 0; transform: translateY(8px); } }
+.banner { background: var(--warn-bg); color: var(--warn); border: 1px solid transparent; border-radius: 12px; }
+input, select, textarea { font-family: var(--font-body); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); outline-color: var(--accent); }
+input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22px !important; height: 22px; min-height: 0; accent-color: var(--accent); flex: none; }
+#toast { background: var(--ink); color: var(--bg); border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.2); animation: toastin .2s ease-out; }
+@keyframes toastin { from { transform: translate(-50%, 10px); opacity: 0; } }
+.fadein { animation: fin .25s ease-out; } @keyframes fin { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .fadein, .ripple, #toast { animation: none; } }
+.lockState { display: inline-block; padding: 2px 12px; border-radius: 99px; font-weight: 600; font-size: 13px; }
+.lockState.on { background: var(--good-bg); color: var(--good); } .lockState.off { background: var(--bad-bg); color: var(--bad); }
+#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--ink); display: grid; place-items: center; padding: 24px; }
+#lockScr .box { width: 100%; max-width: 340px; text-align: center; display: grid; gap: 14px; }
+#lockScr .logo2 { width: 68px; height: 68px; border-radius: 18px; background: var(--accent); color: #fff; display: grid; place-items: center; margin: 0 auto; font: 700 24px var(--font-display); }
+#lockScr h1 { margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 700; }
+#lockScr p { margin: 0; color: var(--muted); }
+#lockScr input { text-align: center; font-size: 18px; letter-spacing: .12em; }
+#lockScr .btn { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; }
+#lockScr .btn#lockGo { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+#lockScr a { color: var(--muted); font-size: 14px; }
+#lockErr { min-height: 22px; font-weight: 600; color: var(--bad); }
+#prodList2 { display: grid; gap: 6px; margin-top: 10px; }
+.prod { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
+.prod span { overflow: hidden; text-overflow: ellipsis; }
 </style>
 </head>
 <body>
@@ -403,6 +389,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       <label for="sDate">Date
         <input id="sDate" type="date" required>
       </label>
+      <datalist id="prodList"></datalist>
       <div id="saleRows"></div>
       <button class="btn" type="button" id="addRowBtn">Add another item</button>
       <div class="week-total"><span>Bill total</span><b id="saleTotal">Rs 0</b></div>
@@ -529,7 +516,29 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       <label for="bizIn">Business name (shown at the top and on every receipt)
         <input id="bizIn" maxlength="40" autocomplete="off" placeholder="Adnan Traders">
       </label>
-      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="bizSave">Save name</button></div>
+      <label for="bizPhone" style="margin-top:8px">Phone number on receipts
+        <input id="bizPhone" type="tel" inputmode="tel" maxlength="30" autocomplete="off" placeholder="03xx xxxxxxx">
+      </label>
+      <label for="bizAddr" style="margin-top:8px">Address on receipts
+        <input id="bizAddr" maxlength="80" autocomplete="off" placeholder="Shop, area, city">
+      </label>
+      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="bizSave">Save details</button></div>
+    </div>
+    <h3>Items and prices</h3>
+    <div class="card">
+      <p class="muted small" style="margin-top:0">Save your items once. When you add a sale, type the item name, pick it from the list and the price fills in by itself.</p>
+      <label for="pdName">Item name
+        <input id="pdName" autocomplete="off" placeholder="20W-50 engine oil 4L">
+      </label>
+      <label for="pdPrice" style="margin-top:8px">Price each (Rs)
+        <input id="pdPrice" inputmode="decimal" autocomplete="off" placeholder="3200">
+      </label>
+      <div class="row" style="margin-top:10px"><button class="btn primary" type="button" id="pdAdd">Add item</button></div>
+      <label for="pdBulk" style="margin-top:12px">Or paste many items, one per line like: name, price
+        <textarea id="pdBulk" rows="3" placeholder="20W-50 4L, 3200&#10;10W-30 1L, 950"></textarea>
+      </label>
+      <div class="row" style="margin-top:10px"><button class="btn" type="button" id="pdBulkAdd">Add pasted items</button></div>
+      <div id="prodList2"></div>
     </div>
     <h3>App lock</h3>
     <div class="card">
@@ -575,7 +584,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '1.7';
+  var APP_VERSION = '1.8';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -993,7 +1002,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   }
   function addSaleRow() {
     var n = ++rowSeq, r = {};
-    r.name = h('input', { id: 'sName' + n, autocomplete: 'off', placeholder: 'Item, e.g. 20W-50 engine oil 4L', 'aria-label': 'Item name' });
+    r.name = h('input', { id: 'sName' + n, list: 'prodList', autocomplete: 'off', placeholder: 'Item, e.g. 20W-50 engine oil 4L', 'aria-label': 'Item name' });
     r.qty = h('input', { id: 'sQty' + n, inputmode: 'decimal', autocomplete: 'off', placeholder: 'Quantity', 'aria-label': 'Quantity' });
     r.rate = h('input', { id: 'sRate' + n, inputmode: 'decimal', autocomplete: 'off', placeholder: 'Price each (Rs)', 'aria-label': 'Price each' });
     r.line = h('b', { class: 'num' }, 'Rs 0');
@@ -1016,7 +1025,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     updateSaleTotal();
   }
   function resetPayForm() { $('pDate').value = today(); $('pAmount').value = ''; $('pNote').value = ''; }
-  $('saleRows').addEventListener('input', updateSaleTotal);
+  function prodFind(name) {
+    try { var a = JSON.parse(localStorage.getItem('adnan-traders-products') || '[]'), k = String(name).trim().toLowerCase();
+      for (var i = 0; i < a.length; i++) if (String(a[i].n).toLowerCase() === k) return a[i]; } catch (e) {}
+    return null;
+  }
+  $('saleRows').addEventListener('input', function (ev) {
+    var t = ev.target;
+    if (t && /^sName\d+$/.test(t.id)) {
+      var pr = prodFind(t.value), rate = $('sRate' + t.id.slice(5));
+      if (pr && rate && !rate.value.trim()) rate.value = String(pr.p);
+    }
+    updateSaleTotal();
+  });
   $('sPaid').addEventListener('input', updateSaleTotal);
   $('addRowBtn').addEventListener('click', function () { addSaleRow(); saleRows[saleRows.length - 1].name.focus(); });
 
@@ -1171,6 +1192,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     else if (d.length === 10 && d.charAt(0) === '3') d = '92' + d;
     return d;
   }
+  function bizInfo() { try { var o = JSON.parse(localStorage.getItem('adnan-traders-bizinfo') || '{}'); return { phone: String(o.phone || '').trim(), addr: String(o.addr || '').trim() }; } catch (e) { return { phone: '', addr: '' }; } }
   function bizName() { try { return (localStorage.getItem('adnan-traders-biz') || '').trim() || 'Adnan Traders'; } catch (e) { return 'Adnan Traders'; } }
   function receiptText(s, e, after) {
     var L = [bizName(), e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date), ''];
@@ -1182,18 +1204,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       if (e.note) L.push('Note: ' + e.note);
     }
     L.push('Balance remaining: ' + money(after), '', 'Thank you.');
+    var bi = bizInfo(); if (bi.phone) L.push('Phone: ' + bi.phone); if (bi.addr) L.push(bi.addr);
     return L.join('\n');
   }
   function drawReceipt(s, e, after) {
     var W = 720, pad = 40, items = e.type === 'sale' ? (e.items || []) : [];
     var c = document.createElement('canvas'); c.width = W; c.height = 900 + items.length * 60;
     var g = c.getContext('2d');
-    var F = ' "Public Sans", "Segoe UI", Arial, sans-serif';
+    var F = ' "Inter", "Segoe UI", Arial, sans-serif';
     g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
-    var gr = g.createLinearGradient(0, 0, W, 130); gr.addColorStop(0, '#5B3FE0'); gr.addColorStop(0.55, '#1E6FF0'); gr.addColorStop(1, '#0B9AA8'); g.fillStyle = gr; g.fillRect(0, 0, W, 130);
+    g.fillStyle = '#1D4ED8'; g.fillRect(0, 0, W, 130);
     g.textAlign = 'left';
-    g.fillStyle = '#FFFFFF'; g.font = '800 40px "Archivo",' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
-    g.fillStyle = '#FFE08A'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
+    g.fillStyle = '#FFFFFF'; g.font = '700 40px "Inter",' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
+    g.fillStyle = '#DBEAFE'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
     function fit(t, maxW) {
       t = String(t); var cut = false;
       while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; }
@@ -1223,14 +1246,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
       row('Paid', money(e.paid));
     } else {
       g.textAlign = 'center'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText('Amount received', W / 2, y + 10);
-      g.font = '800 68px "Archivo",' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
+      g.font = '700 68px "Inter",' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
       g.textAlign = 'left'; y += 150;
       if (e.note) row('Note', e.note);
       rule();
     }
     row('Balance remaining', money(after), { bold: true, color: after > 0 ? '#B3261E' : '#1F7A4D' });
     y += 30;
-    g.textAlign = 'center'; g.font = '400 22px' + F; g.fillStyle = '#56655E'; g.fillText('Thank you for your business', W / 2, y); g.textAlign = 'left';
+    g.textAlign = 'center'; g.font = '400 22px' + F; g.fillStyle = '#56655E'; g.fillText('Thank you for your business', W / 2, y);
+    var bi = bizInfo();
+    g.fillStyle = '#16201C'; g.font = '500 22px' + F;
+    if (bi.phone) { y += 36; g.fillText(fit('Phone: ' + bi.phone, W - 2 * pad), W / 2, y); }
+    if (bi.addr) { y += 32; g.fillStyle = '#56655E'; g.fillText(fit(bi.addr, W - 2 * pad), W / 2, y); }
+    g.textAlign = 'left';
     var out = document.createElement('canvas'); out.width = W; out.height = y + 50;
     out.getContext('2d').drawImage(c, 0, 0);
     return out;
@@ -1289,7 +1317,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     showBanner(need ? 'Please save a backup file. ' + plural(META.changes, 'change is', 'changes are') + ' not in a backup yet. Open the Backup tab.' : '');
   }
   function backupPayload() {
-    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(), settings: { biz: bizName() },
+    return { app: 'adnan-traders', version: 2, savedAt: new Date().toISOString(), settings: { biz: bizName(), info: bizInfo(), products: (function () { try { return JSON.parse(localStorage.getItem('adnan-traders-products') || '[]'); } catch (e) { return []; } })() },
       shops: S.shops.map(strip), visits: S.visits.map(strip), orders: S.orders.map(strip), entries: S.entries.map(strip) };
   }
   function backupName() { return 'adnan-traders-backup-' + today() + '.json'; }
@@ -1313,7 +1341,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   function parseBackup(text) {
     var j = JSON.parse(String(text).replace(/^﻿/, '').trim());
     if (!j || (j.app !== 'adnan-traders' && j.app !== 'koyama-register') || !Array.isArray(j.shops)) throw new Error('bad');
-    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '' };
+    return { shops: j.shops, visits: j.visits || [], orders: j.orders || [], entries: j.entries || [], biz: (j.settings && typeof j.settings.biz === 'string') ? j.settings.biz.slice(0, 40) : '', info: (j.settings && j.settings.info) || null, products: (j.settings && Array.isArray(j.settings.products)) ? j.settings.products : null };
   }
   window.__AT = {
     payload: function () { return backupPayload(); },
@@ -1326,6 +1354,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   }
   function runRestore(done) {
     var jobs = [], ok = /^[A-Za-z0-9_.~:@+-]+$/;
+    try { if (S.pendingImport.info) localStorage.setItem('adnan-traders-bizinfo', JSON.stringify(S.pendingImport.info)); if (S.pendingImport.products && S.pendingImport.products.length) localStorage.setItem('adnan-traders-products', JSON.stringify(S.pendingImport.products)); window.dispatchEvent(new Event('settings-changed')); } catch (e) {}
     if (S.pendingImport.biz) { try { localStorage.setItem('adnan-traders-biz', S.pendingImport.biz); window.dispatchEvent(new Event('biz-changed')); } catch (e) {} }
     ['shops', 'visits', 'orders', 'entries'].forEach(function (col) {
       S.pendingImport[col].forEach(function (d) {
@@ -1631,7 +1660,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 
     /* header shadow grows when scrolling; greeting refreshes when the app is reopened */
     window.addEventListener('scroll', function () {
-      var t = document.querySelector('.top'); if (t) t.style.boxShadow = window.scrollY > 6 ? '0 10px 30px rgba(91,63,224,.38)' : '';
+      var t = document.querySelector('.top'); if (t) t.style.boxShadow = window.scrollY > 6 ? '0 2px 10px rgba(15,23,42,.12)' : '';
     }, { passive: true });
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState !== 'visible') return;
@@ -1656,11 +1685,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 
   /* ---- business name ---- */
   var bi = $('bizIn'); if (bi) bi.value = get(BK) || '';
+  function info() { try { return JSON.parse(get('adnan-traders-bizinfo') || '{}'); } catch (e) { return {}; } }
+  function fillInfo() { var o = info(); if ($('bizPhone')) $('bizPhone').value = o.phone || ''; if ($('bizAddr')) $('bizAddr').value = o.addr || ''; if (bi) bi.value = get(BK) || ''; }
+  fillInfo(); window.addEventListener('settings-changed', fillInfo);
   if ($('bizSave')) $('bizSave').addEventListener('click', function () {
     var v = bi.value.trim().slice(0, 40);
     if (v) put(BK, v); else { try { localStorage.removeItem(BK); } catch (e) {} }
+    put('adnan-traders-bizinfo', JSON.stringify({ phone: ($('bizPhone').value || '').trim(), addr: ($('bizAddr').value || '').trim() }));
     window.dispatchEvent(new Event('biz-changed'));
-    note(v ? 'Name saved. New receipts will use it.' : 'Name reset to Adnan Traders');
+    note('Saved. New receipts will use these details.');
   });
   document.title = biz();
 
@@ -1956,6 +1989,55 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   render(); start();
 })();
 </script>
+<script>
+/* ===== v1.8 items and prices ===== */
+(function () {
+  'use strict';
+  var PK = 'adnan-traders-products';
+  function $(id) { return document.getElementById(id); }
+  if (!$('pdAdd')) return;
+  function load() { try { var a = JSON.parse(localStorage.getItem(PK) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function save(a) { try { localStorage.setItem(PK, JSON.stringify(a)); } catch (e) {} render(); try { window.dispatchEvent(new Event('at-changed')); } catch (e2) {} }
+  function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 2600); }
+  function money(n) { return 'Rs ' + Number(n).toLocaleString('en-US'); }
+  function upsert(a, name, price) {
+    var k = name.toLowerCase();
+    for (var i = 0; i < a.length; i++) if (String(a[i].n).toLowerCase() === k) { a[i].p = price; return; }
+    a.push({ n: name, p: price });
+  }
+  function render() {
+    var a = load().sort(function (x, y) { return String(x.n).localeCompare(String(y.n)); });
+    var dl = $('prodList'); if (dl) { dl.textContent = ''; a.forEach(function (p) { var o = document.createElement('option'); o.value = p.n; dl.appendChild(o); }); }
+    var box = $('prodList2'); box.textContent = '';
+    if (!a.length) { var e = document.createElement('p'); e.className = 'muted small'; e.textContent = 'No items saved yet.'; box.appendChild(e); return; }
+    a.forEach(function (p) {
+      var row = document.createElement('div'); row.className = 'prod';
+      var t = document.createElement('span'); t.textContent = p.n + '  ·  ' + money(p.p);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn sm danger'; b.textContent = 'Remove';
+      b.addEventListener('click', function () { save(load().filter(function (x) { return String(x.n).toLowerCase() !== String(p.n).toLowerCase(); })); });
+      row.appendChild(t); row.appendChild(b); box.appendChild(row);
+    });
+  }
+  $('pdAdd').addEventListener('click', function () {
+    var n = $('pdName').value.trim(), p = parseFloat(String($('pdPrice').value).replace(/,/g, ''));
+    if (!n || !isFinite(p) || p < 0) { note('Write the item name and its price'); return; }
+    var a = load(); upsert(a, n.slice(0, 60), p); save(a);
+    $('pdName').value = ''; $('pdPrice').value = ''; note('Item saved');
+  });
+  $('pdBulkAdd').addEventListener('click', function () {
+    var lines = $('pdBulk').value.split(/\n+/), a = load(), n = 0;
+    lines.forEach(function (ln) {
+      var m = /^(.*?)[,\t;]+\s*([\d,]+(?:\.\d+)?)\s*$/.exec(ln.trim());
+      if (m && m[1].trim()) { upsert(a, m[1].trim().slice(0, 60), parseFloat(m[2].replace(/,/g, ''))); n++; }
+    });
+    if (!n) { note('Use one item per line: name, price'); return; }
+    save(a); $('pdBulk').value = ''; note(n + (n === 1 ? ' item saved' : ' items saved'));
+  });
+  window.addEventListener('settings-changed', render);
+  render();
+})();
+</script>
+
 
 
 
