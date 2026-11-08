@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1A73E8">
+<script>try{var __a=localStorage.getItem("adnan-traders-accent");if(__a&&__a!=="blue")document.documentElement.setAttribute("data-accent",__a)}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -337,6 +338,32 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 .rbtns{display:flex;gap:8px;margin-top:8px}
 .rbtns .btn{flex:1;justify-content:center;white-space:nowrap;padding-left:8px;padding-right:8px;font-size:13px}
 .rbtns .btn.wa{flex:1.6}
+
+/* v2.1 */
+.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.rbtns .btn{width:100%;justify-content:center;white-space:nowrap;font-size:14px;padding-left:10px;padding-right:10px}
+.rbtns .btn.wa{grid-column:1 / -1;min-height:48px;font-size:16px}
+.chip.m{font-size:15px}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.sw{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 12px;font:500 14px Roboto,sans-serif;cursor:pointer}
+.sw i{width:22px;height:22px;border-radius:50%;display:block}
+.sw.on{border-color:var(--accent)}
+.rp{display:grid;gap:8px;margin-top:10px}
+.rp .line{display:flex;justify-content:space-between;gap:10px}
+.rp h4{margin:10px 0 2px;font-size:14px;color:var(--accent)}
+.prod{align-items:center}
+.stk{font-size:13px;margin:2px 0 0}
+.stk.bad{color:var(--bad)} .stk.ok{color:var(--good)}
+:root[data-accent="purple"] .top .logo{border:2px solid #E5B53A;color:#F3C94B;background:transparent}
+:root[data-accent="purple"]{--accent:#6A1B9A;--accent-soft:#F3E5F5;--bar:linear-gradient(135deg,#4A0E5C,#74198A);--accent-ink:#fff}
+@media (prefers-color-scheme: dark){:root[data-accent="purple"]:not([data-theme="light"]){--accent:#D1A3E8;--accent-soft:#3A2545;--accent-ink:#2B0F36;--bar:linear-gradient(135deg,#2E0A3A,#4F1062)}}
+:root[data-accent="purple"][data-theme="dark"]{--accent:#D1A3E8;--accent-soft:#3A2545;--accent-ink:#2B0F36;--bar:linear-gradient(135deg,#2E0A3A,#4F1062)}
+:root[data-accent="green"]{--accent:#0B8043;--accent-soft:#E6F4EA;--bar:linear-gradient(135deg,#0B6B3A,#12924F);--accent-ink:#fff}
+@media (prefers-color-scheme: dark){:root[data-accent="green"]:not([data-theme="light"]){--accent:#81C995;--accent-soft:#1F3A2A;--accent-ink:#0B2A18;--bar:linear-gradient(135deg,#0A4A28,#0E6B3A)}}
+:root[data-accent="green"][data-theme="dark"]{--accent:#81C995;--accent-soft:#1F3A2A;--accent-ink:#0B2A18;--bar:linear-gradient(135deg,#0A4A28,#0E6B3A)}
+:root[data-accent="orange"]{--accent:#D84315;--accent-soft:#FBE9E7;--bar:linear-gradient(135deg,#BF360C,#E4511C);--accent-ink:#fff}
+@media (prefers-color-scheme: dark){:root[data-accent="orange"]:not([data-theme="light"]){--accent:#FFAB91;--accent-soft:#4A2A20;--accent-ink:#3B1200;--bar:linear-gradient(135deg,#7A2208,#A8340F)}}
+:root[data-accent="orange"][data-theme="dark"]{--accent:#FFAB91;--accent-soft:#4A2A20;--accent-ink:#3B1200;--bar:linear-gradient(135deg,#7A2208,#A8340F)}
 </style>
 </head>
 <body>
@@ -345,7 +372,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 <div class="wrap">
   <header class="top">
     <h1 class="brand" id="brand">Adnan Traders<small>Shops, collections and orders</small></h1>
-    <div class="hright"><div class="sync" id="sync" data-state="load" role="status"><i></i><span id="syncText">Connecting</span></div><button class="btn sm" id="themeBtn" type="button" aria-label="Change display mode">Mode: Auto</button></div>
+    <div class="hright"><div class="sync" id="sync" data-state="load" role="status"><i></i><span id="syncText">Connecting</span></div><button class="btn sm" id="themeBtn" type="button" hidden aria-label="Change display mode">Mode: Auto</button></div>
   </header>
 
   <div id="banner" class="banner" hidden></div>
@@ -408,7 +435,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     <div class="stats compact" id="shopStats"></div>
     <p class="muted small" id="shopOpening"></p>
     <div class="card" id="receiptBox" style="margin-top:12px" hidden>
-      <p class="title">Receipt</p>
+      <p class="title" id="rcTitle">Receipt</p>
       <p class="small" id="rcTo" style="margin:4px 0"></p>
       <img id="receiptImg" alt="Receipt preview">
       <div class="rc-actions">
@@ -419,6 +446,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       <p class="muted small">Tap the green button, choose WhatsApp, pick this shop's chat and tap Send. The shop number is copied for you to paste in WhatsApp search.</p>
     </div>
     <div id="shopPending"></div>
+    <div class="card" id="stmtCard" style="margin-top:12px"><p class="title">Account statement</p><p class="muted small" style="margin:2px 0 8px">A full list of this shop's bills and payments for a month, ready to send.</p><div class="row"><select id="stmtMonth" aria-label="Statement month"></select><button class="btn primary sm" type="button" id="stmtView">View statement</button></div></div>
     <h2>Add a sale</h2>
     <form id="saleForm">
       <label for="sDate">Date
@@ -447,7 +475,9 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
           <input id="pAmount" inputmode="numeric" autocomplete="off" placeholder="0" required>
         </label>
       </div>
-      <label for="pNote">Note
+      <p class="muted small" style="margin:10px 0 0">Payment method</p>
+      <div class="chips" id="pMethods" style="margin:0"><button class="chip m on" type="button" data-m="Cash">Cash</button><button class="chip m" type="button" data-m="Easypaisa">Easypaisa</button><button class="chip m" type="button" data-m="Other">Other</button></div>
+      <label for="pNote">Note (optional)
         <input id="pNote" autocomplete="off">
       </label>
       <button class="btn primary" type="submit" id="paySave">Save payment</button>
@@ -495,8 +525,10 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   <div id="setMenu">
     <button class="setrow" type="button" data-open="profile"><span class="ic" style="background:#1A73E8"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></span><span class="tx"><b>Profile</b><small>Name, photo, phone number and address</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
     <button class="setrow" type="button" data-open="security"><span class="ic" style="background:#188038"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3zm-1 14-3.5-3.5L9 11l2 2 4-4 1.5 1.5L11 16z"/></svg></span><span class="tx"><b>Security</b><small>Password and fingerprint lock</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="appearance"><span class="ic" style="background:#8E24AA"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1.1.9-2 2-2h2.4a3.6 3.6 0 0 0 3.6-3.6C21 6.5 17 3 12 3zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg></span><span class="tx"><b>Appearance</b><small>Display mode and colour theme</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
     <button class="setrow" type="button" data-open="backup"><span class="ic" style="background:#E37400"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.4 10A7.5 7.5 0 0 0 5 8.7 5.5 5.5 0 0 0 6 19.5h12.5a4.5 4.5 0 0 0 .9-9.5zM12 9l4 4h-3v4h-2v-4H8l4-4z"/></svg></span><span class="tx"><b>Backup and restore</b><small>Google account cloud backup and backup file</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
     <button class="setrow" type="button" data-open="items"><span class="ic" style="background:#00897B"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M21.4 11.6 12.4 2.6A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .5.2 1 .6 1.4l9 9a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8zM6.5 8A1.5 1.5 0 1 1 8 6.5 1.5 1.5 0 0 1 6.5 8z"/></svg></span><span class="tx"><b>Items and prices</b><small>Your item list for quick sales</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
+    <button class="setrow" type="button" data-open="reports"><span class="ic" style="background:#C2185B"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></span><span class="tx"><b>Monthly report</b><small>Sales, collection, top shops and stock</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
     <button class="setrow" type="button" data-open="about"><span class="ic" style="background:#5F6368"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span><span class="tx"><b>About and help</b><small>Install on home screen, app version</small></span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg></button>
   </div>
   <div class="pane" data-pane="profile" hidden>
@@ -630,6 +662,22 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       <div id="prodList2"></div>
     </div>
   </div>
+  <div class="pane" data-pane="appearance" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
+    <h3>Display mode</h3>
+    <div class="card"><div class="swatches" id="modeSw"></div><p class="muted small" style="margin:10px 0 0">Auto follows your phone's day and night setting.</p></div>
+    <h3>Colour theme</h3>
+    <div class="card"><div class="swatches" id="themeSw"></div><p class="muted small" style="margin:10px 0 0">Try a colour. If you do not like it, choose Blue to go back.</p></div>
+  </div>
+  <div class="pane" data-pane="reports" hidden>
+    <button class="btn back" type="button" data-back>&larr; Settings</button>
+    <h3>Monthly report</h3>
+    <div class="card">
+      <div class="row between"><button class="btn sm" type="button" id="rpPrev">&lsaquo; Previous</button><b id="rpMonth"></b><button class="btn sm" type="button" id="rpNext">Next &rsaquo;</button></div>
+      <div class="rp" id="rpBody"></div>
+      <div class="row" style="margin-top:12px"><button class="btn" type="button" id="rpShare">Share summary</button></div>
+    </div>
+  </div>
   <div class="pane" data-pane="about" hidden>
     <button class="btn back" type="button" data-back>&larr; Settings</button>
     <h3>Home screen</h3>
@@ -657,7 +705,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '2.0';
+  var APP_VERSION = '2.1';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -878,26 +926,35 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       box.append(b);
     }
     chip('all', 'All days', S.shops.length);
+    chip('owing', 'Owing', S.shops.filter(function (s) { return shopBalance(s) > 0; }).length);
     DAYORDER.forEach(function (d) { chip(String(d), DAYFULL[d], shopsOnDay(d).length); });
     var none = S.shops.filter(function (s) { return shopDay(s) === ''; }).length;
     if (none) chip('none', 'No day', none);
+  }
+  function remind(s) {
+    var n = waNumber(s.phone || '');
+    if (!n) { toast('No number saved for this shop. Add it with Edit.'); return; }
+    var msg = 'Assalam o Alaikum ' + s.shopName + ', ' + bizName() + ' ki taraf se yaad dehani: aap ka baqaya ' + money(shopBalance(s)) + ' hai. Meharbani karke jaldi ada kar dein. Shukriya.';
+    window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(msg), '_blank');
   }
   function renderShops() {
     renderChips();
     var q = toAscii($('shopSearch').value).trim().toLowerCase();
     var list = S.shops.slice().sort(byShopName)
       .filter(function (s) {
-        if (dayFilter === 'none' ? shopDay(s) !== '' : (dayFilter !== 'all' && shopDay(s) !== dayFilter)) return false;
+        if (dayFilter === 'owing') { if (!(shopBalance(s) > 0)) return false; } else if (dayFilter === 'none' ? shopDay(s) !== '' : (dayFilter !== 'all' && shopDay(s) !== dayFilter)) return false;
         if (!q) return true;
         return [s.shopName, s.owner, s.phone, s.location].join(' ').toLowerCase().indexOf(q) !== -1;
       });
     var box = $('shopList'); box.textContent = '';
     if (!S.shops.length) { box.append(emptyBox('No shops yet', 'Tap "Add shop" above to add your first one.')); return; }
+    if (dayFilter === 'owing') list.sort(function (a, b) { return shopBalance(b) - shopBalance(a); });
     var di = $('dayInfo');
     if (dayFilter === 'all') di.textContent = plural(list.length, 'shop', 'shops');
     else if (dayFilter === 'none') di.textContent = plural(list.length, 'shop', 'shops') + ' with no visit day. Use Edit to set one.';
+    else if (dayFilter === 'owing') di.textContent = plural(list.length, 'shop owes', 'shops owe') + ' ' + money(list.reduce(function (a, s) { return a + shopBalance(s); }, 0)) + ' (highest first)';
     else { var tot = list.reduce(function (a, s) { return a + Math.max(0, shopBalance(s)); }, 0); di.textContent = DAYFULL[+dayFilter] + ': ' + plural(list.length, 'shop', 'shops') + (tot ? ' | Total owed ' + money(tot) : ''); }
-    if (!list.length) { box.append(emptyBox(dayFilter === 'all' || q ? 'No match found' : 'No shops on ' + DAYFULL[+dayFilter], dayFilter === 'all' || q ? 'Try a different word.' : 'Open Edit on a shop and choose its weekly visit day.')); return; }
+    if (!list.length) { box.append(emptyBox(dayFilter === 'owing' ? 'Nobody owes you' : dayFilter === 'all' || q ? 'No match found' : 'No shops on ' + DAYFULL[+dayFilter], dayFilter === 'owing' ? 'All accounts are settled.' : dayFilter === 'all' || q ? 'Try a different word.' : 'Open Edit on a shop and choose its weekly visit day.')); return; }
     list.forEach(function (s) {
       var card = h('div', { class: 'card' });
       var lv = lastVisit(s.id);
@@ -918,6 +975,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       card.append(h('div', { class: 'row', style: 'margin-top:6px' },
         h('button', { class: 'btn sm primary', type: 'button', onclick: function () { openShopPage(s.id); } }, 'Open account'),
         h('button', { class: 'btn sm', type: 'button', onclick: function () { startVisit(s.id); } }, 'Log visit'),
+        shopBalance(s) > 0 ? h('button', { class: 'btn sm', type: 'button', onclick: function () { remind(s); } }, 'Remind') : null,
         h('button', { class: 'btn sm', type: 'button', onclick: function () { editShop(s); } }, 'Edit'),
         twoStep('Delete', 'danger', function () { delShop(s); })
       ));
@@ -1135,7 +1193,10 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     $('sDate').value = today(); $('sPaid').value = ''; $('sNote').value = '';
     updateSaleTotal();
   }
-  function resetPayForm() { $('pDate').value = today(); $('pAmount').value = ''; $('pNote').value = ''; }
+  var payMethod = 'Cash';
+  function setMethod(m) { payMethod = m; [].forEach.call(document.querySelectorAll('#pMethods .chip'), function (b) { b.classList.toggle('on', b.getAttribute('data-m') === m); }); }
+  $('pMethods').addEventListener('click', function (ev) { var b = ev.target.closest('.chip'); if (b) setMethod(b.getAttribute('data-m')); });
+  function resetPayForm() { $('pDate').value = today(); $('pAmount').value = ''; $('pNote').value = ''; setMethod('Cash'); }
   function prodFind(name) {
     try { var a = JSON.parse(localStorage.getItem('adnan-traders-products') || '[]'), k = String(name).trim().toLowerCase();
       for (var i = 0; i < a.length; i++) if (String(a[i].n).toLowerCase() === k) return a[i]; } catch (e) {}
@@ -1179,7 +1240,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     var amt = num($('pAmount').value);
     if (amt == null || amt <= 0) { toast('Enter the amount received'); return; }
     var btn = $('paySave'); btn.disabled = true;
-    var entry = { shopId: s.id, shopName: s.shopName, type: 'payment', amount: amt, date: $('pDate').value || today(), note: $('pNote').value.trim(), ts: Date.now() };
+    var entry = { shopId: s.id, shopName: s.shopName, type: 'payment', amount: amt, method: payMethod, date: $('pDate').value || today(), note: $('pNote').value.trim(), ts: Date.now() };
     var after = r2(shopBalance(s) - amt);
     S.root.collection('entries').doc().set(entry)
       .then(function () { resetPayForm(); toast('Payment saved'); showReceipt(s, entry, after); }, failed).then(function () { btn.disabled = false; });
@@ -1215,16 +1276,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       ));
     } else {
       card.append(h('div', { class: 'row between' }, h('span', { class: 'pill good' }, 'Payment received'), h('span', { class: 'muted small' }, dayLabel(e.date))),
-        h('div', { class: 'line', style: 'margin-top:6px' }, h('span', {}, 'Amount'), h('b', { class: 'num' }, money(e.amount))));
+        h('div', { class: 'line', style: 'margin-top:6px' }, h('span', {}, 'Amount'), h('b', { class: 'num' }, money(e.amount))),
+        e.method ? h('div', { class: 'line' }, h('span', {}, 'Method'), h('span', {}, e.method)) : null);
     }
     if (e.note) card.append(h('p', { class: 'small', style: 'margin:6px 0 0' }, e.note));
     card.append(h('p', { class: 'muted small', style: 'margin:6px 0' }, 'Balance after this: ' + money(after)));
-    var WAI = '<svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.18 1.6 6L4 28l7.1-1.86a12 12 0 0 0 4.94 1.06h.01C22.7 27.2 28 21.8 28 15.16 28 8.5 22.7 3 16.04 3zm0 22.1a10 10 0 0 1-5.1-1.4l-.37-.22-4.2 1.1 1.12-4.1-.24-.38a9.9 9.9 0 0 1-1.52-5.3c0-5.5 4.5-10 10.03-10 5.5 0 9.98 4.5 9.98 10 0 5.52-4.5 10.3-9.7 10.3z"/></svg>';
+    var WAI = '<svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.18 1.6 6L4 28l7.1-1.86a12 12 0 0 0 4.94 1.06h.01C22.7 27.2 28 21.8 28 15.16 28 8.5 22.7 3 16.04 3zm0 22.1a10 10 0 0 1-5.1-1.4l-.37-.22-4.2 1.1 1.12-4.1-.24-.38a9.9 9.9 0 0 1-1.52-5.3c0-5.5 4.5-10 10.03-10 5.5 0 9.98 4.5 9.98 10 0 5.52-4.5 10.3-9.7 10.3zm5.5-7.5c-.3-.15-1.78-.88-2.05-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.18.2-.35.22-.65.08-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.52-.07-.15-.68-1.64-.93-2.25-.24-.58-.5-.5-.68-.5h-.58c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.5.7.3 1.27.5 1.7.62.72.23 1.37.2 1.88.12.58-.08 1.78-.73 2.03-1.43.25-.7.25-1.3.18-1.43-.08-.13-.28-.2-.58-.35z"/></svg>';
     function wb(cls, html, fn) { var b = h('button', { class: 'btn sm ' + cls, type: 'button', onclick: fn }); b.innerHTML = html; return b; }
     card.append(h('div', { class: 'rbtns' },
       wb('', '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 2h12a1 1 0 0 1 1 1v19l-3-2-2 2-2-2-2 2-2-2-3 2V3a1 1 0 0 1 1-1zm2 5v2h8V7H8zm0 4v2h8v-2H8z"/></svg><span>View receipt</span>', function () { var sh = shopById(e.shopId); if (sh) showReceipt(sh, e, after); }),
-      wb('wa', WAI + '<span>WhatsApp</span>', function () { var sh = shopById(e.shopId); if (sh) { prepReceipt(sh, e, after); shareReceipt(); } }),
-      wb('', '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy</span>', function () { var sh = shopById(e.shopId); if (!sh) return; var tx = receiptText(sh, e, after); try { navigator.clipboard.writeText(tx).then(function () { toast('Receipt text copied'); }, function () { toast('Could not copy'); }); } catch (x) { toast('Could not copy'); } })
+      wb('', '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy</span>', function () { var sh = shopById(e.shopId); if (!sh) return; var tx = receiptText(sh, e, after); try { navigator.clipboard.writeText(tx).then(function () { toast('Receipt text copied'); }, function () { toast('Could not copy'); }); } catch (x) { toast('Could not copy'); } }),
+      wb('wa', WAI + '<span>Send on WhatsApp</span>', function () { var sh = shopById(e.shopId); if (sh) { prepReceipt(sh, e, after); shareReceipt(); } })
     ));
     card.append(h('div', { class: 'row', style: 'margin-top:6px' },
       twoStep('Delete', 'danger', function () {
@@ -1236,6 +1298,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 
   function renderShopPage() {
     if (!S.openShop) return;
+    fillStmt();
     var s = shopById(S.openShop);
     if (!s) { closeShopPage(); return; }
     var hd = $('shopHead'); hd.textContent = '';
@@ -1311,8 +1374,12 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   }
   function bizInfo() { try { var o = JSON.parse(localStorage.getItem('adnan-traders-bizinfo') || '{}'); return { phone: String(o.phone || '').trim(), addr: String(o.addr || '').trim() }; } catch (e) { return { phone: '', addr: '' }; } }
   function bizName() { try { return (localStorage.getItem('adnan-traders-biz') || '').trim() || 'Adnan Traders'; } catch (e) { return 'Adnan Traders'; } }
+  function timeText(e) { try { return e && e.ts ? new Date(e.ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''; } catch (x) { return ''; } }
+  function txnId(e) { var k = e && e.ts ? Number(e.ts).toString(36).toUpperCase().slice(-7) : String((e && e.id) || '').toUpperCase().slice(-7); return 'AT-' + (k || '0000000'); }
   function receiptText(s, e, after) {
-    var L = [bizName(), e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date), ''];
+    var L = [bizName(), e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', 'Shop: ' + s.shopName, 'Date: ' + fullDate(e.date)];
+    var tm = timeText(e); if (tm) L.push('Time: ' + tm);
+    L.push('Txn ID: ' + txnId(e)); if (e.type !== 'sale' && e.method) L.push('Method: ' + e.method); L.push('');
     if (e.type === 'sale') {
       (e.items || []).forEach(function (i) { L.push(i.name + ' x ' + qtyText(i.qty) + ' @ ' + money(i.price) + ' = ' + money(r2(i.qty * i.price))); });
       L.push('', 'Bill total: ' + money(e.total), 'Paid: ' + money(e.paid));
@@ -1326,7 +1393,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   }
   function drawReceipt(s, e, after) {
     var W = 720, pad = 40, items = e.type === 'sale' ? (e.items || []) : [];
-    var c = document.createElement('canvas'); c.width = W; c.height = 900 + items.length * 60;
+    var c = document.createElement('canvas'); c.width = W; c.height = 1150 + items.length * 60;
     var g = c.getContext('2d');
     var F = ' Roboto, "Segoe UI", Arial, sans-serif';
     g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
@@ -1350,6 +1417,9 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     function rule() { g.strokeStyle = '#CAD2CE'; g.lineWidth = 2; g.beginPath(); g.moveTo(pad, y - 22); g.lineTo(W - pad, y - 22); g.stroke(); y += 12; }
     row('Shop', s.shopName, { bold: true });
     row('Date', fullDate(e.date));
+    if (timeText(e)) row('Time', timeText(e));
+    row('Txn ID', txnId(e));
+    if (e.type !== 'sale' && e.method) row('Method', e.method);
     rule();
     if (e.type === 'sale') {
       items.forEach(function (i) {
@@ -1390,13 +1460,96 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     S.rc = { canvas: c, text: text, filename: 'receipt-' + (String(s.shopName).replace(/[^A-Za-z0-9]+/g, '-').slice(0, 30) || 'shop') + '-' + (e.date || today()) + '.png' };
     $('receiptImg').src = c.toDataURL('image/png');
     var wn = waNumber(s.phone || ''), to = $('rcTo');
-    S.rc.number = wn;
+    S.rc.number = wn; $('rcTitle').textContent = 'Receipt';
     if (!wn) { to.textContent = 'No contact number is saved for this shop, so WhatsApp will ask you to pick a contact. Add the number with Edit shop.'; to.style.color = 'var(--bad)'; }
     else if (wn.length < 11) { to.textContent = 'Sending to +' + wn + '. This number looks incomplete, check it with Edit shop.'; to.style.color = 'var(--bad)'; }
     else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + '). In WhatsApp choose this shop, then tap Send.'; to.style.color = ''; }
     $('receiptBox').hidden = false;
     $('receiptBox').scrollIntoView({ block: 'start' });
   }
+
+  /* ---------- account statement ---------- */
+  function ledgerRows(sh) {
+    var list = entriesOf(sh.id).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0); });
+    var bal = openingOf(sh), out = [];
+    list.forEach(function (e) {
+      var before = bal;
+      if (e.type === 'sale') bal = r2(bal + (Number(e.total) || 0) - (Number(e.paid) || 0));
+      else bal = r2(bal - (Number(e.amount) || 0));
+      out.push({ e: e, before: before, after: bal });
+    });
+    return out;
+  }
+  function stmtMonths(sh) {
+    var m = {}; m[today().slice(0, 7)] = 1;
+    entriesOf(sh.id).forEach(function (e) { if (e.date) m[String(e.date).slice(0, 7)] = 1; });
+    return Object.keys(m).sort().reverse();
+  }
+  function monthName(ym) { var p = ym.split('-'); return MONTHS[+p[1] - 1] + ' ' + p[0]; }
+  function fillStmt() {
+    var sel = $('stmtMonth'); if (!sel || !S.openShop) return;
+    var sh = shopById(S.openShop); if (!sh) return;
+    var cur = sel.value, ms = stmtMonths(sh);
+    sel.textContent = '';
+    ms.forEach(function (m) { sel.append(h('option', { value: m }, monthName(m))); });
+    sel.append(h('option', { value: 'all' }, 'All time'));
+    if (cur && (cur === 'all' || ms.indexOf(cur) !== -1)) sel.value = cur;
+  }
+  function drawStatement(sh, key) {
+    var all = ledgerRows(sh), rows = key === 'all' ? all : all.filter(function (r) { return String(r.e.date).slice(0, 7) === key; });
+    var openBal = rows.length ? rows[0].before : (all.length ? (key === 'all' ? openingOf(sh) : (function () { var b = openingOf(sh); all.forEach(function (r) { if (String(r.e.date).slice(0, 7) < key) b = r.after; }); return b; })()) : openingOf(sh));
+    var closeBal = rows.length ? rows[rows.length - 1].after : openBal;
+    var W = 720, pad = 36, F = ' Roboto, "Segoe UI", Arial, sans-serif';
+    var c = document.createElement('canvas'); c.width = W; c.height = 620 + rows.length * 84;
+    var g = c.getContext('2d');
+    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, W, c.height);
+    g.fillStyle = '#1A73E8'; g.fillRect(0, 0, W, 130);
+    g.fillStyle = '#FFFFFF'; g.font = '700 38px Roboto,' + F; g.textAlign = 'left'; g.fillText(bizName(), pad, 62);
+    g.fillStyle = '#E8F0FE'; g.font = '500 24px' + F; g.fillText('Account statement - ' + (key === 'all' ? 'All time' : monthName(key)), pad, 102);
+    function fit(t, maxW) { t = String(t); var cut = false; while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; } return cut ? t.trim() + '...' : t; }
+    var y = 184;
+    g.fillStyle = '#16201C'; g.font = '700 28px' + F; g.fillText(fit(sh.shopName, W - 2 * pad), pad, y); y += 40;
+    g.fillStyle = '#56655E'; g.font = '400 22px' + F; g.fillText('Printed ' + fullDate(today()), pad, y); y += 46;
+    function line(l, v, col, bold) { g.textAlign = 'left'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText(l, pad, y); g.textAlign = 'right'; g.font = (bold ? '700' : '500') + ' 26px' + F; g.fillStyle = col || '#16201C'; g.fillText(v, W - pad, y); y += 44; }
+    line('Balance at start', money(openBal), '#16201C', true);
+    g.strokeStyle = '#CAD2CE'; g.lineWidth = 2; g.beginPath(); g.moveTo(pad, y - 20); g.lineTo(W - pad, y - 20); g.stroke(); y += 8;
+    var billed = 0, got = 0;
+    rows.forEach(function (r) {
+      var e = r.e, d = parse(e.date), dl = d.getDate() + ' ' + MONTHS[d.getMonth()];
+      var label, amt, col;
+      if (e.type === 'sale') {
+        label = (e.items || []).map(function (i) { return i.name + ' x' + qtyText(i.qty); }).join(', ');
+        amt = '+' + money(e.total); col = '#B3261E'; billed += Number(e.total) || 0; got += Number(e.paid) || 0;
+        if (Number(e.paid)) label += '  (paid ' + money(e.paid) + ')';
+      } else { label = 'Payment' + (e.method ? ' - ' + e.method : ''); amt = '-' + money(e.amount); col = '#1F7A4D'; got += Number(e.amount) || 0; }
+      g.textAlign = 'left'; g.font = '500 22px' + F; g.fillStyle = '#16201C'; g.fillText(dl, pad, y);
+      g.font = '500 23px' + F; g.fillText(fit(label, 330), pad + 100, y);
+      g.textAlign = 'right'; g.font = '700 24px' + F; g.fillStyle = col; g.fillText(amt, W - pad, y);
+      g.font = '400 20px' + F; g.fillStyle = '#56655E'; g.fillText('Balance ' + money(r.after), W - pad, y + 30);
+      y += 76;
+    });
+    if (!rows.length) { g.textAlign = 'left'; g.font = '400 23px' + F; g.fillStyle = '#56655E'; g.fillText('No bills or payments in this period.', pad, y); y += 60; }
+    g.strokeStyle = '#CAD2CE'; g.beginPath(); g.moveTo(pad, y - 28); g.lineTo(W - pad, y - 28); g.stroke(); y += 10;
+    line('Total billed', money(billed)); line('Total received', money(got), '#1F7A4D');
+    line('Balance now due', money(closeBal), closeBal > 0 ? '#B3261E' : '#1F7A4D', true);
+    var bi = bizInfo(); g.textAlign = 'center'; g.fillStyle = '#56655E'; g.font = '400 21px' + F;
+    if (bi.phone) { y += 18; g.fillText(fit('Phone: ' + bi.phone, W - 2 * pad), W / 2, y); }
+    if (bi.addr) { y += 30; g.fillText(fit(bi.addr, W - 2 * pad), W / 2, y); }
+    var out = document.createElement('canvas'); out.width = W; out.height = y + 40; out.getContext('2d').drawImage(c, 0, 0);
+    var txt = [bizName(), 'Account statement - ' + (key === 'all' ? 'All time' : monthName(key)), 'Shop: ' + sh.shopName, 'Balance at start: ' + money(openBal), ''];
+    rows.forEach(function (r) { var e = r.e; txt.push(dayLabel(e.date) + ': ' + (e.type === 'sale' ? 'Sale ' + money(e.total) + (Number(e.paid) ? ' (paid ' + money(e.paid) + ')' : '') : 'Payment ' + money(e.amount) + (e.method ? ' (' + e.method + ')' : '')) + ' | Balance ' + money(r.after)); });
+    txt.push('', 'Balance now due: ' + money(closeBal));
+    return { canvas: out, text: txt.join('\n') };
+  }
+  function showStatement(sh, key) {
+    var r = drawStatement(sh, key);
+    S.rc = { canvas: r.canvas, text: r.text, number: waNumber(sh.phone || ''), filename: 'statement-' + (String(sh.shopName).replace(/[^A-Za-z0-9]+/g, '-').slice(0, 30) || 'shop') + '-' + key + '.png' };
+    $('receiptImg').src = r.canvas.toDataURL('image/png');
+    $('rcTitle').textContent = 'Statement';
+    var to = $('rcTo'); to.textContent = S.rc.number ? 'Sending to +' + S.rc.number + ' (' + sh.shopName + '). Tap the green button, choose WhatsApp, then Send.' : 'No contact number saved for this shop.'; to.style.color = '';
+    $('receiptBox').hidden = false; $('receiptBox').scrollIntoView({ block: 'start' });
+  }
+  $('stmtView').addEventListener('click', function () { var sh = shopById(S.openShop); if (sh) showStatement(sh, $('stmtMonth').value || today().slice(0, 7)); });
   function receiptFile(unique) {
     return new Promise(function (resolve, reject) {
       if (!S.rc) { reject(new Error('no receipt')); return; }
@@ -1413,12 +1566,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     receiptFile(true).then(function (r) { saveBlob(r.name, r.blob); toast('Receipt image saved in your gallery'); }, function () { toast('Could not make the image'); });
   });
   function shareReceipt() {
-    receiptFile(false).then(function (r) {
-      var f = new File([r.blob], r.name, { type: r.type });
-      if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing is not supported on this phone. Use Save image.'); return; }
-      if (S.rc.number) { try { navigator.clipboard.writeText('+' + S.rc.number); } catch (e2) {} }
-      return navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); });
-    }, function () { toast('Could not make the image'); });
+    if (!S.rc || S.sharing) return;
+    var f;
+    try {
+      var bin = atob(S.rc.canvas.toDataURL('image/jpeg', 0.92).split(',')[1]), u8 = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      f = new File([u8], S.rc.filename.replace(/\.png$/, '.jpg'), { type: 'image/jpeg' });
+    } catch (x) { toast('Could not make the image'); return; }
+    if (!navigator.share || !navigator.canShare || !navigator.canShare({ files: [f] })) { toast('Sharing is not supported on this phone. Use Save image.'); return; }
+    if (S.rc.number) { try { navigator.clipboard.writeText('+' + S.rc.number); } catch (e2) {} }
+    S.sharing = true;
+    navigator.share({ files: [f] }).catch(function (err) { if (err && err.name !== 'AbortError') toast('Sharing is blocked here. Use Save image.'); }).then(function () { setTimeout(function () { S.sharing = false; }, 400); });
   }
   $('rcShare').addEventListener('click', shareReceipt);
 
@@ -1469,6 +1627,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     payload: function () { return backupPayload(); },
     markBackedUp: function () { markBackedUp(); },
     changes: function () { return META.changes; },
+    data: function () { return { shops: S.shops, entries: S.entries, balance: function (id) { var sh = shopById(id); return sh ? shopBalance(sh) : 0; } }; },
     restoreText: function (text, done) { S.pendingImport = parseBackup(text); runRestore(done || function () {}); }
   };
   function describeBackup(d) {
@@ -2138,6 +2297,14 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     for (var i = 0; i < a.length; i++) if (String(a[i].n).toLowerCase() === k) { a[i].p = price; return; }
     a.push({ n: name, p: price });
   }
+  function stockLeft(p) {
+    if (p.q == null || !window.__AT || !window.__AT.data) return null;
+    var k = String(p.n).trim().toLowerCase(), sold = 0, at = Number(p.at) || 0;
+    window.__AT.data().entries.forEach(function (e) { if (e.type === 'sale' && (Number(e.ts) || 0) >= at) (e.items || []).forEach(function (i) { if (String(i.name).trim().toLowerCase() === k) sold += Number(i.qty) || 0; }); });
+    return Number(p.q) - sold;
+  }
+  window.__stockLeft = stockLeft;
+  window.addEventListener('at-changed', function () { try { render(); } catch (x) {} });
   function render() {
     var a = load().sort(function (x, y) { return String(x.n).localeCompare(String(y.n)); });
     var dl = $('prodList'); if (dl) { dl.textContent = ''; a.forEach(function (p) { var o = document.createElement('option'); o.value = p.n; dl.appendChild(o); }); }
@@ -2146,9 +2313,24 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     a.forEach(function (p) {
       var row = document.createElement('div'); row.className = 'prod';
       var t = document.createElement('span'); t.textContent = p.n + '  ·  ' + money(p.p);
+      var wrap = document.createElement('div'); wrap.style.flex = '1'; wrap.appendChild(t);
+      var left = stockLeft(p), sk = document.createElement('p'); sk.className = 'stk' + (left == null ? '' : left <= 0 ? ' bad' : ' ok');
+      sk.textContent = left == null ? 'Stock not tracked' : 'In stock: ' + (Math.round(left * 100) / 100) + (left <= 0 ? ' (finished)' : '');
+      wrap.appendChild(sk);
+      var sb = document.createElement('button'); sb.type = 'button'; sb.className = 'btn sm'; sb.textContent = left == null ? 'Set stock' : 'Stock';
+      sb.addEventListener('click', function () {
+        var v = prompt(left == null ? 'How many "' + p.n + '" are in stock now?' : 'Stock now is ' + (Math.round(left * 100) / 100) + '. Type the new total, or +10 to add 10:', '');
+        if (v == null) return; v = String(v).trim().replace(/,/g, '');
+        var all = load(), q = null;
+        for (var j = 0; j < all.length; j++) if (String(all[j].n).toLowerCase() === String(p.n).toLowerCase()) q = all[j];
+        if (!q) return;
+        if (/^\+\s*\d/.test(v) && left != null) { q.q = (Number(q.q) || 0) + parseFloat(v.slice(1)); }
+        else { var n = parseFloat(v); if (!isFinite(n)) { note('Type a number'); return; } q.q = n; q.at = Date.now(); }
+        save(all); note('Stock updated');
+      });
       var b = document.createElement('button'); b.type = 'button'; b.className = 'btn sm danger'; b.textContent = 'Remove';
       b.addEventListener('click', function () { save(load().filter(function (x) { return String(x.n).toLowerCase() !== String(p.n).toLowerCase(); })); });
-      row.appendChild(t); row.appendChild(b); box.appendChild(row);
+      row.appendChild(wrap); row.appendChild(sb); row.appendChild(b); box.appendChild(row);
     });
   }
   $('pdAdd').addEventListener('click', function () {
@@ -2191,7 +2373,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 
   /* ---- menu and pages ---- */
   var panes = sec.querySelectorAll('.pane'), menu = $('setMenu'), title = $('setTitle');
-  var NAMES = { profile: 'Profile', security: 'Security', backup: 'Backup and restore', items: 'Items and prices', about: 'About and help' };
+  var NAMES = { profile: 'Profile', security: 'Security', appearance: 'Appearance', backup: 'Backup and restore', items: 'Items and prices', reports: 'Monthly report', about: 'About and help' };
   function show(key) {
     for (var i = 0; i < panes.length; i++) panes[i].hidden = panes[i].getAttribute('data-pane') !== key;
     menu.hidden = !!key; title.textContent = key ? NAMES[key] : 'Settings';
@@ -2257,6 +2439,94 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   refresh();
 })();
 </script>
+<script>
+/* ===== v2.1 appearance and monthly report ===== */
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function note(msg) { var t = $('toast'); if (!t) return; t.textContent = msg; t.hidden = false; clearTimeout(note.t); note.t = setTimeout(function () { t.hidden = true; }, 2600); }
+  function money(n) { return 'Rs ' + (Math.round((Number(n) || 0) * 100) / 100).toLocaleString('en-US'); }
+
+  /* display mode */
+  var MODES = [['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']];
+  function curMode() { var m = get('adnan-traders-mode'); return m === 'light' || m === 'dark' ? m : 'auto'; }
+  function setMode(m) {
+    if (m === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', m);
+    put('adnan-traders-mode', m); paintBar(); drawMode();
+  }
+  function drawMode() {
+    var box = $('modeSw'); if (!box) return; box.textContent = '';
+    MODES.forEach(function (m) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sw' + (curMode() === m[0] ? ' on' : ''); b.textContent = m[1];
+      b.addEventListener('click', function () { setMode(m[0]); }); box.appendChild(b);
+    });
+  }
+  /* colour theme */
+  var THEMES = [['blue', 'Blue (standard)', '#1A73E8', '#1A73E8'], ['purple', 'Purple and gold', '#6A1B9A', '#4A0E5C'], ['green', 'Green', '#0B8043', '#0B6B3A'], ['orange', 'Orange', '#D84315', '#BF360C']];
+  function curTheme() { var a = get('adnan-traders-accent'); return THEMES.some(function (t) { return t[0] === a; }) ? a : 'blue'; }
+  function paintBar() {
+    var t = THEMES.filter(function (x) { return x[0] === curTheme(); })[0], dark = document.documentElement.getAttribute('data-theme') === 'dark' || (curMode() === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', dark ? '#1B1F27' : t[3]);
+  }
+  function setTheme(a) {
+    if (a === 'blue') document.documentElement.removeAttribute('data-accent'); else document.documentElement.setAttribute('data-accent', a);
+    put('adnan-traders-accent', a); paintBar(); drawThemes();
+  }
+  function drawThemes() {
+    var box = $('themeSw'); if (!box) return; box.textContent = '';
+    THEMES.forEach(function (t) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sw' + (curTheme() === t[0] ? ' on' : '');
+      var i = document.createElement('i'); i.style.background = t[2]; b.appendChild(i); b.appendChild(document.createTextNode(t[1]));
+      b.addEventListener('click', function () { setTheme(t[0]); }); box.appendChild(b);
+    });
+  }
+  drawMode(); drawThemes(); paintBar();
+
+  /* monthly report */
+  var MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var ym = (function () { var d = new Date(); return { y: d.getFullYear(), m: d.getMonth() }; })();
+  function key() { return ym.y + '-' + (ym.m < 9 ? '0' : '') + (ym.m + 1); }
+  var lastText = '';
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function line(box, a, b, strong) { var l = el('div', 'line'); l.appendChild(el('span', '', a)); l.appendChild(el(strong ? 'b' : 'span', 'num', b)); box.appendChild(l); }
+  function renderReport() {
+    var box = $('rpBody'); if (!box || !window.__AT || !window.__AT.data) return;
+    var D = window.__AT.data(), k = key(); $('rpMonth').textContent = MN[ym.m] + ' ' + ym.y; box.textContent = '';
+    var sales = 0, got = 0, credit = 0, bills = 0, pays = 0, by = {}, meth = {};
+    D.entries.forEach(function (e) {
+      if (String(e.date).slice(0, 7) !== k) return;
+      if (e.type === 'sale') { var t = Number(e.total) || 0, pd = Number(e.paid) || 0; sales += t; got += pd; credit += t - pd; bills++; by[e.shopName || 'Shop'] = (by[e.shopName || 'Shop'] || 0) + t; }
+      else if (e.type === 'payment') { var a = Number(e.amount) || 0; got += a; pays++; var mm = e.method || 'Other'; meth[mm] = (meth[mm] || 0) + a; }
+    });
+    var owed = 0, owing = 0; D.shops.forEach(function (s) { var b = D.balance(s.id); if (b > 0) { owed += b; owing++; } });
+    line(box, 'Sales (' + bills + (bills === 1 ? ' bill)' : ' bills)'), money(sales), true);
+    line(box, 'Money received (' + pays + (pays === 1 ? ' payment + paid on bills)' : ' payments + paid on bills)'), money(got), true);
+    line(box, 'Given on credit this month', money(credit));
+    line(box, 'Total still owed now (' + owing + (owing === 1 ? ' shop)' : ' shops)'), money(owed), true);
+    var ms = Object.keys(meth); if (ms.length) { box.appendChild(el('h4', '', 'Received by method (payments)')); ms.forEach(function (m) { line(box, m, money(meth[m])); }); }
+    var top = Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).slice(0, 5);
+    if (top.length) { box.appendChild(el('h4', '', 'Top shops by purchase')); top.forEach(function (n, i) { line(box, (i + 1) + '. ' + n, money(by[n])); }); }
+    var low = [];
+    try { JSON.parse(get('adnan-traders-products') || '[]').forEach(function (p) { var l = window.__stockLeft ? window.__stockLeft(p) : null; if (l != null && l <= 5) low.push(p.n + ': ' + (Math.round(l * 100) / 100)); }); } catch (x) {}
+    if (low.length) { box.appendChild(el('h4', '', 'Low stock (5 or less)')); low.forEach(function (t) { box.appendChild(el('div', 'small', t)); }); }
+    lastText = ['Monthly report - ' + MN[ym.m] + ' ' + ym.y, 'Sales: ' + money(sales) + ' (' + bills + ' bills)', 'Received: ' + money(received(got)), 'On credit: ' + money(credit), 'Total still owed: ' + money(owed)].concat(top.length ? ['', 'Top shops:'].concat(top.map(function (n, i) { return (i + 1) + '. ' + n + ' ' + money(by[n]); })) : []).join('\n');
+  }
+  function received(x) { return x; }
+  $('rpPrev').addEventListener('click', function () { ym.m--; if (ym.m < 0) { ym.m = 11; ym.y--; } renderReport(); });
+  $('rpNext').addEventListener('click', function () { ym.m++; if (ym.m > 11) { ym.m = 0; ym.y++; } renderReport(); });
+  $('rpShare').addEventListener('click', function () {
+    renderReport();
+    if (navigator.share) navigator.share({ text: lastText }).catch(function () {});
+    else try { navigator.clipboard.writeText(lastText).then(function () { note('Summary copied'); }); } catch (x) { note('Could not share'); }
+  });
+  var sec = $('view-backup');
+  if (sec) sec.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-open="reports"]')) renderReport(); });
+  window.addEventListener('at-changed', renderReport);
+})();
+</script>
+
 
 
 
