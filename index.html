@@ -302,7 +302,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 @media (prefers-reduced-motion: reduce) { .fadein, .ripple, #toast { animation: none; } }
 .lockState { display: inline-block; padding: 2px 12px; border-radius: 99px; font-weight: 600; font-size: 13px; }
 .lockState.on { background: var(--good-bg); color: var(--good); } .lockState.off { background: var(--bad-bg); color: var(--bad); }
-#lockScr { position: fixed; inset: 0; z-index: 100; background: var(--bar); color: #fff; display: grid; place-items: center; padding: 24px; }
+#lockScr { position: fixed; inset: 0; z-index: 2000; background: var(--bar); color: #fff; display: grid; place-items: center; padding: 24px; }
 #lockScr .box { width: 100%; max-width: 340px; text-align: center; display: grid; gap: 14px; }
 #lockScr .logo2 { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,.22) center / cover no-repeat; color: #fff; display: grid; place-items: center; margin: 0 auto; font: 700 24px var(--font-display); }
 #lockScr h1 { margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 700; }
@@ -364,6 +364,20 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 :root[data-accent="orange"]{--accent:#D84315;--accent-soft:#FBE9E7;--bar:linear-gradient(135deg,#BF360C,#E4511C);--accent-ink:#fff}
 @media (prefers-color-scheme: dark){:root[data-accent="orange"]:not([data-theme="light"]){--accent:#FFAB91;--accent-soft:#4A2A20;--accent-ink:#3B1200;--bar:linear-gradient(135deg,#7A2208,#A8340F)}}
 :root[data-accent="orange"][data-theme="dark"]{--accent:#FFAB91;--accent-soft:#4A2A20;--accent-ink:#3B1200;--bar:linear-gradient(135deg,#7A2208,#A8340F)}
+
+/* v2.2 receipt screen */
+#receiptBox{position:fixed;inset:0;z-index:900;background:linear-gradient(#B7E1CB,#FFFFFF 55%);display:flex;flex-direction:column}
+#receiptBox[hidden]{display:none}
+.rcscroll{flex:1;overflow-y:auto;padding:14px 0 10px;-webkit-overflow-scrolling:touch}
+.rcscroll img{display:block;width:100%;max-width:520px;margin:0 auto}
+#rcTo{color:#4A4F57;margin:6px 16px 0;text-align:center}
+.rcbar{display:flex;gap:12px;align-items:center;padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #E3E6E8}
+.rcb{height:52px;border:2px solid #12A150;background:#fff;color:#12A150;border-radius:26px;font:600 17px Roboto,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.rcb.back{flex:1;color:#23232B}
+.rcb.ic{width:60px;flex:none}
+.rcb:active{background:#E6F4EC}
+#receiptBox #rcSave,#receiptBox #rcShare{width:60px;min-height:52px;flex:none;background:#fff;border:2px solid #12A150;color:#12A150;box-shadow:none;padding:0}
+#receiptBox #rcClose{flex:1;width:auto;min-height:52px;background:#fff;border:2px solid #12A150;color:#23232B;box-shadow:none}
 </style>
 </head>
 <body>
@@ -434,16 +448,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     <div id="shopHead"></div>
     <div class="stats compact" id="shopStats"></div>
     <p class="muted small" id="shopOpening"></p>
-    <div class="card" id="receiptBox" style="margin-top:12px" hidden>
-      <p class="title" id="rcTitle">Receipt</p>
-      <p class="small" id="rcTo" style="margin:4px 0"></p>
-      <img id="receiptImg" alt="Receipt preview">
-      <div class="rc-actions">
-        <button class="btn wa" type="button" id="rcShare"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.18 1.6 6L4 28l7.1-1.86a12 12 0 0 0 4.94 1.06h.01C22.7 27.2 28 21.8 28 15.16 28 8.5 22.7 3 16.04 3zm0 22.1a10 10 0 0 1-5.1-1.4l-.37-.22-4.2 1.1 1.12-4.1-.24-.38a9.9 9.9 0 0 1-1.52-5.3c0-5.5 4.5-10 10.03-10 5.5 0 9.98 4.5 9.98 10 0 5.52-4.5 10.3-9.7 10.3zm5.5-7.5c-.3-.15-1.78-.88-2.05-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.18.2-.35.22-.65.08-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.52-.07-.15-.68-1.64-.93-2.25-.24-.58-.5-.5-.68-.5h-.58c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.5.7.3 1.27.5 1.7.62.72.23 1.37.2 1.88.12.58-.08 1.78-.73 2.03-1.43.25-.7.25-1.3.18-1.43-.08-.13-.28-.2-.58-.35z"/></svg><span>Send receipt on WhatsApp</span></button>
-        <button class="btn" type="button" id="rcSave"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 20h14v-2H5v2zM12 3v10.2l3.6-3.6L17 11l-5 5-5-5 1.4-1.4 3.6 3.6V3h0z"/></svg><span>Save image</span></button>
-        <button class="btn cancel" type="button" id="rcClose"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/></svg><span>Cancel</span></button>
+    <div id="receiptBox" hidden>
+      <div class="rcscroll">
+        <p class="title" id="rcTitle" hidden>Receipt</p>
+        <img id="receiptImg" alt="Receipt preview">
+        <p class="small" id="rcTo"></p>
       </div>
-      <p class="muted small">Tap the green button, choose WhatsApp, pick this shop's chat and tap Send. The shop number is copied for you to paste in WhatsApp search.</p>
+      <div class="rcbar">
+        <button class="rcb back" type="button" id="rcClose">Back</button>
+        <button class="rcb ic" type="button" id="rcShare" aria-label="Share receipt"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+        <button class="rcb ic" type="button" id="rcSave" aria-label="Save image"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg></button>
+      </div>
     </div>
     <div id="shopPending"></div>
     <div class="card" id="stmtCard" style="margin-top:12px"><p class="title">Account statement</p><p class="muted small" style="margin:2px 0 8px">A full list of this shop's bills and payments for a month, ready to send.</p><div class="row"><select id="stmtMonth" aria-label="Statement month"></select><button class="btn primary sm" type="button" id="stmtView">View statement</button></div></div>
@@ -705,7 +720,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '2.1';
+  var APP_VERSION = '2.2';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -1391,63 +1406,83 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     var bi = bizInfo(); if (bi.phone) L.push('Phone: ' + bi.phone); if (bi.addr) L.push(bi.addr);
     return L.join('\n');
   }
+  function stampText(e) {
+    var d = parse(e.date), t = timeText(e);
+    return (d.getDate() < 10 ? '0' : '') + d.getDate() + '-' + MONTHS[d.getMonth()] + '-' + d.getFullYear() + (t ? ', ' + t : '');
+  }
   function drawReceipt(s, e, after) {
-    var W = 720, pad = 40, items = e.type === 'sale' ? (e.items || []) : [];
-    var c = document.createElement('canvas'); c.width = W; c.height = 1150 + items.length * 60;
+    var W = 720, pad = 64, items = e.type === 'sale' ? (e.items || []) : [];
+    var c = document.createElement('canvas'); c.width = W; c.height = 1500 + items.length * 74;
     var g = c.getContext('2d');
-    var F = ' Roboto, "Segoe UI", Arial, sans-serif';
-    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, c.width, c.height);
-    g.fillStyle = '#1A73E8'; g.fillRect(0, 0, W, 130);
+    var F = ' Roboto, "Segoe UI", Arial, sans-serif', INK = '#23232B', MUTE = '#4A4F57';
+    function fit(t, maxW) { t = String(t); var cut = false; while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; } return cut ? t.trim() + '...' : t; }
+    var bg = g.createLinearGradient(0, 0, 0, 760); bg.addColorStop(0, '#B7E1CB'); bg.addColorStop(1, '#FFFFFF');
+    g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, W, c.height); g.fillStyle = bg; g.fillRect(0, 0, W, 760);
+    var cardX = 28, cardW = W - 56, cg = g.createLinearGradient(0, 40, 0, 900); cg.addColorStop(0, 'rgba(255,255,255,0.55)'); cg.addColorStop(1, 'rgba(255,255,255,1)');
+    g.fillStyle = cg; g.fillRect(cardX, 40, cardW, c.height - 40);
+    /* gold coin with green tick */
+    var cx = W / 2, cy = 190, R = 82, rg = g.createRadialGradient(cx - 22, cy - 28, 10, cx, cy, R);
+    rg.addColorStop(0, '#F8E3A4'); rg.addColorStop(0.65, '#E0B65A'); rg.addColorStop(1, '#C48F2E');
+    g.shadowColor = 'rgba(120,80,10,0.35)'; g.shadowBlur = 22; g.shadowOffsetY = 8;
+    g.fillStyle = rg; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+    g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+    g.strokeStyle = 'rgba(255,255,255,0.45)'; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, R - 6, 0, Math.PI * 2); g.stroke();
+    g.strokeStyle = '#0C6B33'; g.lineWidth = 26; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath(); g.moveTo(cx - 36, cy + 6); g.lineTo(cx - 8, cy + 36); g.lineTo(cx + 40, cy - 28); g.stroke();
+    g.strokeStyle = '#1FB35A'; g.lineWidth = 18; g.beginPath(); g.moveTo(cx - 36, cy + 4); g.lineTo(cx - 8, cy + 33); g.lineTo(cx + 40, cy - 30); g.stroke();
+    g.textAlign = 'center'; g.fillStyle = INK; g.font = '700 38px Roboto,' + F;
+    g.fillText(e.type === 'sale' ? 'Bill Created' : 'Payment Received', W / 2, 340);
+    g.fillStyle = MUTE; g.font = '400 24px' + F;
+    g.fillText(fit(e.type === 'sale' ? 'Thank you for shopping with ' + bizName() : 'Thank you. Payment received by ' + bizName(), W - 2 * pad), W / 2, 380);
     g.textAlign = 'left';
-    g.fillStyle = '#FFFFFF'; g.font = '700 40px Roboto,' + F; g.fillText(fit(bizName(), W - 2 * pad), pad, 64);
-    g.fillStyle = '#E8F0FE'; g.font = '500 24px' + F; g.fillText(e.type === 'sale' ? 'Sale receipt' : 'Payment receipt', pad, 104);
-    function fit(t, maxW) {
-      t = String(t); var cut = false;
-      while (g.measureText(t).width > maxW && t.length > 3) { t = t.slice(0, -2); cut = true; }
-      return cut ? t.trim() + '...' : t;
-    }
-    var y = 190;
+    var y = 440;
+    function rule() { g.strokeStyle = '#D4D8DC'; g.lineWidth = 2; g.beginPath(); g.moveTo(pad, y); g.lineTo(W - pad, y); g.stroke(); y += 46; }
+    function head(t) { g.textAlign = 'left'; g.font = '700 26px' + F; g.fillStyle = INK; g.fillText(t, pad, y); y += 48; }
     function row(label, value, o) {
       o = o || {};
-      g.textAlign = 'left'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText(label, pad, y);
-      g.textAlign = 'right'; g.font = (o.bold ? '700' : '500') + ' 26px' + F; g.fillStyle = o.color || '#16201C';
-      g.fillText(fit(value, W - 2 * pad - 170), W - pad, y);
-      g.textAlign = 'left'; y += 46;
+      g.textAlign = 'left'; g.font = '400 26px' + F; g.fillStyle = INK; g.fillText(label, pad, y);
+      g.textAlign = 'right'; g.font = (o.bold ? '700' : '500') + ' 27px' + F; g.fillStyle = o.color || INK;
+      g.fillText(fit(value, W - 2 * pad - 210), W - pad, y); g.textAlign = 'left'; y += 48;
     }
-    function rule() { g.strokeStyle = '#CAD2CE'; g.lineWidth = 2; g.beginPath(); g.moveTo(pad, y - 22); g.lineTo(W - pad, y - 22); g.stroke(); y += 12; }
-    row('Shop', s.shopName, { bold: true });
-    row('Date', fullDate(e.date));
-    if (timeText(e)) row('Time', timeText(e));
-    row('Txn ID', txnId(e));
-    if (e.type !== 'sale' && e.method) row('Method', e.method);
     rule();
-    if (e.type === 'sale') {
-      items.forEach(function (i) {
-        g.textAlign = 'left'; g.font = '600 25px' + F; g.fillStyle = '#16201C'; g.fillText(fit(i.name, W - 2 * pad - 190), pad, y);
-        g.textAlign = 'right'; g.fillText(money(r2(i.qty * i.price)), W - pad, y);
-        g.textAlign = 'left'; g.font = '400 21px' + F; g.fillStyle = '#56655E'; g.fillText(qtyText(i.qty) + ' x ' + money(i.price), pad, y + 28);
-        y += 60;
-      });
-      rule();
-      row('Bill total', money(e.total), { bold: true });
-      row('Paid', money(e.paid));
-    } else {
-      g.textAlign = 'center'; g.font = '400 24px' + F; g.fillStyle = '#56655E'; g.fillText('Amount received', W / 2, y + 10);
-      g.font = '700 68px Roboto,' + F; g.fillStyle = '#1F7A4D'; g.fillText(money(e.amount), W / 2, y + 90);
-      g.textAlign = 'left'; y += 150;
-      if (e.note) row('Note', e.note);
-      rule();
-    }
-    row('Balance remaining', money(after), { bold: true, color: after > 0 ? '#B3261E' : '#1F7A4D' });
-    y += 30;
-    g.textAlign = 'center'; g.font = '400 22px' + F; g.fillStyle = '#56655E'; g.fillText('Thank you for your business', W / 2, y);
+    row('Transaction ID', '#' + txnId(e), { bold: true });
+    row('Date & Time', stampText(e));
+    row('Type', e.type === 'sale' ? 'Sale' : 'Payment');
+    if (e.type !== 'sale' && e.method) row('Payment Method', e.method);
+    y -= 6; rule();
+    head('Customer');
+    row('Name', s.shopName);
+    if (s.phone) row('Phone Number', s.phone);
+    y -= 6; rule();
+    head('Issued by');
+    row('Name', bizName());
     var bi = bizInfo();
-    g.fillStyle = '#16201C'; g.font = '500 22px' + F;
-    if (bi.phone) { y += 36; g.fillText(fit('Phone: ' + bi.phone, W - 2 * pad), W / 2, y); }
-    if (bi.addr) { y += 32; g.fillStyle = '#56655E'; g.fillText(fit(bi.addr, W - 2 * pad), W / 2, y); }
+    if (bi.phone) row('Phone Number', bi.phone);
+    y -= 6; rule();
+    if (e.type === 'sale') {
+      head('Items');
+      items.forEach(function (i) {
+        g.textAlign = 'left'; g.font = '500 26px' + F; g.fillStyle = INK; g.fillText(fit(i.name, W - 2 * pad - 200), pad, y);
+        g.textAlign = 'right'; g.font = '500 26px' + F; g.fillText(money(r2(i.qty * i.price)), W - pad, y);
+        g.textAlign = 'left'; g.font = '400 22px' + F; g.fillStyle = MUTE; g.fillText(qtyText(i.qty) + ' x ' + money(i.price), pad, y + 30);
+        y += 74;
+      });
+      y -= 14; rule();
+    }
+    head('Charges');
+    if (e.type === 'sale') { row('Bill Amount', money(e.total)); row('Paid', money(e.paid)); }
+    else { row('Amount', money(e.amount)); if (e.note) row('Note', e.note); }
+    row('Fee', 'Rs. 0');
+    y -= 6; rule();
+    g.textAlign = 'left'; g.font = '700 32px' + F; g.fillStyle = INK; g.fillText('Total Amount', pad, y + 2);
+    g.textAlign = 'right'; g.fillText(money(e.type === 'sale' ? e.total : e.amount), W - pad, y + 2); y += 62;
+    g.font = '600 27px' + F; g.textAlign = 'left'; g.fillStyle = INK; g.fillText('Balance remaining', pad, y);
+    g.textAlign = 'right'; g.font = '700 28px' + F; g.fillStyle = after > 0 ? '#B3261E' : '#1F7A4D'; g.fillText(money(after), W - pad, y); y += 56;
+    g.textAlign = 'center'; g.font = '400 22px' + F; g.fillStyle = MUTE;
+    if (bi.addr) { g.fillText(fit(bi.addr, W - 2 * pad), W / 2, y); y += 36; }
+    g.fillText('Generated by Adnan Traders app', W / 2, y);
     g.textAlign = 'left';
     var out = document.createElement('canvas'); out.width = W; out.height = y + 50;
-    out.getContext('2d').drawImage(c, 0, 0);
+    var og = out.getContext('2d'); og.fillStyle = '#FFFFFF'; og.fillRect(0, 0, W, out.height); og.drawImage(c, 0, 0);
     return out;
   }
   function prepReceipt(s, e, after) {
@@ -1463,7 +1498,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     S.rc.number = wn; $('rcTitle').textContent = 'Receipt';
     if (!wn) { to.textContent = 'No contact number is saved for this shop, so WhatsApp will ask you to pick a contact. Add the number with Edit shop.'; to.style.color = 'var(--bad)'; }
     else if (wn.length < 11) { to.textContent = 'Sending to +' + wn + '. This number looks incomplete, check it with Edit shop.'; to.style.color = 'var(--bad)'; }
-    else { to.textContent = 'Sending to +' + wn + ' (' + s.shopName + '). In WhatsApp choose this shop, then tap Send.'; to.style.color = ''; }
+    else { to.textContent = 'Tap the share icon, pick WhatsApp, choose ' + s.shopName + ' (+' + wn + ') and press Send.'; to.style.color = ''; }
     $('receiptBox').hidden = false;
     $('receiptBox').scrollIntoView({ block: 'start' });
   }

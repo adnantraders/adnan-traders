@@ -1,7 +1,7 @@
 // Offline-first: the app opens from the phone's saved copy, even with no or very slow internet.
 // When internet is available, a newer copy is fetched in the background.
 // To release an update: upload the new files and change the version number below.
-var CACHE = 'adnan-traders-offline-v12';
+var CACHE = 'adnan-traders-offline-v13';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', function (e) {
   e.waitUntil(
