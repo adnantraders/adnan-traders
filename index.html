@@ -378,9 +378,32 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 .rcb:active{background:#E6F4EC}
 #receiptBox #rcSave,#receiptBox #rcShare{width:60px;min-height:52px;flex:none;background:#fff;border:2px solid #12A150;color:#12A150;box-shadow:none;padding:0}
 #receiptBox #rcClose{flex:1;width:auto;min-height:52px;background:#fff;border:2px solid #12A150;color:#23232B;box-shadow:none}
+
+/* v2.4 welcome */
+#welcome{position:fixed;inset:0;z-index:1500;background:var(--bar);display:grid;place-items:center;padding:24px;overflow:auto}
+#welcome[hidden]{display:none}
+#welcome .wcard{width:100%;max-width:360px;text-align:center;color:#fff;display:grid;gap:16px;justify-items:center}
+#welcome .wlogo{width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font:700 32px Roboto,sans-serif;border:2px solid rgba(255,255,255,.5)}
+#welcome h1{margin:0;font:700 26px Roboto,sans-serif}
+#welcome .wsub{margin:0;opacity:.92;line-height:1.5}
+#welcome .gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;border:0;border-radius:27px;background:#fff;color:#3C4043;font:500 17px Roboto,sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+#welcome .wmsg{margin:0;min-height:22px;font-size:14px}
+#welcome .wmsg.bad{color:#FFD7D2}
+#welcome .wskip{background:none;border:0;color:#fff;opacity:.85;text-decoration:underline;font:400 15px Roboto,sans-serif;cursor:pointer;padding:8px}
 </style>
 </head>
 <body>
+<div id="welcome" hidden>
+  <div class="wcard">
+    <div class="wlogo">AT</div>
+    <h1>Adnan Traders</h1>
+    <p class="wsub">Sign in with your Google account. Your shops, accounts and settings stay safe in it, and if you used this app before, everything comes back by itself.</p>
+    <button class="gbtn" type="button" id="wGoogle"><svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.2 5.5-4.7 7.2l7.3 5.7c4.3-4 6.7-9.9 6.7-17.4z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.3-5.7c-2 1.4-4.6 2.3-8.6 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span>Continue with Google</span></button>
+    <p class="wmsg" id="wMsg" role="status"></p>
+    <button class="wskip" type="button" id="wSkip">Skip for now</button>
+  </div>
+</div>
+
 
 
 <div class="wrap">
@@ -720,7 +743,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '2.2';
+  var APP_VERSION = '2.4';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -950,7 +973,8 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     var n = waNumber(s.phone || '');
     if (!n) { toast('No number saved for this shop. Add it with Edit.'); return; }
     var msg = 'Assalam o Alaikum ' + s.shopName + ', ' + bizName() + ' ki taraf se yaad dehani: aap ka baqaya ' + money(shopBalance(s)) + ' hai. Meharbani karke jaldi ada kar dein. Shukriya.';
-    window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(msg), '_blank');
+    var wl = 'https://wa.me/' + n + '?text=' + encodeURIComponent(msg);
+    if (NATIVE) location.href = wl; else window.open(wl, '_blank');
   }
   function renderShops() {
     renderChips();
@@ -1602,6 +1626,12 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   });
   function shareReceipt() {
     if (!S.rc || S.sharing) return;
+    if (NATIVE) {
+      S.sharing = true;
+      try { nativeShare(S.rc.filename.replace(/\.png$/, '') + '-' + Date.now().toString(36) + '.jpg', S.rc.canvas.toDataURL('image/jpeg', 0.92).split(',')[1], 'Receipt').catch(function (err) { if (!err || !/cancel/i.test(String(err.message || err))) toast('Could not open sharing'); }).then(function () { S.sharing = false; }); }
+      catch (x) { S.sharing = false; toast('Could not make the image'); }
+      return;
+    }
     var f;
     try {
       var bin = atob(S.rc.canvas.toDataURL('image/jpeg', 0.92).split(',')[1]), u8 = new Uint8Array(bin.length);
@@ -1732,7 +1762,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   });
 
   /* ---------- files ---------- */
+  /* ---------- Android app (Capacitor) helpers ---------- */
+  var NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  var NPL = null;
+  function nativePlugins() { if (!NPL) NPL = { Share: window.Capacitor.registerPlugin('Share'), FS: window.Capacitor.registerPlugin('Filesystem') }; return NPL; }
+  function nativeShare(name, b64, title) {
+    var P = nativePlugins();
+    return P.FS.writeFile({ path: name, data: b64, directory: 'CACHE' }).then(function (r) { return P.Share.share({ title: title || name, dialogTitle: title || name, files: [r.uri] }); });
+  }
+  function blobToB64(blob) { return new Promise(function (res, rej) { var fr = new FileReader(); fr.onload = function () { res(String(fr.result).split(',')[1]); }; fr.onerror = rej; fr.readAsDataURL(blob); }); }
   function saveBlob(name, blob) {
+    if (NATIVE) { blobToB64(blob).then(function (b) { return nativeShare(name, b, name); }).catch(function (err) { if (!err || !/cancel/i.test(String(err.message || err))) toast('Could not save the file'); }); return; }
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = name;
     document.body.append(a); a.click(); a.remove();
@@ -2219,7 +2259,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     if (user) { put(UK, user.email || ''); put('adnan-traders-guser', JSON.stringify({ email: u.email || '', name: u.displayName || '', photo: u.photoURL || '' })); }
     else { del(UK); del('adnan-traders-guser'); }
     render(); try { window.dispatchEvent(new Event('settings-changed')); } catch (e) {}
-    if (user) maybeAuto(true);
+    if (user) firstSync();
   }
 
   function start() {
@@ -2246,17 +2286,20 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     if (c === 'auth/operation-not-allowed') return 'Google sign-in is not turned on in Firebase. Open Authentication, Sign-in method and enable Google.';
     return 'Sign-in did not work (' + (c || 'unknown') + ').';
   }
-  $('cloudSignIn').addEventListener('click', function () {
-    if (!navigator.onLine) { msg('You need internet to sign in.', true); return; }
-    msg('Opening Google sign-in...');
+  function signInFlow(show) {
+    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) { show('Google sign-in does not work inside the Android app. Use Save backup file in Settings.', true); return; }
+    if (!navigator.onLine) { show('You need internet to sign in.', true); return; }
+    show('Opening Google sign-in...');
     loadFb().then(function (api) {
-      return api.signIn().then(function () { msg(''); }, function (err) {
+      return api.signIn().then(function () { show(''); }, function (err) {
         var c = (err && err.code) || '';
         if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') return api.redirect();
-        msg(authErr(err), true);
+        show(authErr(err), true);
       });
-    }, function () { msg('Could not load Google sign-in. Check your internet.', true); });
-  });
+    }, function () { show('Could not load Google sign-in. Check your internet.', true); });
+  }
+  window.__signInFlow = signInFlow;
+  $('cloudSignIn').addEventListener('click', function () { signInFlow(msg); });
   $('cloudOutBtn').addEventListener('click', function () {
     loadFb().then(function (api) { return api.signOut(); }).then(function () { msg('Signed out. Your data on this phone is untouched.'); }, function () {});
   });
@@ -2284,6 +2327,29 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     }).then(function () { busy = false; });
   }
   $('cloudNow').addEventListener('click', function () { backupNow(false); });
+
+  /* first sign-in on a phone: bring the cloud copy back automatically (like logging in to Facebook), never overwrite it with an empty phone */
+  var syncedFor = null;
+  function firstSync() {
+    if (syncedFor === user.uid) { maybeAuto(true); return; }
+    if (!navigator.onLine || !window.__AT) return;
+    syncedFor = user.uid;
+    loadFb().then(function (api) {
+      return api.meta(user.uid).then(function (m) {
+        if (m && !Number(get(LK2) || 0)) {
+          restoring = true; note('Welcome back. Bringing your data back...'); msg('Restoring your data from your Google account...');
+          return withTimeout(api.load(user.uid, m.n), 40000).then(function (text) {
+            return new Promise(function (res) { window.__AT.restoreText(text, res); });
+          }).then(function () {
+            put(LK2, String(m.savedAt || Date.now())); window.__AT.markBackedUp(); restoring = false; render(); msg('Your data is back from your Google account.'); note('Your data is back');
+            try { window.dispatchEvent(new Event('at-signed-in')); } catch (e) {}
+          }, function () { restoring = false; syncedFor = null; msg('Could not bring your data back yet. Open Settings, then Backup and restore, then tap Restore from cloud.', true); });
+        }
+        try { window.dispatchEvent(new Event('at-signed-in')); } catch (e) {}
+        maybeAuto(true);
+      });
+    }).catch(function () { syncedFor = null; });
+  }
 
   var armed = false;
   $('cloudRestore').addEventListener('click', function () {
@@ -2561,6 +2627,38 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   window.addEventListener('at-changed', renderReport);
 })();
 </script>
+<script>
+/* ===== v2.4 welcome sign-in and automatic profile ===== */
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  var w = $('welcome'); if (!w) return;
+  function signed() { return !!get('adnan-traders-guser'); }
+  function hide() { w.hidden = true; }
+  function show(t, bad) { var m = $('wMsg'); m.textContent = t || ''; m.className = 'wmsg' + (bad ? ' bad' : ''); }
+  if (!signed() && get('adnan-traders-welcome') !== 'skip') w.hidden = false;
+  $('wGoogle').addEventListener('click', function () { if (window.__signInFlow) window.__signInFlow(show); else show('Please wait a moment and try again.', true); });
+  $('wSkip').addEventListener('click', function () { put('adnan-traders-welcome', 'skip'); hide(); });
+  var wt = null;
+  window.addEventListener('settings-changed', function () {
+    if (!signed() || w.hidden) return;
+    show('Signed in. Bringing your data back...'); $('wGoogle').disabled = true; $('wSkip').hidden = true;
+    clearTimeout(wt); wt = setTimeout(hide, 30000);
+  });
+  /* after signing in, fill the profile like any other app: name and photo from the Google account */
+  window.addEventListener('at-signed-in', function () {
+    clearTimeout(wt); hide();
+    var g; try { g = JSON.parse(get('adnan-traders-guser') || 'null'); } catch (e) { g = null; }
+    if (!g) return;
+    var p; try { p = JSON.parse(get('adnan-traders-profile') || '{}') || {}; } catch (e) { p = {}; }
+    if (!p.name && g.name) { p.name = String(g.name).slice(0, 40); put('adnan-traders-profile', JSON.stringify(p)); try { window.dispatchEvent(new Event('settings-changed')); } catch (e2) {} }
+    if (!p.photo && g.photo && $('profG')) setTimeout(function () { try { $('profG').click(); } catch (e3) {} }, 600);
+  });
+})();
+</script>
+
 
 
 
