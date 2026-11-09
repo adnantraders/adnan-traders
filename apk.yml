@@ -1,0 +1,87 @@
+name: Build Android app
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'index.html'
+      - 'google-services.json'
+      - '.github/workflows/apk.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the Firebase file is there
+        run: |
+          if [ ! -f google-services.json ]; then
+            echo "google-services.json is missing. Upload it to the main page of the repository."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Create the Android project
+        run: |
+          mkdir -p www
+          cp index.html www/
+          cp manifest.webmanifest icon-192.png icon-512.png www/ || true
+          npm init -y
+          npm install --legacy-peer-deps @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/share@6 @capacitor/filesystem@6 @capacitor-firebase/authentication@6 firebase@10.12.2 @aparajita/capacitor-biometric-auth@8.0.2
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "com.adnantraders.app",
+            "appName": "Adnan Traders",
+            "webDir": "www",
+            "plugins": {
+              "FirebaseAuthentication": {
+                "skipNativeAuth": true,
+                "providers": ["google.com"]
+              }
+            }
+          }
+          EOF
+          npx cap add android
+          cp google-services.json android/app/google-services.json
+          printf '\next {\n    rgcfaIncludeGoogle = true\n}\n' >> android/variables.gradle
+          sed -i 's#</manifest>#    <uses-permission android:name="android.permission.USE_BIOMETRIC" />\n</manifest>#' android/app/src/main/AndroidManifest.xml
+          npx cap sync android
+
+      - name: App icon
+        run: |
+          RES=android/app/src/main/res
+          rm -rf $RES/mipmap-anydpi-v26
+          for d in $RES/mipmap-*; do
+            cp icon-192.png $d/ic_launcher.png
+            cp icon-192.png $d/ic_launcher_round.png
+            cp icon-192.png $d/ic_launcher_foreground.png
+          done
+
+      - name: Signing key (same every time, so updates keep your data)
+        run: |
+          mkdir -p ~/.android
+          echo "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" | base64 -d > ~/.android/debug.keystore
+
+      - name: Build the app
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Publish the app file
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk AdnanTraders.apk
+          gh release delete app --yes --cleanup-tag || true
+          gh release create app AdnanTraders.apk --title "Adnan Traders Android app" --notes "Download AdnanTraders.apk and install it."
