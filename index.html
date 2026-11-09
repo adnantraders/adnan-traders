@@ -743,7 +743,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
 <script>
 (function () {
   'use strict';
-  var APP_VERSION = '2.4';
+  var APP_VERSION = '2.5';
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- helpers ---------- */
@@ -2067,11 +2067,28 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   }
 
   /* ---- fingerprint (WebAuthn platform authenticator, checks this phone's own fingerprint/screen lock) ---- */
+  var NATIVE_BIO = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  function bioPlugin() {
+    try {
+      var hs = window.Capacitor.PluginHeaders || [];
+      for (var i = 0; i < hs.length; i++) {
+        var ms = (hs[i].methods || []).map(function (m) { return m.name; });
+        if (ms.indexOf('checkBiometry') !== -1) { var au = ms.filter(function (n) { return /authenticate/i.test(n); })[0]; return { p: window.Capacitor.registerPlugin(hs[i].name), auth: au }; }
+      }
+    } catch (e) {}
+    return null;
+  }
+  function bioAsk(reason) {
+    var b = bioPlugin(); if (!b || !b.auth) return Promise.reject(new Error('no biometric plugin'));
+    return b.p[b.auth]({ reason: reason, cancelTitle: 'Cancel', allowDeviceCredential: false, androidTitle: 'Adnan Traders', androidSubtitle: reason, androidConfirmationRequired: false });
+  }
   function fpSupported() {
+    if (NATIVE_BIO) { var b = bioPlugin(); return b ? b.p.checkBiometry().then(function (r) { return !!(r && r.isAvailable); }, function () { return false; }) : Promise.resolve(false); }
     return !!(window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable)
       ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(function () { return false; }) : Promise.resolve(false);
   }
   function fpEnroll() {
+    if (NATIVE_BIO) return bioAsk('Touch the fingerprint sensor to turn it on').then(function () { return 'native'; });
     return navigator.credentials.create({ publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
       rp: { name: biz() },
@@ -2082,6 +2099,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     } }).then(function (c) { return b64(c.rawId); });
   }
   function fpCheck(credB64) {
+    if (NATIVE_BIO) return bioAsk('Unlock Adnan Traders');
     return navigator.credentials.get({ publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
       allowCredentials: [{ type: 'public-key', id: unb64(credB64) }],
@@ -2219,9 +2237,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       return {
         onAuth: function (cb) { return U.onAuthStateChanged(auth, cb); },
         signIn: function () { return U.signInWithPopup(auth, new U.GoogleAuthProvider()); },
+        signInNative: function () {
+          var FA = window.Capacitor.registerPlugin('FirebaseAuthentication');
+          return FA.signInWithGoogle().then(function (r) {
+            var tok = r && r.credential && r.credential.idToken;
+            if (!tok) { var er = new Error('no token'); er.code = 'native/no-token'; throw er; }
+            return U.signInWithCredential(auth, U.GoogleAuthProvider.credential(tok));
+          });
+        },
         redirect: function () { return U.signInWithRedirect(auth, new U.GoogleAuthProvider()); },
         redirectResult: function () { return U.getRedirectResult(auth); },
-        signOut: function () { return U.signOut(auth); },
+        signOut: function () { var pr = U.signOut(auth); try { if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) window.Capacitor.registerPlugin('FirebaseAuthentication').signOut().catch(function () {}); } catch (e) {} return pr; },
         save: function (uid, chunks, oldN, meta) {
           var b = F.writeBatch(db), i;
           for (i = 0; i < chunks.length; i++) b.set(d(uid, 'c' + i), { i: i, t: chunks[i] });
@@ -2287,10 +2313,17 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     return 'Sign-in did not work (' + (c || 'unknown') + ').';
   }
   function signInFlow(show) {
-    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) { show('Google sign-in does not work inside the Android app. Use Save backup file in Settings.', true); return; }
+    var native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
     if (!navigator.onLine) { show('You need internet to sign in.', true); return; }
     show('Opening Google sign-in...');
     loadFb().then(function (api) {
+      if (native) {
+        return api.signInNative().then(function () { show(''); }, function (err) {
+          var m = String((err && (err.message || err.code)) || '');
+          if (/cancel/i.test(m)) show('Sign-in was cancelled.', true);
+          else show('Google sign-in did not work in the app (' + m.slice(0, 80) + '). Check that the Firebase Android setup is finished.', true);
+        });
+      }
       return api.signIn().then(function () { show(''); }, function (err) {
         var c = (err && err.code) || '';
         if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') return api.redirect();

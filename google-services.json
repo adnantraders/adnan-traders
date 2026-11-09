@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "782690042699",
+    "project_id": "adnan-traders-7a1c5",
+    "storage_bucket": "adnan-traders-7a1c5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782690042699:android:1d2f445441434d8cf65ece",
+        "android_client_info": {
+          "package_name": "com.adnantraders.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782690042699-9k1qvliitpchv8b348tprkgr4ufb4tp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adnantraders.app",
+            "certificate_hash": "aa2c2b0730a71b866d2f48450eb2832447d8024a"
+          }
+        },
+        {
+          "client_id": "782690042699-ol44gj5riscvemc9qh3ig27tbrsrn07u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA77hC3uMtedg8pwH6C-VbC9iJTQj5hVwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782690042699-ol44gj5riscvemc9qh3ig27tbrsrn07u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
