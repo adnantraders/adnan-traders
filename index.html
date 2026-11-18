@@ -2237,6 +2237,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       return {
         onAuth: function (cb) { return U.onAuthStateChanged(auth, cb); },
         signIn: function () { return U.signInWithPopup(auth, new U.GoogleAuthProvider()); },
+        signInWithToken: function (tok) { return U.signInWithCredential(auth, U.GoogleAuthProvider.credential(tok)); },
         signInNative: function () {
           var FA = window.Capacitor.registerPlugin('FirebaseAuthentication');
           return FA.signInWithGoogle().then(function (r) {
@@ -2316,14 +2317,28 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     var native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
     if (!navigator.onLine) { show('You need internet to sign in.', true); return; }
     show('Opening Google sign-in...');
-    loadFb().then(function (api) {
-      if (native) {
-        return api.signInNative().then(function () { show(''); }, function (err) {
-          var m = String((err && (err.message || err.code)) || '');
-          if (/cancel/i.test(m)) show('Sign-in was cancelled.', true);
-          else show('Google sign-in did not work in the app (' + m.slice(0, 80) + '). Check that the Firebase Android setup is finished.', true);
+    if (native) {
+      var FA, step = 'start';
+      try { FA = window.Capacitor.registerPlugin('FirebaseAuthentication'); } catch (e) { show('Google plugin missing (' + String(e && e.message || e).slice(0, 80) + ')', true); return; }
+      var failN = function (err) {
+        var m = String((err && (err.message || err.code)) || err || '');
+        if (/cancel/i.test(m)) show('Sign-in was cancelled.', true);
+        else show('Google sign-in failed at "' + step + '": ' + m.slice(0, 120), true);
+      };
+      var tmo = function (p, ms, what) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error(what + ' timed out')); }, ms); })]); };
+      step = 'google account';
+      tmo(Promise.resolve().then(function () { return FA.signInWithGoogle(); }), 90000, 'Google account screen').then(function (r) {
+        var tok = r && r.credential && r.credential.idToken;
+        if (!tok) throw new Error('no token from Google');
+        step = 'loading Firebase'; show('Signing in...');
+        return tmo(loadFb(), 20000, 'Firebase load').then(function (api) {
+          step = 'Firebase login';
+          return tmo(api.signInWithToken(tok), 20000, 'Firebase login');
         });
-      }
+      }).then(function () { show(''); }, failN);
+      return;
+    }
+    loadFb().then(function (api) {
       return api.signIn().then(function () { show(''); }, function (err) {
         var c = (err && err.code) || '';
         if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') return api.redirect();
