@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1A73E8">
+<script>window.__plug=function(n){var C=window.Capacitor;if(!C)throw new Error('no Capacitor');if(typeof C.registerPlugin==='function')return C.registerPlugin(n);if(C.Plugins&&C.Plugins[n])return C.Plugins[n];if(typeof C.nativePromise==='function'&&typeof Proxy==='function')return new Proxy({},{get:function(_,m){if(m==='then')return undefined;return function(o){return C.nativePromise(n,m,o||{});};}});throw new Error('Capacitor plugin API missing');};</script>
 <script>try{var __a=localStorage.getItem("adnan-traders-accent");if(__a&&__a!=="blue")document.documentElement.setAttribute("data-accent",__a)}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -1765,7 +1766,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
   /* ---------- Android app (Capacitor) helpers ---------- */
   var NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   var NPL = null;
-  function nativePlugins() { if (!NPL) NPL = { Share: window.Capacitor.registerPlugin('Share'), FS: window.Capacitor.registerPlugin('Filesystem') }; return NPL; }
+  function nativePlugins() { if (!NPL) NPL = { Share: window.__plug('Share'), FS: window.__plug('Filesystem') }; return NPL; }
   function nativeShare(name, b64, title) {
     var P = nativePlugins();
     return P.FS.writeFile({ path: name, data: b64, directory: 'CACHE' }).then(function (r) { return P.Share.share({ title: title || name, dialogTitle: title || name, files: [r.uri] }); });
@@ -2073,7 +2074,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
       var hs = window.Capacitor.PluginHeaders || [];
       for (var i = 0; i < hs.length; i++) {
         var ms = (hs[i].methods || []).map(function (m) { return m.name; });
-        if (ms.indexOf('checkBiometry') !== -1) { var au = ms.filter(function (n) { return /authenticate/i.test(n); })[0]; return { p: window.Capacitor.registerPlugin(hs[i].name), auth: au }; }
+        if (ms.indexOf('checkBiometry') !== -1) { var au = ms.filter(function (n) { return /authenticate/i.test(n); })[0]; return { p: window.__plug(hs[i].name), auth: au }; }
       }
     } catch (e) {}
     return null;
@@ -2239,7 +2240,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
         signIn: function () { return U.signInWithPopup(auth, new U.GoogleAuthProvider()); },
         signInWithToken: function (tok) { return U.signInWithCredential(auth, U.GoogleAuthProvider.credential(tok)); },
         signInNative: function () {
-          var FA = window.Capacitor.registerPlugin('FirebaseAuthentication');
+          var FA = window.__plug('FirebaseAuthentication');
           return FA.signInWithGoogle().then(function (r) {
             var tok = r && r.credential && r.credential.idToken;
             if (!tok) { var er = new Error('no token'); er.code = 'native/no-token'; throw er; }
@@ -2248,7 +2249,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
         },
         redirect: function () { return U.signInWithRedirect(auth, new U.GoogleAuthProvider()); },
         redirectResult: function () { return U.getRedirectResult(auth); },
-        signOut: function () { var pr = U.signOut(auth); try { if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) window.Capacitor.registerPlugin('FirebaseAuthentication').signOut().catch(function () {}); } catch (e) {} return pr; },
+        signOut: function () { var pr = U.signOut(auth); try { if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) window.__plug('FirebaseAuthentication').signOut().catch(function () {}); } catch (e) {} return pr; },
         save: function (uid, chunks, oldN, meta) {
           var b = F.writeBatch(db), i;
           for (i = 0; i < chunks.length; i++) b.set(d(uid, 'c' + i), { i: i, t: chunks[i] });
@@ -2319,7 +2320,7 @@ input[type=checkbox] { -webkit-appearance: checkbox; appearance: auto; width: 22
     show('Opening Google sign-in...');
     if (native) {
       var FA, step = 'start';
-      try { FA = window.Capacitor.registerPlugin('FirebaseAuthentication'); } catch (e) { show('Google plugin missing (' + String(e && e.message || e).slice(0, 80) + ')', true); return; }
+      try { FA = window.__plug('FirebaseAuthentication'); } catch (e) { show('Google plugin missing (' + String(e && e.message || e).slice(0, 80) + ')', true); return; }
       var failN = function (err) {
         var m = String((err && (err.message || err.code)) || err || '');
         if (/cancel/i.test(m)) show('Sign-in was cancelled.', true);
