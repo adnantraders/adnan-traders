@@ -84,4 +84,16 @@ jobs:
         run: |
           cp android/app/build/outputs/apk/debug/app-debug.apk AdnanTraders.apk
           gh release delete app --yes --cleanup-tag || true
-          gh release create app AdnanTraders.apk --title "Adnan Traders Android app" --notes "Download AdnanTraders.apk and install it."
+          {
+            echo "Download AdnanTraders.apk and install it."
+            echo
+            echo "Check - app signature:"
+            keytool -printcert -jarfile AdnanTraders.apk 2>&1 | grep -E "SHA1|Owner" || echo "no signature info"
+            echo
+            echo "Check - google values:"
+            grep -rh -E "default_web_client_id|google_app_id|project_id" android/app/build/generated/res/google-services 2>/dev/null | sed 's/^ *//' | head -5 || true
+            echo
+            echo "Check - google-services.json:"
+            grep -E "certificate_hash|client_type|package_name" android/app/google-services.json | sed 's/^ *//' || true
+          } > notes.txt
+          gh release create app AdnanTraders.apk --title "Adnan Traders Android app" --notes-file notes.txt
