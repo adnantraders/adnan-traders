@@ -76,7 +76,22 @@ jobs:
 
       - name: Build the app
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        run: |
+          keytool -list -v -keystore "$HOME/.android/debug.keystore" -storepass android | grep -E "Alias|SHA1" || true
+          cat >> app/build.gradle <<GRADLE
+
+          android {
+              signingConfigs {
+                  debug {
+                      storeFile file("$HOME/.android/debug.keystore")
+                      storePassword "android"
+                      keyAlias "androiddebugkey"
+                      keyPassword "android"
+                  }
+              }
+          }
+          GRADLE
+          ./gradlew assembleDebug --no-daemon
 
       - name: Publish the app file
         env:
